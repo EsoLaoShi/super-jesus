@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2a1b4a">
-<title>Super Jésus</title>
+<title>Super Jesus</title>
 <style>
   :root { --ink:#1d1230; --gold:#ffc83d; --bg:#2a1b4a; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -39,6 +39,7 @@
     .lbl { display:none; }
     #fs { display:block; left:46%; }
     #mute { left:calc(46% + 46px); }
+    #lang { left:calc(46% + 92px); }
   }
   @media (pointer:coarse) and (orientation:portrait) {
     #rotate { display:flex; position:fixed; inset:0; z-index:9; background:#2a1b4a; flex-direction:column; align-items:center; justify-content:center; font-size:1.3rem; padding:30px; }
@@ -46,21 +47,316 @@
 </style>
 </head>
 <body>
-<h1>SUPER JÉSUS</h1>
-<p class="help">Flèches ou A/D : avancer · Espace ou Haut : sauter · X : main de lumière · B : parole de vie · C : lancer un ange · V : pluie de foudre (une par tranche de 100 anges). Attrape les paroles d'encouragement : anges dorés, boules de feu et paroles plus grosses ! Sur le char de feu, saute 2 fois pour voler. Ramasse les pierres précieuses : or +1 ange, émeraude +3, diamant bleu +5, améthyste +10, diamant rouge +25, diamant de gloire +50 ! Dans certains niveaux, touche le char de feu pour monter dessus.</p>
+<h1>SUPER JESUS</h1>
+<p class="help" data-i18n>Flèches ou A/D : avancer · Espace ou Haut : sauter · X : main de lumière · B : parole de vie · C : lancer un ange · V : pluie de foudre (une par tranche de 100 anges). Attrape les paroles d'encouragement : anges dorés, boules de feu et paroles plus grosses ! Sur le char de feu, saute 2 fois pour voler. Ramasse les pierres précieuses : or +1 ange, émeraude +3, diamant bleu +5, améthyste +10, diamant rouge +25, diamant de gloire +50 ! Dans certains niveaux, touche le char de feu pour monter dessus.</p>
 <div id="wrap">
   <canvas id="c" width="1600" height="800"></canvas>
   <div class="pad">
     <div><button data-k="ArrowLeft">&#9664;</button><button data-k="ArrowRight">&#9654;</button></div>
     <div class="acts"><button data-k="v" id="vbtn" class="off">&#9889;</button><button data-k="b">&#128172;</button><button data-k="c">&#128293;</button><button data-k="x">&#9995;</button><button data-k="ArrowUp" class="jump">&#9650;</button></div>
   </div>
-  <button id="fs" class="ui">&#x26F6;<span class="lbl"> Plein écran</span></button>
+  <button id="fs" class="ui">&#x26F6;<span class="lbl" data-i18n data-pre=" ">Plein écran</span></button>
   <button id="mute" class="ui">🔊 Son (M)</button>
+  <button id="lang" class="ui">🌐 FR</button>
 </div>
-<div id="rotate"><div style="font-size:3rem">📱↻</div><p>Tourne ton téléphone<br>en mode paysage pour jouer</p></div>
+<div id="rotate"><div style="font-size:3rem">📱↻</div><p data-i18n>Tourne ton téléphone<br>en mode paysage pour jouer</p></div>
 <script>
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 ctx.scale(2, 2); // image deux fois plus fine, dessin toujours en 800 × 400
+// ---------- Langues : chaque texte affiché est traduit au moment où il est dessiné ----------
+// Une ligne = [français, anglais, espagnol, italien, portugais, lingala]
+const LANGS = ['fr', 'en', 'es', 'it', 'pt', 'ln'];
+const LANG_NAMES = { fr:'Français', en:'English', es:'Español', it:'Italiano', pt:'Português', ln:'Lingala' };
+const TR_ROWS = [
+  // héros
+  ["Jésus", "Jesus", "Jesús", "Gesù", "Jesus", "Yesu"],
+  ["Moïse", "Moses", "Moisés", "Mosè", "Moisés", "Mose"],
+  ["Élie", "Elijah", "Elías", "Elia", "Elias", "Eliya"],
+  ["Ruth", "Ruth", "Rut", "Rut", "Rute", "Luti"],
+  ["Ève", "Eve", "Eva", "Eva", "Eva", "Eva"],
+  ["Halo divin · 6 vies", "Divine halo · 6 lives", "Halo divino · 6 vidas", "Aureola divina · 6 vite", "Auréola divina · 6 vidas", "Mwinda ya Nzambe · bomoi 6"],
+  ["Saute très haut", "Jumps very high", "Salta muy alto", "Salta altissimo", "Pula muito alto", "Apumbwaka likolo mingi"],
+  ["Lumière puissante", "Mighty light", "Luz poderosa", "Luce potente", "Luz poderosa", "Mwinda makasi"],
+  ["Très rapide", "Very fast", "Muy rápido", "Velocissimo", "Muito rápido", "Mbangu mingi"],
+  ["Double saut", "Double jump", "Doble salto", "Doppio salto", "Pulo duplo", "Kopumbwa mbala mibale"],
+  ["Costume 3 pièces : il plane", "3-piece suit: he glides", "Traje de 3 piezas: planea", "Abito tre pezzi: plana", "Terno de 3 peças: ele plana", "Kostimu ya biteni 3: apumbwaka malembe"],
+  ["Bâton : frappe de loin", "Staff: strikes from afar", "Bastón: golpea de lejos", "Bastone: colpisce da lontano", "Cajado: golpeia de longe", "Lingenda: abetaka mosika"],
+  ["Flamme dès le début", "Flame from the start", "Llama desde el inicio", "Fiamma fin dall'inizio", "Chama desde o início", "Mwinda banda ebandeli"],
+  ["Harpe : paroles rapides", "Harp: quick words", "Arpa: palabras rápidas", "Arpa: parole veloci", "Harpa: palavras rápidas", "Nzenze: maloba mbangu"],
+  ["Chaque pierre : 2 anges", "Each stone: 2 angels", "Cada piedra: 2 ángeles", "Ogni pietra: 2 angeli", "Cada pedra: 2 anjos", "Libanga moko: banzelu 2"],
+  ["+1 vie à chaque niveau", "+1 life each level", "+1 vida por nivel", "+1 vita a ogni livello", "+1 vida a cada nível", "+1 bomoi na eteni nyonso"],
+  ["Rapide + double saut", "Fast + double jump", "Rápida + doble salto", "Veloce + doppio salto", "Rápida + pulo duplo", "Mbangu + kopumbwa mbala mibale"],
+  // maladies
+  ["Cancer", "Cancer", "Cáncer", "Cancro", "Câncer", "Kanseri"],
+  ["Grippe", "Flu", "Gripe", "Influenza", "Gripe", "Gripi"],
+  ["Tuberculose", "Tuberculosis", "Tuberculosis", "Tubercolosi", "Tuberculose", "Tibikilozi"],
+  ["Surdité", "Deafness", "Sordera", "Sordità", "Surdez", "Bokufi matoi"],
+  ["Cécité", "Blindness", "Ceguera", "Cecità", "Cegueira", "Bokufi miso"],
+  ["Mutisme", "Muteness", "Mudez", "Mutismo", "Mudez", "Bobubu"],
+  ["Asthme", "Asthma", "Asma", "Asma", "Asma", "Asima"],
+  ["Diabète", "Diabetes", "Diabetes", "Diabete", "Diabetes", "Maladi ya sukali"],
+  ["Paludisme", "Malaria", "Malaria", "Malaria", "Malária", "Malaria"],
+  ["Parkinson", "Parkinson's", "Párkinson", "Parkinson", "Parkinson", "Parkinson"],
+  ["Alzheimer", "Alzheimer's", "Alzhéimer", "Alzheimer", "Alzheimer", "Alzheimer"],
+  ["Rougeole", "Measles", "Sarampión", "Morbillo", "Sarampo", "Rugeole"],
+  ["Varicelle", "Chickenpox", "Varicela", "Varicella", "Catapora", "Varisele"],
+  ["Hépatite B", "Hepatitis B", "Hepatitis B", "Epatite B", "Hepatite B", "Epatite B"],
+  ["Épilepsie", "Epilepsy", "Epilepsia", "Epilessia", "Epilepsia", "Epilepsi"],
+  ["Psoriasis", "Psoriasis", "Psoriasis", "Psoriasi", "Psoríase", "Psoriasis"],
+  ["Choléra", "Cholera", "Cólera", "Colera", "Cólera", "Kolera"],
+  ["Drépanocytose", "Sickle cell", "Anemia falciforme", "Anemia falciforme", "Anemia falciforme", "SS"],
+  ["Dépression", "Depression", "Depresión", "Depressione", "Depressão", "Depresio"],
+  // démons
+  ["Haine", "Hatred", "Odio", "Odio", "Ódio", "Koyina"],
+  ["Colère", "Anger", "Ira", "Ira", "Ira", "Nkanda"],
+  ["Cupidité", "Greed", "Avaricia", "Avidità", "Ganância", "Lokoso"],
+  ["Mensonge", "Lies", "Mentira", "Menzogna", "Mentira", "Lokuta"],
+  ["Immoralité", "Immorality", "Inmoralidad", "Immoralità", "Imoralidade", "Bosoto"],
+  ["Méchanceté", "Wickedness", "Maldad", "Malvagità", "Maldade", "Mabe"],
+  ["Sorcellerie", "Witchcraft", "Brujería", "Stregoneria", "Feitiçaria", "Kindoki"],
+  ["Tristesse", "Sadness", "Tristeza", "Tristezza", "Tristeza", "Mawa"],
+  ["Bêtise", "Foolishness", "Necedad", "Stoltezza", "Tolice", "Bozoba"],
+  ["Excès", "Excess", "Exceso", "Eccesso", "Excesso", "Koleka ndelo"],
+  ["Paresse", "Laziness", "Pereza", "Pigrizia", "Preguiça", "Goyigoyi"],
+  ["Rébellion", "Rebellion", "Rebelión", "Ribellione", "Rebelião", "Botomboki"],
+  ["Hypocrisie", "Hypocrisy", "Hipocresía", "Ipocrisia", "Hipocrisia", "Bilongi mibale"],
+  ["Peur", "Fear", "Miedo", "Paura", "Medo", "Bobangi"],
+  ["Doute", "Doubt", "Duda", "Dubbio", "Dúvida", "Ntembe"],
+  ["Orgueil", "Pride", "Orgullo", "Orgoglio", "Orgulho", "Lolendo"],
+  ["Jalousie", "Jealousy", "Celos", "Gelosia", "Ciúme", "Zuwa"],
+  ["Honte", "Shame", "Vergüenza", "Vergogna", "Vergonha", "Soni"],
+  ["Angoisse", "Anguish", "Angustia", "Angoscia", "Angústia", "Mitungisi"],
+  ["Amertume", "Bitterness", "Amargura", "Amarezza", "Amargura", "Bololo"],
+  ["Convoitise", "Covetousness", "Codicia", "Bramosia", "Cobiça", "Mposa mabe"],
+  ["Médisance", "Gossip", "Chisme", "Maldicenza", "Fofoca", "Songisongi"],
+  ["Vanité", "Vanity", "Vanidad", "Vanità", "Vaidade", "Lolendo ya mpamba"],
+  ["Rancune", "Grudge", "Rencor", "Rancore", "Rancor", "Kokanga motema"],
+  ["Désespoir", "Despair", "Desesperación", "Disperazione", "Desespero", "Kozanga elikya"],
+  ["L'Accusateur", "The Accuser", "El Acusador", "L'Accusatore", "O Acusador", "Mofundi"],
+  ["Le Découragement", "Discouragement", "El Desánimo", "Lo Scoraggiamento", "O Desânimo", "Bolembu"],
+  ["La Condamnation", "Condemnation", "La Condenación", "La Condanna", "A Condenação", "Etumbu"],
+  ["La Peur", "Fear", "El Miedo", "La Paura", "O Medo", "Bobangi"],
+  ["Le Chaos", "Chaos", "El Caos", "Il Caos", "O Caos", "Mobulu"],
+  ["L'Angoisse", "Anguish", "La Angustia", "L'Angoscia", "A Angústia", "Mitungisi"],
+  ["Le Désespoir", "Despair", "La Desesperación", "La Disperazione", "O Desespero", "Kozanga elikya"],
+  ["L'Orgueil", "Pride", "El Orgullo", "L'Orgoglio", "O Orgulho", "Lolendo"],
+  ["La Honte", "Shame", "La Vergüenza", "La Vergogna", "A Vergonha", "Soni"],
+  ["Le Doute", "Doubt", "La Duda", "Il Dubbio", "A Dúvida", "Ntembe"],
+  ["La Convoitise", "Covetousness", "La Codicia", "La Bramosia", "A Cobiça", "Mposa mabe"],
+  ["Père du mensonge", "Father of Lies", "Padre de la mentira", "Padre della menzogna", "Pai da mentira", "Tata ya lokuta"],
+  ["Le Père du mensonge", "The Father of Lies", "El padre de la mentira", "Il padre della menzogna", "O pai da mentira", "Tata ya lokuta"],
+  ["Lion", "Lion", "León", "Leone", "Leão", "Nkosi"],
+  ["Lion calmé", "Calm lion", "León calmado", "Leone calmo", "Leão calmo", "Nkosi ekimi"],
+  // niveaux
+  ["La Galilée", "Galilee", "Galilea", "Galilea", "Galileia", "Galilaya"],
+  ["Nazareth", "Nazareth", "Nazaret", "Nazareth", "Nazaré", "Nazarete"],
+  ["Le Jourdain", "The Jordan", "El Jordán", "Il Giordano", "O Jordão", "Yordani"],
+  ["Le désert de Judée", "The Judean desert", "El desierto de Judea", "Il deserto di Giudea", "O deserto da Judeia", "Esobe ya Yudea"],
+  ["Jéricho", "Jericho", "Jericó", "Gerico", "Jericó", "Yeriko"],
+  ["Capharnaüm", "Capernaum", "Cafarnaúm", "Cafarnao", "Cafarnaum", "Kapernaumi"],
+  ["Béthanie", "Bethany", "Betania", "Betania", "Betânia", "Betania"],
+  ["Jérusalem", "Jerusalem", "Jerusalén", "Gerusalemme", "Jerusalém", "Yelusaleme"],
+  ["La mer de Galilée", "The Sea of Galilee", "El mar de Galilea", "Il mare di Galilea", "O mar da Galileia", "Mbu ya Galilaya"],
+  ["Marcher sur les eaux", "Walking on water", "Caminar sobre el agua", "Camminare sulle acque", "Andar sobre as águas", "Kotambola likolo ya mai"],
+  ["La tempête", "The storm", "La tormenta", "La tempesta", "A tempestade", "Mopepe makasi"],
+  ["La mer Rouge", "The Red Sea", "El mar Rojo", "Il mar Rosso", "O mar Vermelho", "Mbu Motane"],
+  ["Le mont Carmel", "Mount Carmel", "El monte Carmelo", "Il monte Carmelo", "O monte Carmelo", "Ngomba Karmele"],
+  ["Le mont Sinaï", "Mount Sinai", "El monte Sinaí", "Il monte Sinai", "O monte Sinai", "Ngomba Sinai"],
+  ["Le char de feu", "The chariot of fire", "El carro de fuego", "Il carro di fuoco", "A carruagem de fogo", "Likalo ya moto"],
+  ["La fournaise ardente", "The fiery furnace", "El horno de fuego", "La fornace ardente", "A fornalha ardente", "Litumbu ya moto"],
+  ["La fosse aux lions", "The lions' den", "El foso de los leones", "La fossa dei leoni", "A cova dos leões", "Libulu ya bankosi"],
+  ["Le jardin de Gethsémani", "The garden of Gethsemane", "El huerto de Getsemaní", "Il giardino del Getsemani", "O jardim do Getsêmani", "Elanga ya Getesemane"],
+  ["Le mont des Oliviers", "The Mount of Olives", "El monte de los Olivos", "Il monte degli Ulivi", "O monte das Oliveiras", "Ngomba ya Olive"],
+  ["La Pentecôte", "Pentecost", "Pentecostés", "Pentecoste", "Pentecostes", "Pantekote"],
+  ["Le désert de la tentation", "The desert of temptation", "El desierto de la tentación", "Il deserto della tentazione", "O deserto da tentação", "Esobe ya komekama"],
+  ["La vallée des ténèbres", "The valley of darkness", "El valle de las tinieblas", "La valle delle tenebre", "O vale das trevas", "Lobwaku ya molili"],
+  ["Le Golgotha", "Golgotha", "El Gólgota", "Il Golgota", "O Gólgota", "Golgota"],
+  ["Guéris les malades !", "Heal the sick!", "¡Sana a los enfermos!", "Guarisci i malati!", "Cure os doentes!", "Bikisa bato ya maladi!"],
+  ["Le village de Jésus : guéris les malades !", "Jesus' village: heal the sick!", "El pueblo de Jesús: ¡sana a los enfermos!", "Il villaggio di Gesù: guarisci i malati!", "A aldeia de Jesus: cure os doentes!", "Mboka ya Yesu: bikisa bato ya maladi!"],
+  ["Guéris les malades au bord du fleuve !", "Heal the sick by the river!", "¡Sana a los enfermos junto al río!", "Guarisci i malati in riva al fiume!", "Cure os doentes à beira do rio!", "Bikisa bato ya maladi pembeni ya ebale!"],
+  ["Monte sur le char de feu et guéris les malades !", "Ride the chariot of fire and heal the sick!", "¡Sube al carro de fuego y sana a los enfermos!", "Sali sul carro di fuoco e guarisci i malati!", "Suba na carruagem de fogo e cure os doentes!", "Mata na likalo ya moto mpe bikisa bato ya maladi!"],
+  ["Au bord du lac : le char de feu t'attend !", "By the lake: the chariot of fire awaits you!", "Junto al lago: ¡el carro de fuego te espera!", "In riva al lago: il carro di fuoco ti aspetta!", "À beira do lago: a carruagem de fogo te espera!", "Pembeni ya laki: likalo ya moto ezali kozela yo!"],
+  ["Chez Lazare : guéris les malades !", "At Lazarus' house: heal the sick!", "En casa de Lázaro: ¡sana a los enfermos!", "Da Lazzaro: guarisci i malati!", "Na casa de Lázaro: cure os doentes!", "Epai ya Lazalo: bikisa bato ya maladi!"],
+  ["Chasse les démons !", "Cast out the demons!", "¡Expulsa a los demonios!", "Scaccia i demoni!", "Expulse os demônios!", "Bengana milimo mabe!"],
+  ["Marche sur le lac, mais ne t'arrête pas : n'aie pas peur !", "Walk on the lake, but don't stop: do not be afraid!", "Camina sobre el lago, pero no te detengas: ¡no tengas miedo!", "Cammina sul lago, ma non fermarti: non avere paura!", "Ande sobre o lago, mas não pare: não tenha medo!", "Tambola likolo ya laki, kasi kotelema te: kobanga te!"],
+  ["Approche-toi : la mer s'ouvre devant toi !", "Come closer: the sea opens before you!", "Acércate: ¡el mar se abre ante ti!", "Avvicinati: il mare si apre davanti a te!", "Aproxime-se: o mar se abre diante de você!", "Pusana: mbu ekofungwama liboso na yo!"],
+  ["Le feu tombe du ciel : prends le char de feu !", "Fire falls from heaven: take the chariot of fire!", "El fuego cae del cielo: ¡toma el carro de fuego!", "Il fuoco scende dal cielo: prendi il carro di fuoco!", "O fogo cai do céu: pegue a carruagem de fogo!", "Moto ekiti uta na likolo: kamata likalo ya moto!"],
+  ["Renverse les idoles : chasse les démons !", "Tear down the idols: cast out the demons!", "Derriba los ídolos: ¡expulsa a los demonios!", "Abbatti gli idoli: scaccia i demoni!", "Derrube os ídolos: expulse os demônios!", "Bwaka bikeko: bengana milimo mabe!"],
+  ["Comme Élie, file vers le ciel sur le char de feu !", "Like Elijah, race to heaven on the chariot of fire!", "Como Elías, ¡sube al cielo en el carro de fuego!", "Come Elia, vola verso il cielo sul carro di fuoco!", "Como Elias, suba ao céu na carruagem de fogo!", "Lokola Eliya, mata na likolo na likalo ya moto!"],
+  ["Évite les jets de feu… sauf si ta flamme est grande !", "Avoid the jets of fire… unless your flame is big!", "Evita los chorros de fuego… ¡salvo si tu llama es grande!", "Evita i getti di fuoco… a meno che la tua fiamma sia grande!", "Evite os jatos de fogo… a não ser que sua chama seja grande!", "Keba na moto… longola soki mwinda na yo ezali monene!"],
+  ["Les lions ne se battent pas : calme-les par une parole (B) !", "Lions don't fight: calm them with a word (B)!", "Los leones no pelean: ¡cálmalos con una palabra (B)!", "I leoni non combattono: calmali con una parola (B)!", "Os leões não lutam: acalme-os com uma palavra (B)!", "Bankosi babundaka te: kitisa bango na liloba (B)!"],
+  ["Veille et prie : chasse les démons !", "Watch and pray: cast out the demons!", "Vela y ora: ¡expulsa a los demonios!", "Veglia e prega: scaccia i demoni!", "Vigie e ore: expulse os demônios!", "Kengela mpe bondela: bengana milimo mabe!"],
+  ["Le vent souffle : attrape les langues de feu !", "The wind blows: catch the tongues of fire!", "El viento sopla: ¡atrapa las lenguas de fuego!", "Il vento soffia: afferra le lingue di fuoco!", "O vento sopra: pegue as línguas de fogo!", "Mopepe ezali kopepa: simba minoko ya moto!"],
+  ["Résiste au mensonge : chasse les démons !", "Resist the lie: cast out the demons!", "Resiste a la mentira: ¡expulsa a los demonios!", "Resisti alla menzogna: scaccia i demoni!", "Resista à mentira: expulse os demônios!", "Boyokela lokuta te: bengana milimo mabe!"],
+  ["Les démons reviennent : le char de feu t'aide !", "The demons are back: the chariot of fire helps you!", "Los demonios vuelven: ¡el carro de fuego te ayuda!", "I demoni tornano: il carro di fuoco ti aiuta!", "Os demônios voltam: a carruagem de fogo te ajuda!", "Milimo mabe ezongi: likalo ya moto ezali kosalisa yo!"],
+  ["Triomphe du Père du mensonge !", "Triumph over the Father of Lies!", "¡Triunfa sobre el padre de la mentira!", "Trionfa sul padre della menzogna!", "Triunfe sobre o pai da mentira!", "Longa tata ya lokuta!"],
+  // écrans et tableau de bord
+  ["CHOISIS TON SERVITEUR", "CHOOSE YOUR SERVANT", "ELIGE A TU SIERVO", "SCEGLI IL TUO SERVO", "ESCOLHA SEU SERVO", "PONA MOSALELI NA YO"],
+  ["Flèches pour choisir, Espace ou Entrée pour jouer — ou touche un serviteur, puis touche-le encore", "Arrows to choose, Space or Enter to play — or tap a servant, then tap it again", "Flechas para elegir, Espacio o Intro para jugar — o toca un siervo y vuelve a tocarlo", "Frecce per scegliere, Spazio o Invio per giocare — oppure tocca un servo, poi toccalo ancora", "Setas para escolher, Espaço ou Enter para jogar — ou toque num servo e toque de novo", "Bafleshi mpo na kopona, Espace to Entrée mpo na kosakana — to simba mosaleli, simba ye lisusu"],
+  ["Appuie sur une touche pour choisir ton serviteur", "Press a key to choose your servant", "Pulsa una tecla para elegir a tu siervo", "Premi un tasto per scegliere il tuo servo", "Aperte uma tecla para escolher seu servo", "Finá bouton moko mpo na kopona mosaleli na yo"],
+  ["Chaque pierre fait venir des anges :", "Each stone calls angels:", "Cada piedra trae ángeles:", "Ogni pietra chiama angeli:", "Cada pedra traz anjos:", "Libanga nyonso ebengaka banzelu:"],
+  ["Pierre d'or", "Gold stone", "Piedra de oro", "Pietra d'oro", "Pedra de ouro", "Libanga ya wolo"],
+  ["Émeraude", "Emerald", "Esmeralda", "Smeraldo", "Esmeralda", "Emeraude"],
+  ["Diamant bleu", "Blue diamond", "Diamante azul", "Diamante blu", "Diamante azul", "Diama ya bule"],
+  ["Améthyste", "Amethyst", "Amatista", "Ametista", "Ametista", "Ametiste"],
+  ["Diamant rouge", "Red diamond", "Diamante rojo", "Diamante rosso", "Diamante vermelho", "Diama ya motane"],
+  ["Diamant de gloire", "Glory diamond", "Diamante de gloria", "Diamante di gloria", "Diamante de glória", "Diama ya nkembo"],
+  ["+1 ange", "+1 angel", "+1 ángel", "+1 angelo", "+1 anjo", "+1 anzelu"],
+  ["Flamme", "Flame", "Llama", "Fiamma", "Chama", "Mwinda"],
+  ["Courage", "Courage", "Valor", "Coraggio", "Coragem", "Mpiko"],
+  ["Char de feu", "Chariot of fire", "Carro de fuego", "Carro di fuoco", "Carruagem de fogo", "Likalo ya moto"],
+  ["NIVEAU TERMINÉ !", "LEVEL COMPLETE!", "¡NIVEL COMPLETADO!", "LIVELLO COMPLETATO!", "NÍVEL CONCLUÍDO!", "ETENI ESILI!"],
+  ["PARTIE TERMINÉE", "GAME OVER", "FIN DEL JUEGO", "PARTITA FINITA", "FIM DE JOGO", "LISANO ESILI"],
+  ["Appuie sur une touche pour recommencer ce niveau", "Press a key to restart this level", "Pulsa una tecla para reiniciar este nivel", "Premi un tasto per ricominciare il livello", "Aperte uma tecla para recomeçar este nível", "Finá bouton mpo na kobanda eteni oyo lisusu"],
+  ["VICTOIRE !", "VICTORY!", "¡VICTORIA!", "VITTORIA!", "VITÓRIA!", "ELONGI!"],
+  ["Touche pour rejouer", "Tap to play again", "Toca para jugar de nuevo", "Tocca per rigiocare", "Toque para jogar de novo", "Simba mpo na kosakana lisusu"],
+  // dialogue avec le géant
+  ["Si tu es le Fils de Dieu... ah ah !", "If you are the Son of God... ha ha!", "Si eres el Hijo de Dios... ¡ja, ja!", "Se sei il Figlio di Dio... ah ah!", "Se você é o Filho de Deus... ha ha!", "Soki ozali Mwana ya Nzambe... ha ha!"],
+  ["Ah ah ! Un disciple de Jésus...", "Ha ha! A disciple of Jesus...", "¡Ja, ja! Un discípulo de Jesús...", "Ah ah! Un discepolo di Gesù...", "Ha ha! Um discípulo de Jesus...", "Ha ha! Moyekoli ya Yesu..."],
+  ["Que viens-tu faire ici ?", "What are you doing here?", "¿Qué vienes a hacer aquí?", "Che cosa vieni a fare qui?", "O que você veio fazer aqui?", "Oyei kosala nini awa?"],
+  ["Tu crois pouvoir me vaincre ?", "You think you can defeat me?", "¿Crees que puedes vencerme?", "Credi di potermi sconfiggere?", "Você acha que pode me vencer?", "Okanisi okoki kolonga ngai?"],
+  ["Je vais te détruire !", "I will destroy you!", "¡Voy a destruirte!", "Ti distruggerò!", "Vou te destruir!", "Nakobebisa yo!"],
+  ["Tu ne passeras pas !", "You will not get through!", "¡No pasarás!", "Non passerai!", "Você não vai passar!", "Okoleka te!"],
+  ["Écoute ce que je dis de toi...", "Listen to what I say about you...", "Escucha lo que digo de ti...", "Ascolta cosa dico di te...", "Escute o que eu digo de você...", "Yoka oyo nalobaka mpo na yo..."],
+  ["Appuie sur une touche ou touche l’écran", "Press a key or tap the screen", "Pulsa una tecla o toca la pantalla", "Premi un tasto o tocca lo schermo", "Aperte uma tecla ou toque na tela", "Finá bouton to simba ekrani"],
+  ["Réponds avec des paroles de vie : touche B ou 💬", "Answer with words of life: press B or 💬", "Responde con palabras de vida: pulsa B o 💬", "Rispondi con parole di vita: premi B o 💬", "Responda com palavras de vida: aperte B ou 💬", "Yanola na maloba ya bomoi: finá B to 💬"],
+  ["B ou 💬 : paroles de vie", "B or 💬: words of life", "B o 💬: palabras de vida", "B o 💬: parole di vita", "B ou 💬: palavras de vida", "B to 💬: maloba ya bomoi"],
+  // messages en jeu
+  ["Faux !", "False!", "¡Falso!", "Falso!", "Falso!", "Lokuta!"],
+  ["Tes anges s'envolent...", "Your angels fly away...", "Tus ángeles se van volando...", "I tuoi angeli volano via...", "Seus anjos voam embora...", "Banzelu na yo bazali kopumbwa..."],
+  ["Il faut 100 anges pour une pluie de foudre", "You need 100 angels for a lightning storm", "Necesitas 100 ángeles para una lluvia de rayos", "Servono 100 angeli per una pioggia di fulmini", "Você precisa de 100 anjos para uma chuva de raios", "Esengeli banzelu 100 mpo na mbula ya nkake"],
+  ["Pluie de foudre et de feu !", "Rain of lightning and fire!", "¡Lluvia de rayos y fuego!", "Pioggia di fulmini e fuoco!", "Chuva de raios e fogo!", "Mbula ya nkake mpe moto!"],
+  ["Le lion se couche", "The lion lies down", "El león se echa", "Il leone si accuccia", "O leão se deita", "Nkosi alali"],
+  ["Guéri !", "Healed!", "¡Sanado!", "Guarito!", "Curado!", "Abiki!"],
+  ["Vaincu !", "Defeated!", "¡Vencido!", "Sconfitto!", "Vencido!", "Alongami!"],
+  ["Le char de feu s'envole !", "The chariot of fire takes off!", "¡El carro de fuego despega!", "Il carro di fuoco si alza in volo!", "A carruagem de fogo levanta voo!", "Likalo ya moto ezali kopumbwa!"],
+  ["Le char remonte au ciel", "The chariot returns to heaven", "El carro vuelve al cielo", "Il carro risale in cielo", "A carruagem volta ao céu", "Likalo ezongi na likolo"],
+  ["La mer s'ouvre !", "The sea opens!", "¡El mar se abre!", "Il mare si apre!", "O mar se abre!", "Mbu efungwami!"],
+  ["N'aie pas peur : avance !", "Do not be afraid: keep going!", "No tengas miedo: ¡avanza!", "Non avere paura: avanti!", "Não tenha medo: avance!", "Kobanga te: kende liboso!"],
+  ["Le doute… tu coules !", "Doubt… you are sinking!", "La duda… ¡te hundes!", "Il dubbio… affondi!", "A dúvida… você afunda!", "Ntembe… ozali kozinda!"],
+  ["Char de feu !", "Chariot of fire!", "¡Carro de fuego!", "Carro di fuoco!", "Carruagem de fogo!", "Likalo ya moto!"],
+  ["+1 vie", "+1 life", "+1 vida", "+1 vita", "+1 vida", "+1 bomoi"],
+  ["Le feu ne te brûle pas !", "The fire does not burn you!", "¡El fuego no te quema!", "Il fuoco non ti brucia!", "O fogo não te queima!", "Moto ezali kotumba yo te!"],
+  ["Le vent souffle → !", "The wind blows →!", "¡El viento sopla →!", "Il vento soffia →!", "O vento sopra →!", "Mopepe ezali kopepa →!"],
+  ["← Le vent souffle !", "← The wind blows!", "← ¡El viento sopla!", "← Il vento soffia!", "← O vento sopra!", "← Mopepe ezali kopepa!"],
+  ["Parle-lui : touche B", "Speak to it: press B", "Háblale: pulsa B", "Parlagli: premi B", "Fale com ele: aperte B", "Loba na ye: finá B"],
+  ["Langue de feu : la flamme grandit !", "Tongue of fire: the flame grows!", "Lengua de fuego: ¡la llama crece!", "Lingua di fuoco: la fiamma cresce!", "Língua de fogo: a chama cresce!", "Lolemo ya moto: mwinda ezali kokola!"],
+  ["La flamme grandit !", "The flame grows!", "¡La llama crece!", "La fiamma cresce!", "A chama cresce!", "Mwinda ezali kokola!"],
+  ["Flamme ardente !", "Blazing flame!", "¡Llama ardiente!", "Fiamma ardente!", "Chama ardente!", "Mwinda makasi!"],
+  ["Pas d'ange : ramasse des pierres d'or", "No angels: pick up gold stones", "Sin ángeles: recoge piedras de oro", "Niente angeli: raccogli pietre d'oro", "Sem anjos: pegue pedras de ouro", "Banzelu te: lokota mabanga ya wolo"],
+  // accusations et paroles de vie
+  ["Dieu ne t'aime pas", "God doesn't love you", "Dios no te ama", "Dio non ti ama", "Deus não te ama", "Nzambe alingaka yo te"],
+  ["Tu es seul", "You are alone", "Estás solo", "Sei solo", "Você está sozinho", "Ozali yo moko"],
+  ["Tu n'y arriveras pas", "You won't make it", "No lo lograrás", "Non ce la farai", "Você não vai conseguir", "Okokoka te"],
+  ["Personne ne te pardonnera", "No one will forgive you", "Nadie te perdonará", "Nessuno ti perdonerà", "Ninguém vai te perdoar", "Moto moko te akolimbisa yo"],
+  ["Tu ne vaux rien", "You are worthless", "No vales nada", "Non vali niente", "Você não vale nada", "Ozali na ntina te"],
+  ["Abandonne !", "Give up!", "¡Ríndete!", "Arrenditi!", "Desista!", "Tika!"],
+  ["Tu es méchant", "You are wicked", "Eres malo", "Sei cattivo", "Você é mau", "Ozali moto mabe"],
+  ["Tu es nul", "You are useless", "No sirves para nada", "Sei una nullità", "Você é um inútil", "Ozali mpamba"],
+  ["Personne ne t'aime", "Nobody loves you", "Nadie te quiere", "Nessuno ti ama", "Ninguém te ama", "Moto moko te alingaka yo"],
+  ["Tu as échoué", "You have failed", "Has fracasado", "Hai fallito", "Você falhou", "Olongi te"],
+  ["Tu ne changeras jamais", "You will never change", "Nunca cambiarás", "Non cambierai mai", "Você nunca vai mudar", "Okobongwana ata mokolo moko te"],
+  ["Tu es coupable", "You are guilty", "Eres culpable", "Sei colpevole", "Você é culpado", "Ozali na ngambo"],
+  ["Je suis aimé", "I am loved", "Soy amado", "Sono amato", "Sou amado", "Nalingami"],
+  ["Je marche avec Dieu", "I walk with God", "Camino con Dios", "Cammino con Dio", "Ando com Deus", "Natambolaka na Nzambe"],
+  ["Je suis pardonné", "I am forgiven", "Estoy perdonado", "Sono perdonato", "Estou perdoado", "Nalimbisami"],
+  ["Je suis béni", "I am blessed", "Soy bendecido", "Sono benedetto", "Sou abençoado", "Napambolami"],
+  ["Je crois que tout est possible", "I believe all things are possible", "Creo que todo es posible", "Credo che tutto sia possibile", "Creio que tudo é possível", "Nandimi ete nyonso ekoki kosalema"],
+  ["Je suis enfant de Dieu", "I am a child of God", "Soy hijo de Dios", "Sono figlio di Dio", "Sou filho de Deus", "Nazali mwana ya Nzambe"],
+  ["Je ne suis pas seul", "I am not alone", "No estoy solo", "Non sono solo", "Não estou sozinho", "Nazali ngai moko te"],
+  ["Je peux tout par Christ", "I can do all things through Christ", "Todo lo puedo en Cristo", "Posso tutto in Cristo", "Tudo posso em Cristo", "Nakoki nyonso na nzela ya Klisto"],
+  ["J'ai la paix de Dieu", "I have God's peace", "Tengo la paz de Dios", "Ho la pace di Dio", "Tenho a paz de Deus", "Nazali na kimia ya Nzambe"],
+  ["Je suis fortifié", "I am strengthened", "Estoy fortalecido", "Sono fortificato", "Estou fortalecido", "Nalendisami"],
+  ["Courage !", "Courage!", "¡Ánimo!", "Coraggio!", "Coragem!", "Mpiko!"],
+  ["Sois fort et courageux !", "Be strong and courageous!", "¡Sé fuerte y valiente!", "Sii forte e coraggioso!", "Seja forte e corajoso!", "Zala makasi mpe na mpiko!"],
+  ["Ne crains rien", "Fear nothing", "No temas nada", "Non temere", "Não tema nada", "Kobanga eloko te"],
+  ["Je suis avec toi", "I am with you", "Estoy contigo", "Sono con te", "Estou com você", "Nazali elongo na yo"],
+  ["Tu vas y arriver !", "You will make it!", "¡Lo vas a lograr!", "Ce la farai!", "Você vai conseguir!", "Okolonga!"],
+  ["Dieu combat pour toi", "God fights for you", "Dios pelea por ti", "Dio combatte per te", "Deus luta por você", "Nzambe abundaka mpo na yo"],
+  ["Lève-toi et brille !", "Arise and shine!", "¡Levántate y resplandece!", "Alzati e risplendi!", "Levante-se e brilhe!", "Telema mpe ngenga!"],
+  ["Tu es plus que vainqueur", "You are more than a conqueror", "Eres más que vencedor", "Sei più che vincitore", "Você é mais que vencedor", "Oleki molongi"],
+  ["Va avec la force que tu as", "Go in the strength you have", "Ve con la fuerza que tienes", "Va' con la forza che hai", "Vá com a força que você tem", "Kende na makasi oyo ozali na yango"],
+  ["Rien ne t'est impossible", "Nothing is impossible for you", "Nada es imposible para ti", "Nulla ti è impossibile", "Nada é impossível para você", "Eloko moko te ekoleka yo"],
+  // les fruits de l'Esprit (Galates 5.22-23)
+  ["Amour", "Love", "Amor", "Amore", "Amor", "Bolingo"],
+  ["Joie", "Joy", "Gozo", "Gioia", "Alegria", "Esengo"],
+  ["Paix", "Peace", "Paz", "Pace", "Paz", "Kimia"],
+  ["Patience", "Patience", "Paciencia", "Pazienza", "Paciência", "Motema molai"],
+  ["Bonté", "Goodness", "Bondad", "Bontà", "Bondade", "Bolamu"],
+  ["Bienveillance", "Kindness", "Benignidad", "Benevolenza", "Benignidade", "Boboto"],
+  ["Fidélité", "Faithfulness", "Fidelidad", "Fedeltà", "Fidelidade", "Bosembo"],
+  ["Douceur", "Gentleness", "Mansedumbre", "Mitezza", "Mansidão", "Bopolo"],
+  ["Maîtrise de soi", "Self-control", "Dominio propio", "Dominio di sé", "Domínio próprio", "Komipekisa"],
+  // page autour du jeu
+  ["Plein écran", "Full screen", "Pantalla completa", "Schermo intero", "Tela cheia", "Ekrani mobimba"],
+  ["Son (M)", "Sound (M)", "Sonido (M)", "Audio (M)", "Som (M)", "Makelele (M)"],
+  ["Son coupé (M)", "Sound off (M)", "Sin sonido (M)", "Audio spento (M)", "Som desligado (M)", "Makelele ekatami (M)"],
+  ["Tourne ton téléphone<br>en mode paysage pour jouer", "Turn your phone<br>sideways to play", "Gira tu teléfono<br>en horizontal para jugar", "Gira il telefono<br>in orizzontale per giocare", "Vire o telefone<br>na horizontal para jogar", "Balusa telefone na yo<br>na ngambo mpo na kosakana"],
+  ["Flèches ou A/D : avancer · Espace ou Haut : sauter · X : main de lumière · B : parole de vie · C : lancer un ange · V : pluie de foudre (une par tranche de 100 anges). Attrape les paroles d'encouragement : anges dorés, boules de feu et paroles plus grosses ! Sur le char de feu, saute 2 fois pour voler. Ramasse les pierres précieuses : or +1 ange, émeraude +3, diamant bleu +5, améthyste +10, diamant rouge +25, diamant de gloire +50 ! Dans certains niveaux, touche le char de feu pour monter dessus.",
+   "Arrows or A/D: move · Space or Up: jump · X: hand of light · B: word of life · C: throw an angel · V: lightning rain (one for every 100 angels). Catch the words of encouragement: golden angels, bigger fireballs and bigger words! On the chariot of fire, jump twice to fly. Pick up precious stones: gold +1 angel, emerald +3, blue diamond +5, amethyst +10, red diamond +25, glory diamond +50! In some levels, touch the chariot of fire to climb aboard.",
+   "Flechas o A/D: avanzar · Espacio o Arriba: saltar · X: mano de luz · B: palabra de vida · C: lanzar un ángel · V: lluvia de rayos (una por cada 100 ángeles). ¡Atrapa las palabras de ánimo: ángeles dorados, bolas de fuego y palabras más grandes! En el carro de fuego, salta 2 veces para volar. Recoge las piedras preciosas: oro +1 ángel, esmeralda +3, diamante azul +5, amatista +10, diamante rojo +25, diamante de gloria +50. En algunos niveles, toca el carro de fuego para subir.",
+   "Frecce o A/D: avanzare · Spazio o Su: saltare · X: mano di luce · B: parola di vita · C: lanciare un angelo · V: pioggia di fulmini (una ogni 100 angeli). Prendi le parole d'incoraggiamento: angeli dorati, palle di fuoco e parole più grandi! Sul carro di fuoco, salta 2 volte per volare. Raccogli le pietre preziose: oro +1 angelo, smeraldo +3, diamante blu +5, ametista +10, diamante rosso +25, diamante di gloria +50! In alcuni livelli, tocca il carro di fuoco per salirci.",
+   "Setas ou A/D: avançar · Espaço ou Cima: pular · X: mão de luz · B: palavra de vida · C: lançar um anjo · V: chuva de raios (uma a cada 100 anjos). Pegue as palavras de encorajamento: anjos dourados, bolas de fogo e palavras maiores! Na carruagem de fogo, pule 2 vezes para voar. Pegue as pedras preciosas: ouro +1 anjo, esmeralda +3, diamante azul +5, ametista +10, diamante vermelho +25, diamante de glória +50! Em alguns níveis, toque na carruagem de fogo para subir.",
+   "Bafleshi to A/D: kokende liboso · Espace to Likolo: kopumbwa · X: loboko ya pole · B: liloba ya bomoi · C: kobwaka anzelu · V: mbula ya nkake (moko mpo na banzelu 100). Simba maloba ya kolendisa: banzelu ya wolo, mabanga ya moto mpe maloba minene! Na likalo ya moto, pumbwa mbala 2 mpo na kopumbwa na likolo. Lokota mabanga ya motuya: wolo +1 anzelu, emeraude +3, diama ya bule +5, ametiste +10, diama ya motane +25, diama ya nkembo +50! Na biteni mosusu, simba likalo ya moto mpo na komata."]
+];
+// phrases qui contiennent un nombre ou un nom : {1}, {2} = morceau recopié ; {t1} = morceau traduit
+const TR_TPL = [
+  [/^« (.+) »$/, ['“{t1}”', '«{t1}»', '«{t1}»', '“{t1}”', '“{t1}”']],
+  [/^\+5 anges dorés · courage (\d)\/5$/, ['+5 golden angels · courage {1}/5', '+5 ángeles dorados · valor {1}/5', '+5 angeli dorati · coraggio {1}/5', '+5 anjos dourados · coragem {1}/5', '+5 banzelu ya wolo · mpiko {1}/5']],
+  [/^(\d+) anges : pluie de foudre prête ! \(V ⚡\)$/, ['{1} angels: lightning rain ready! (V ⚡)', '{1} ángeles: ¡lluvia de rayos lista! (V ⚡)', '{1} angeli: pioggia di fulmini pronta! (V ⚡)', '{1} anjos: chuva de raios pronta! (V ⚡)', 'Banzelu {1}: mbula ya nkake ebongi! (V ⚡)']],
+  [/^(\d+) anges : le maximum !$/, ['{1} angels: the maximum!', '{1} ángeles: ¡el máximo!', '{1} angeli: il massimo!', '{1} anjos: o máximo!', 'Banzelu {1}: ekoki!']],
+  [/^\+(\d+) diamants · \+3 anges !$/, ['+{1} diamonds · +3 angels!', '¡+{1} diamantes · +3 ángeles!', '+{1} diamanti · +3 angeli!', '+{1} diamantes · +3 anjos!', 'Diama +{1} · banzelu +3!']],
+  [/^\+(\d+) diamants !$/, ['+{1} diamonds!', '¡+{1} diamantes!', '+{1} diamanti!', '+{1} diamantes!', 'Diama +{1}!']],
+  [/^Tous les malades sont guéris · \+(\d+) diamants !$/, ['All the sick are healed · +{1} diamonds!', '¡Todos los enfermos sanados · +{1} diamantes!', 'Tutti i malati sono guariti · +{1} diamanti!', 'Todos os doentes foram curados · +{1} diamantes!', 'Bato nyonso ya maladi babiki · diama +{1}!']],
+  [/^Tous les démons sont chassés · \+(\d+) diamants !$/, ['All the demons are cast out · +{1} diamonds!', '¡Todos los demonios expulsados · +{1} diamantes!', 'Tutti i demoni sono scacciati · +{1} diamanti!', 'Todos os demônios foram expulsos · +{1} diamantes!', 'Milimo mabe nyonso ebenganami · diama +{1}!']],
+  [/^(.+) : \+(\d+) anges$/, ['{t1}: +{2} angels', '{t1}: +{2} ángeles', '{t1}: +{2} angeli', '{t1}: +{2} anjos', '{t1}: banzelu +{2}']],
+  [/^\+(\d+) anges$/, ['+{1} angels', '+{1} ángeles', '+{1} angeli', '+{1} anjos', '+{1} banzelu']],
+  [/^(\d+) niveaux : de la Galilée au Golgotha$/, ['{1} levels: from Galilee to Golgotha', '{1} niveles: de Galilea al Gólgota', '{1} livelli: dalla Galilea al Golgota', '{1} níveis: da Galileia ao Gólgota', 'Biteni {1}: uta Galilaya tii Golgota']],
+  [/^Malades guéris : (\d+) \/ (\d+)  —  touche pour continuer$/, ['Sick healed: {1} / {2}  —  tap to continue', 'Enfermos sanados: {1} / {2}  —  toca para continuar', 'Malati guariti: {1} / {2}  —  tocca per continuare', 'Doentes curados: {1} / {2}  —  toque para continuar', 'Bato babiki: {1} / {2}  —  simba mpo na kokoba']],
+  [/^Démons vaincus : (\d+) \/ (\d+)  —  touche pour continuer$/, ['Demons defeated: {1} / {2}  —  tap to continue', 'Demonios vencidos: {1} / {2}  —  toca para continuar', 'Demoni sconfitti: {1} / {2}  —  tocca per continuare', 'Demônios vencidos: {1} / {2}  —  toque para continuar', 'Milimo mabe elongami: {1} / {2}  —  simba mpo na kokoba']],
+  [/^Prochain niveau : (.+)$/, ['Next level: {t1}', 'Próximo nivel: {t1}', 'Prossimo livello: {t1}', 'Próximo nível: {t1}', 'Eteni oyo ekolanda: {t1}']],
+  [/^Le Père du mensonge est vaincu ! Points : (\d+)$/, ['The Father of Lies is defeated! Points: {1}', '¡El padre de la mentira ha sido vencido! Puntos: {1}', 'Il padre della menzogna è sconfitto! Punti: {1}', 'O pai da mentira foi vencido! Pontos: {1}', 'Tata ya lokuta alongami! Ba points: {1}']],
+  [/^Points : (\d+)$/, ['Points: {1}', 'Puntos: {1}', 'Punti: {1}', 'Pontos: {1}', 'Ba points: {1}']],
+  [/^Guéris : (\d+) \/ (\d+)$/, ['Healed: {1} / {2}', 'Sanados: {1} / {2}', 'Guariti: {1} / {2}', 'Curados: {1} / {2}', 'Babiki: {1} / {2}']],
+  [/^Vaincus : (\d+) \/ (\d+)$/, ['Defeated: {1} / {2}', 'Vencidos: {1} / {2}', 'Sconfitti: {1} / {2}', 'Vencidos: {1} / {2}', 'Balongami: {1} / {2}']],
+  [/^⚡ Foudre × (\d+)(.*)$/, ['⚡ Lightning × {1}{2}', '⚡ Rayos × {1}{2}', '⚡ Fulmini × {1}{2}', '⚡ Raios × {1}{2}', '⚡ Nkake × {1}{2}']],
+  [/^(\d+)\. (.+)$/, ['{1}. {t2}', '{1}. {t2}', '{1}. {t2}', '{1}. {t2}', '{1}. {t2}']],
+  [/^Je suis (.+) !$/, ['I am {t1}!', '¡Soy {t1}!', 'Sono {t1}!', 'Eu sou {t1}!', 'Ngai nazali {t1}!']],
+  [/^(.+) !$/, ['{t1}!', '¡{t1}!', '{t1}!', '{t1}!', '{t1}!'], true]
+];
+// la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
+const VICTORY = {
+  en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
+  es:['¡{X} ya no tiene poder!', '¡{X} ha perdido!', '¡Fuera, {X}!'],
+  it:['{X} non ha più potere!', '{X} ha perso!', 'Fuori, {X}!'],
+  pt:['{X} não tem mais poder!', '{X} perdeu!', 'Fora, {X}!'],
+  ln:['{X} ezali lisusu na nguya te!', '{X} elongami!', '{X}, bima!', 'Yesu alongi {X}!']
+};
+const TR = {}, TRU = {};
+LANGS.slice(1).forEach((l, i) => { TR[l] = new Map(); TRU[l] = new Map(); for (const r of TR_ROWS) { TR[l].set(r[0], r[i + 1]); TRU[l].set(r[0].toUpperCase(), r[i + 1].toUpperCase()); } });
+let LANG = 'fr', trCache = new Map();
+try { const s = localStorage.getItem('sj-lang'); if (LANGS.includes(s)) LANG = s; else { const n = (navigator.language || 'fr').slice(0, 2); if (LANGS.includes(n)) LANG = n; } } catch (e) {}
+function tr(s) {
+  if (LANG === 'fr' || typeof s !== 'string' || !s) return s;
+  const hit = trCache.get(s); if (hit !== undefined) return hit;
+  let out = TR[LANG].get(s) ?? TRU[LANG].get(s);
+  if (out === undefined) {
+    const li = LANGS.indexOf(LANG) - 1;
+    for (const [re, m, known] of TR_TPL) {
+      const g = s.match(re); if (!g) continue;
+      if (known && !TR[LANG].has(g[1])) continue; // « X ! » seulement si X est un mot connu
+      out = m[li].replace(/\{(t?)(\d)\}/g, (_, k, i) => k ? tr(g[i]) : g[i]); break;
+    }
+  }
+  if (out === undefined) out = s;
+  if (trCache.size > 3000) trCache.clear();
+  trCache.set(s, out); return out;
+}
+// chaque texte dessiné sur le jeu passe par la traduction
+{ const ft = ctx.fillText, st = ctx.strokeText, mt = ctx.measureText;
+  ctx.fillText = function (t, ...a) { return ft.call(this, tr(t), ...a); };
+  ctx.strokeText = function (t, ...a) { return st.call(this, tr(t), ...a); };
+  ctx.measureText = function (t) { return mt.call(this, tr(t)); }; }
 const keys = {};
 let state = 'title', stT = 0, sel = 0, lives = 5, score = 0, cam = 0, level = 0, levelT = 0;
 let p, coins = [], foes = [], fires = [], lies = [], texts = [], god = { x:0, y:0 }, cp = 60;
@@ -113,10 +409,21 @@ function ensureAudio() {
 function setMute(m) {
   muted = m; if (master) master.gain.value = m ? 0 : 0.8;
   try { localStorage.setItem('sj-mute', m ? '1' : '0'); } catch (e) {}
-  muteBtn.innerHTML = (m ? '🔇' : '🔊') + '<span class="lbl">' + (m ? ' Son coupé (M)' : ' Son (M)') + '</span>'; // sur téléphone, le texte est masqué
+  muteBtn.innerHTML = (m ? '🔇' : '🔊') + '<span class="lbl">' + ' ' + tr(m ? 'Son coupé (M)' : 'Son (M)') + '</span>'; // sur téléphone, le texte est masqué
 }
 setMute(muted);
 muteBtn.addEventListener('click', () => { ensureAudio(); setMute(!muted); muteBtn.blur(); });
+// le bouton 🌐 passe à la langue suivante (le choix est gardé pour la prochaine fois)
+const langBtn = document.getElementById('lang');
+function applyLang() {
+  trCache.clear(); document.documentElement.lang = LANG;
+  for (const el of document.querySelectorAll('[data-i18n]')) { if (el.dataset.fr === undefined) el.dataset.fr = el.innerHTML; el.innerHTML = (el.dataset.pre || '') + tr(el.dataset.fr); }
+  langBtn.innerHTML = '🌐 ' + LANG.toUpperCase() + '<span class="lbl"> ' + LANG_NAMES[LANG] + '</span>';
+  setMute(muted);
+}
+function setLang(l) { LANG = l; try { localStorage.setItem('sj-lang', l); } catch (e) {} applyLang(); }
+langBtn.addEventListener('click', () => { setLang(LANGS[(LANGS.indexOf(LANG) + 1) % LANGS.length]); langBtn.blur(); });
+applyLang();
 const mf = n => 440 * Math.pow(2, (n - 69) / 12);
 function tone(freq, dur, type, vol, t0, slide, bus) {
   if (!AC) return;
@@ -550,6 +857,7 @@ function drawEncs(t) {
 // la grande phrase de victoire : « La colère a été vaincue ! »
 const FEM = new Set(['Haine','Colère','Cupidité','Immoralité','Méchanceté','Sorcellerie','Tristesse','Bêtise','Paresse','Rébellion','Hypocrisie','Grippe','Tuberculose','Surdité','Cécité','Varicelle','Rougeole','Hépatite B','Épilepsie','Drépanocytose','Dépression','Covid-19','Peur','Jalousie','Honte','Angoisse','Amertume','Convoitise','Médisance','Vanité','Rancune','Condamnation']);
 function victoryLine(n) {
+  if (LANG !== 'fr') { const V = VICTORY[LANG]; return V[Math.floor(rnd() * V.length)].replace('{X}', tr(n)); }
   let A, base = n.replace(/^(L'|La |Le )/, '');
   if (n === 'Père du mensonge') { A = 'Le Père du mensonge'; base = n; }
   else if (/^(L'|La |Le )/.test(n)) A = n;
@@ -2449,7 +2757,7 @@ function loop() {
   else {
     draw();
     const L = LEVELS[level];
-    if (state === 'title') { banner('SUPER JÉSUS', 'Appuie sur une touche pour choisir ton serviteur', LEVELS.length + ' niveaux : de la Galilée au Golgotha'); drawGemLegend(312); }
+    if (state === 'title') { banner('SUPER JESUS', 'Appuie sur une touche pour choisir ton serviteur', LEVELS.length + ' niveaux : de la Galilée au Golgotha'); drawGemLegend(312); }
     if (state === 'next') banner('NIVEAU TERMINÉ !', (L.kind === 'mal' ? 'Malades guéris : ' : 'Démons vaincus : ') + done + ' / ' + total + '  —  touche pour continuer', 'Prochain niveau : ' + LEVELS[level + 1].name);
     if (state === 'over') banner('PARTIE TERMINÉE', 'Appuie sur une touche pour recommencer ce niveau', L.name);
     if (state === 'win') banner('VICTOIRE !', 'Le Père du mensonge est vaincu ! Points : ' + score, 'Touche pour rejouer');
