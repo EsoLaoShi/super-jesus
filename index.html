@@ -767,11 +767,11 @@ function buildLevel(n) {
   } else {
     const gi = GIANTS[n % GIANTS.length]; gate = { x:LEVEL_W - 110 };
     foes.push({ name:gi.name, look:gi.look, kind:'dem', boss:true, giant:true, x:x + 680, y:FLOOR - 96, w:84, h:96, min:x + 470, max:x + 855, d:-1, dead:false,
-      hp:Math.min(18, 7 + n), hpMax:Math.min(18, 7 + n), hurt:0, spd:.8, shot:0, taunt:['Je suis ' + gi.name + ' !', 'Tu ne passeras pas !', 'Écoute ce que je dis de toi...'] });
+      hp:Math.min(24, 10 + n), hpMax:Math.min(24, 10 + n), hurt:0, spd:.8, shot:0, taunt:['Je suis ' + gi.name + ' !', 'Tu ne passeras pas !', 'Écoute ce que je dis de toi...'] });
   }
   // la horde garde le géant, et une petite foule est retenue captive dans une cage
-  horde = { pool:10 + Math.floor(n * 1.5), t:0, cap:8 + Math.floor(n / 3), on:false, every:Math.max(90, 150 - n * 3) };
-  for (let i = 0, nH = 7 + Math.floor(n / 3); i < nH; i++) spawnHorde(x + 430 + (i * 67) % 430, r3);
+  horde = { pool:16 + n * 2, t:0, cap:10 + Math.floor(n / 2), on:false, every:Math.max(70, 130 - n * 3) };
+  for (let i = 0, nH = 9 + Math.floor(n / 2); i < nH; i++) spawnHorde(x + 430 + (i * 53) % 430, r3);
   cage = { x:x + 905, w:124, h:78, open:0 };
   captives = [];
   for (let i = 0, nC = 6 + n % 3; i < nC; i++) captives.push({ x:cage.x + 12 + i * (100 / nC), c:captiveLook(r3), f:r3() < .5 ? 1 : -1, ph:r3() * 6, free:0, gone:false });
@@ -787,7 +787,7 @@ function spawnHorde(x, R) {
   const name = fly ? FLYERS[Math.floor(R() * FLYERS.length)] : mal ? MALADIES[Math.floor(R() * MALADIES.length)] : DEMONS[Math.floor(R() * DEMONS.length)];
   const fw = fly ? 34 : 28 + Math.floor(R() * 14), fh = fly ? 28 : 24 + Math.floor(R() * 12), y0 = FLOOR - 120 - R() * 70;
   foes.push({ name, kind:mal ? 'mal' : 'dem', horde:true, fly, y0, x, y:fly ? y0 : FLOOR - fh, w:fw, h:fh, min:arenaX + 300, max:BARRIER - 6, d:-1, dead:false,
-    hp:2 + (n >= 10 ? 1 : 0) + (L.strong ? 1 : 0), hurt:0, spd:.6 + R() * .55, ph:Math.floor(R() * 30), col:(mal ? SICK : EVIL)[Math.floor(R() * 6)] });
+    hp:2 + (n >= 6 ? 1 : 0) + (n >= 14 ? 1 : 0) + (L.strong ? 1 : 0), hurt:0, spd:.95 + R() * .8, ph:Math.floor(R() * 30), col:(mal ? SICK : EVIL)[Math.floor(R() * 6)] });
 }
 const CAP_SKIN = ['#f6dac6', '#e0aa82', '#c68e61', '#a86a3b', '#6e4228', '#4a2c18'], CAP_HAIR = ['#1a0f08', '#3a2216', '#6a3a1e', '#a0461e', '#d6c08a', '#2a1c12'];
 const CAP_TOP = ['#3f7fc4', '#c4161c', '#4f8a3c', '#d9a54a', '#7a3ab0', '#e8e4dc', '#2a2a36', '#e07a2a'];
@@ -1180,7 +1180,7 @@ function update() {
     if (!horde.on) { horde.on = true; for (const f of foes) if (f.horde) f.min = arenaX + 20; say(p.x + p.w / 2, p.y - 70, 'La horde attaque !', '#ff8a6a', true); sfx('thunder'); shake = 8; }
     const alive = foes.filter(f => f.horde && !f.dead).length;
     if (++horde.t % (storm > 0 ? 45 : horde.every) === 0 && horde.pool > 0 && alive < horde.cap + (storm > 0 ? 4 : 0)) { // des renforts sortent du mur de feu
-      const k = Math.min(horde.pool, level >= 10 ? 3 : 2); horde.pool -= k;
+      const k = Math.min(horde.pool, level >= 10 ? 4 : 3); horde.pool -= k;
       for (let i = 0; i < k; i++) { spawnHorde(BARRIER - 40 - i * 34); const f = foes[foes.length - 1]; f.min = arenaX + 20; spawnFire(f.x + f.w / 2, FLOOR, 18); }
       sfx('lie');
     }
@@ -1191,6 +1191,7 @@ function update() {
     if (f.horde && horde.on && !f.lion) { // la horde fonce sur le héros, en masse
       if ((levelT + f.ph) % 30 === 0) f.d = p.x + p.w / 2 < f.x + f.w / 2 ? -1 : 1;
       f.x += f.d * f.spd; f.x = Math.max(f.min, Math.min(f.max - f.w, f.x));
+      if (f.fly) f.y0 += (Math.max(FLOOR - 150, Math.min(FLOOR - 40, p.y + 10)) - f.y0) * .012; // ils piquent sur le héros
     } else { f.x += f.d * f.spd; if (f.x < f.min || f.x + f.w > f.max) f.d *= -1; }
     if (f.fly) f.y = f.y0 + Math.sin(levelT * .045 + f.min * .01) * 28;
     if (f.lion) { // les lions : on ne les combat pas, on les calme par une parole
@@ -1211,7 +1212,7 @@ function update() {
     }
   }
   // le Père du mensonge lance des mensonges
-  if (boss && !boss.dead && boss.talked && ++boss.shot > 110) {
+  if (boss && !boss.dead && boss.talked && ++boss.shot > 80) {
     boss.shot = 0;
     const dir = p.x < boss.x ? -1 : 1, LL = boss.giant ? ACCUSE : LIES, t = LL[Math.floor(rnd() * LL.length)];
     ctx.font = 'bold 12px Trebuchet MS, sans-serif';
