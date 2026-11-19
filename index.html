@@ -359,6 +359,7 @@ const hsh = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s 
 
 function buildLevel(n) {
   const L = LEVELS[n], T = THEMES[L.theme], r = rng(n * 977 + 13), cs = [];
+  freeCaches(L.theme); // libère les décors peints des autres niveaux (sinon l'iPhone sature vers le niveau 11)
   blocks = []; plats = []; thorns = []; hearts = []; torches = []; deco = []; chariots = []; jets = []; foes = []; lies = []; fires = []; flameParts = []; encs = []; bolts = []; drops = []; storm = 0; bigMsg = null;
   const r2 = rng(n * 331 + 7);
   const addDeco = (x0, x1, top) => { const k = 1 + Math.floor(r() * 3); for (let i = 0; i < k; i++) deco.push({ x:x0 + 40 + r() * Math.max(10, x1 - x0 - 80), y:top, t:T.deco[Math.floor(r() * T.deco.length)], s:.8 + r() * .5 }); };
@@ -2231,6 +2232,16 @@ const PAINT = {
     gEll(g, 0, 1, 14 * s, 2.4 * s, 'rgba(0,0,0,.35)'); br(0, 0, -Math.PI / 2, 30 * s, 6 * s, 1);
   }
 };
+// Les grands décors peints (ciel, nuages, plantes, arbres) restent en mémoire.
+// On ne garde que ceux du niveau en cours : au-delà d'environ 224 Mo d'images, l'iPhone n'affiche plus rien.
+function freeCaches(keep) {
+  const zap = k => { if (k && k.width) { k.width = 0; k.height = 0; } };
+  for (const o of [SKY, CLD]) for (const t in o) if (t !== keep) { zap(o[t]); delete o[t]; }
+  for (const t in FG) if (t !== keep) { FG[t].forEach(zap); delete FG[t]; }
+  for (const t in PAT) if (t !== keep) delete PAT[t];
+  for (const t in GRD) if (t !== keep) delete GRD[t];
+  for (const t in DECO) { zap(DECO[t].k); delete DECO[t]; }
+}
 function decoSprite(t, s) {
   const key = t + Math.round(s * 20);
   if (DECO[key]) return DECO[key];
