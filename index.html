@@ -2383,9 +2383,10 @@ function skyFor(L, T) {
 }
 function cloudsFor(L, T) { // une bande de nuages qui se répète sans couture
   if (CLD[L.theme]) return CLD[L.theme];
-  const [k, g] = mkCanvas(1600, 240), base = T.clouds, storm = !!L.rain, night = !!(T.moon || T.stars);
+  // peints en petit (400 × 60) puis agrandis : le flou vient tout seul, et c'est 16 fois plus léger qu'un filtre (l'iPhone se figeait sur les niveaux d'orage)
+  const k = document.createElement('canvas'); k.width = 400; k.height = 60; const g = k.getContext('2d'); g.scale(.25, .25);
+  const base = T.clouds, storm = !!L.rain, night = !!(T.moon || T.stars);
   const sh = mixC(base, dark(T.sky[0], .2), .5), li = night ? lite(base, .2) : mixC(base, '#fff6dc', .45);
-  g.filter = 'blur(2px)';
   const n = storm ? 16 : 9;
   for (let c = 0; c < n; c++) {
     const cx = (c + hsh(c * 3.3 + 1) * .6) * 1600 / n, cy = 45 + hsh(c * 7.1 + 2) * 110, w = (storm ? 220 : 130) + hsh(c * 5.7) * 170, h = (storm ? 46 : 22) + hsh(c * 9.3) * 26, blobs = [];
@@ -2395,7 +2396,6 @@ function cloudsFor(L, T) { // une bande de nuages qui se répète sans couture
       for (const [x, y, r] of blobs) { g.fillStyle = gRG(g, x + dx, y + r * .3, 0, r * .8, [[0, rgbaC(li, .5)], [1, rgbaC(li, 0)]]); g.fillRect(x + dx - r, y - r * .5, r * 2, r * 1.6); }
     }
   }
-  g.filter = 'none';
   return CLD[L.theme] = k;
 }
 function grads(L, T) {
