@@ -3278,7 +3278,7 @@ function tdDraw() {
   if (cage && vis(cage.x + cage.w / 2, cage.y, 160)) E.push([cage.y, () => drawCaptives()]);
   if (vscroll && !vscroll.got && vis(vscroll.x, vscroll.y, 30)) E.push([vscroll.y, () => { tdShadow(vscroll.x, vscroll.y, 11); drawScrollItem(vscroll.x - cam, vscroll.y - 24, t); }]);
   tdLot3Draw(E, vis, t);
-  E.push([H.y, () => { tdShadow(H.x, H.y, 14); if (!(H.inv > 0 && Math.floor(H.inv / 5) % 2)) drawHeroP(hero(), H.x - 18, H.y - 60, H.face, { air:false, k:Math.hypot(H.vx, H.vy) > .4 ? 0 : -1, v:Math.hypot(H.vx, H.vy) * 1.6, fast:false }, H.punch > 0); }]);
+  E.push([H.y, () => { tdShadow(H.x, H.y, 14); if (!(H.inv > 0 && Math.floor(H.inv / 5) % 2)) { if (Math.abs(H.dy) > Math.abs(H.dx) * 1.2 && H.punch <= 0) drawHeroFB(hero(), H.x - 18, H.y - 60, H.dy < 0, levelT * .28, Math.hypot(H.vx, H.vy) > .4); else drawHeroP(hero(), H.x - 18, H.y - 60, H.face, { air:false, k:Math.hypot(H.vx, H.vy) > .4 ? 0 : -1, v:Math.hypot(H.vx, H.vy) * 1.6, fast:false }, H.punch > 0); } }]);
   if (T.portal) E.push([T.portal.y, () => { const X = T.portal.x - cam, Y = T.portal.y; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y - 40, 4, 70, [[0, 'rgba(255,255,230,.9)'], [.4, 'rgba(255,230,140,.45)'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 70, Y - 120, 140, 140); ctx.fillStyle = LG(X - 16, 0, X + 16, 0, [[0, 'rgba(255,240,180,0)'], [.5, 'rgba(255,250,220,.8)'], [1, 'rgba(255,240,180,0)']]); ctx.fillRect(X - 16, Y - 160 + Math.sin(t / 200) * 4, 32, 160); ctx.restore(); }]);
   E.sort((a, b) => a[0] - b[0]); for (const e of E) e[1]();
   drawEncs(t);
@@ -3296,6 +3296,7 @@ function tdDraw() {
   ctx.restore();
   if (flash > .02) { ctx.fillStyle = 'rgba(235,235,255,' + (flash * .6).toFixed(2) + ')'; ctx.fillRect(0, 0, 800, 400); }
   tdHUD();
+  tdMiniMap();
   drawVerseShow();
   drawBigMsg();
   if (levelT < 220 && state === 'tdplay' && !bigMsg) { ctx.globalAlpha = Math.min(1, (220 - levelT) / 40); label('La Galilée — vue de haut', 400, 130, 30, '#ffc83d'); label('Explore, guéris les malades, libère les captifs !', 400, 160, 18, '#fff'); ctx.globalAlpha = 1; }
@@ -3673,6 +3674,131 @@ function tdLot3Draw(E, vis, t) {
   else if (quest && vis(quest.ix, quest.iy, 40)) E.push([quest.iy, () => drawItem(MISSIONS[quest.m].item, quest.ix - cam, quest.iy, t, !quest.follow && !quest.done)]);
 }
 
+// ================== Lot 2 : récits, carte du monde, mini-carte, héros de face et de dos ==================
+// ----- un court récit biblique avant chaque niveau (index = niveau), dans les 8 langues -----
+const STORIES = [
+  ["Jésus parcourait la Galilée, guérissant toute maladie parmi le peuple.", "Jesus went all over Galilee, healing every disease among the people.", "Jesús recorría Galilea, sanando toda enfermedad entre el pueblo.", "Gesù percorreva la Galilea, guarendo ogni malattia nel popolo.", "Jesus percorria a Galileia, curando toda doença entre o povo.", "Yesu azalaki kotambola na Galilaya, kobikisa bokono nyonso na kati ya bato.", "Yesu alizunguka Galilaya yote, akiponya kila ugonjwa kati ya watu.", "كان يسوع يطوف الجليل كله، يشفي كل مرض في الشعب."],
+  ["À Nazareth, où il a grandi, Jésus lit Ésaïe : il est venu guérir et libérer.", "In Nazareth, where he grew up, Jesus reads Isaiah: he came to heal and set free.", "En Nazaret, donde creció, Jesús lee a Isaías: vino a sanar y a liberar.", "A Nazaret, dove è cresciuto, Gesù legge Isaia: è venuto a guarire e liberare.", "Em Nazaré, onde cresceu, Jesus lê Isaías: ele veio curar e libertar.", "Na Nazarete, esika akolaki, Yesu atángi Yisaya: ayei kobikisa mpe kokangola.", "Huko Nazareti alikokulia, Yesu anasoma Isaya: amekuja kuponya na kuweka huru.", "في الناصرة حيث نشأ، يقرأ يسوع إشعياء: جاء ليشفي ويحرّر."],
+  ["Au Jourdain, Jean baptise Jésus. Une voix dit : « Celui-ci est mon Fils bien-aimé. »", "At the Jordan, John baptizes Jesus. A voice says: “This is my beloved Son.”", "En el Jordán, Juan bautiza a Jesús. Una voz dice: «Este es mi Hijo amado.»", "Al Giordano, Giovanni battezza Gesù. Una voce dice: «Questo è il mio Figlio diletto.»", "No Jordão, João batiza Jesus. Uma voz diz: «Este é o meu Filho amado.»", "Na Yordani, Yoane abatisi Yesu. Mongongo eloboi: « Oyo azali Mwana na ngai ya bolingo. »", "Katika Yordani, Yohana anambatiza Yesu. Sauti yasema: “Huyu ni Mwanangu mpendwa.”", "في الأردن يعمّد يوحنا يسوع. وصوت يقول: «هذا هو ابني الحبيب.»"],
+  ["Au désert, Dieu prend soin des siens et donne la force à ceux qui espèrent en lui.", "In the desert, God cares for his people and gives strength to those who hope in him.", "En el desierto, Dios cuida a los suyos y da fuerza a los que esperan en él.", "Nel deserto, Dio si prende cura dei suoi e dà forza a chi spera in lui.", "No deserto, Deus cuida dos seus e dá força aos que esperam nele.", "Na esobe, Nzambe abatelaka bato na ye mpe apesaka makasi na baye batyaka elikya na ye.", "Jangwani, Mungu huwatunza watu wake na kuwapa nguvu wanaomtumaini.", "في البرية يعتني الله بشعبه ويعطي القوة للذين يرجونه."],
+  ["À Jéricho, Zachée grimpe dans un arbre pour voir Jésus… et sa vie est changée.", "In Jericho, Zacchaeus climbs a tree to see Jesus… and his life is changed.", "En Jericó, Zaqueo sube a un árbol para ver a Jesús… y su vida cambia.", "A Gerico, Zaccheo sale su un albero per vedere Gesù… e la sua vita cambia.", "Em Jericó, Zaqueu sobe numa árvore para ver Jesus… e sua vida é transformada.", "Na Yeriko, Zakayo amati na nzete mpo na komona Yesu… mpe bomoi na ye ebongwani.", "Huko Yeriko, Zakayo anapanda mti ili amwone Yesu… na maisha yake yanabadilika.", "في أريحا يتسلّق زكّا شجرة ليرى يسوع… فتتغيّر حياته."],
+  ["À Capharnaüm, quatre amis descendent un paralysé par le toit. Jésus dit : « Lève-toi ! »", "In Capernaum, four friends lower a paralysed man through the roof. Jesus says: “Get up!”", "En Cafarnaúm, cuatro amigos bajan a un paralítico por el techo. Jesús dice: «¡Levántate!»", "A Cafarnao, quattro amici calano un paralitico dal tetto. Gesù dice: «Alzati!»", "Em Cafarnaum, quatro amigos descem um paralítico pelo telhado. Jesus diz: «Levanta-te!»", "Na Kapernaume, baninga minei bakitisi moto ya bolembu na motondo. Yesu alobi: « Telema! »", "Huko Kapernaumu, marafiki wanne wanamshusha mgonjwa wa kupooza kupitia paa. Yesu asema: “Simama!”", "في كفرناحوم يُنزل أربعة أصدقاء مشلولًا من السقف. يقول يسوع: «قُم!»"],
+  ["À Béthanie, Jésus appelle son ami hors du tombeau : « Lazare, sors ! »", "In Bethany, Jesus calls his friend out of the tomb: “Lazarus, come out!”", "En Betania, Jesús llama a su amigo fuera del sepulcro: «¡Lázaro, sal fuera!»", "A Betania, Gesù chiama il suo amico fuori dal sepolcro: «Lazzaro, vieni fuori!»", "Em Betânia, Jesus chama o amigo para fora do túmulo: «Lázaro, sai para fora!»", "Na Betania, Yesu abengi moninga na ye libanda ya lilita: « Lazalo, bima! »", "Huko Bethania, Yesu anamwita rafiki yake kutoka kaburini: “Lazaro, toka nje!”", "في بيت عنيا ينادي يسوع صديقه من القبر: «لعازر، هلمّ خارجًا!»"],
+  ["Jésus entre à Jérusalem sur un ânon ; la foule crie : « Hosanna ! »", "Jesus enters Jerusalem on a young donkey; the crowd shouts: “Hosanna!”", "Jesús entra en Jerusalén sobre un pollino; la multitud grita: «¡Hosanna!»", "Gesù entra a Gerusalemme su un asinello; la folla grida: «Osanna!»", "Jesus entra em Jerusalém num jumentinho; a multidão grita: «Hosana!»", "Yesu akoti na Yelusaleme likolo ya mwana-mpunda; ebele ya bato bagangi: « Hosana! »", "Yesu anaingia Yerusalemu juu ya mwana-punda; umati unapiga kelele: “Hosana!”", "يدخل يسوع أورشليم على جحش؛ والجموع تصرخ: «أوصنّا!»"],
+  ["Au bord du lac, Jésus appelle Pierre et André : « Suivez-moi ! »", "By the lake, Jesus calls Peter and Andrew: “Follow me!”", "A orillas del lago, Jesús llama a Pedro y a Andrés: «¡Seguidme!»", "In riva al lago, Gesù chiama Pietro e Andrea: «Seguitemi!»", "À beira do lago, Jesus chama Pedro e André: «Segui-me!»", "Pembeni ya laki, Yesu abengi Petelo na Andele: « Bólanda ngai! »", "Kando ya ziwa, Yesu anawaita Petro na Andrea: “Nifuateni!”", "على شاطئ البحيرة يدعو يسوع بطرس وأندراوس: «اتبعاني!»"],
+  ["Pierre marche sur l’eau vers Jésus… tant qu’il garde les yeux sur lui.", "Peter walks on the water towards Jesus… as long as he keeps his eyes on him.", "Pedro camina sobre el agua hacia Jesús… mientras mantiene los ojos en él.", "Pietro cammina sull'acqua verso Gesù… finché tiene gli occhi su di lui.", "Pedro anda sobre a água em direção a Jesus… enquanto mantém os olhos nele.", "Petelo atamboli likolo ya mai epai ya Yesu… soki kaka atali ye.", "Petro anatembea juu ya maji kumwelekea Yesu… muda wote anapomtazama.", "يمشي بطرس على الماء نحو يسوع… ما دام ينظر إليه."],
+  ["Une tempête secoue la barque. Jésus dit : « Silence ! » — et tout se calme.", "A storm shakes the boat. Jesus says: “Be still!” — and all is calm.", "Una tormenta sacude la barca. Jesús dice: «¡Calla!» — y todo se calma.", "Una tempesta scuote la barca. Gesù dice: «Taci!» — e tutto si calma.", "Uma tempestade sacode o barco. Jesus diz: «Silêncio!» — e tudo se acalma.", "Mopepe makasi eningisi bwato. Yesu alobi: « Kimya! » — mpe nyonso ekómi kimya.", "Dhoruba inatikisa mashua. Yesu asema: “Nyamaza!” — na kila kitu kinatulia.", "عاصفة تهزّ القارب. يقول يسوع: «اسكت!» — فيهدأ كل شيء."],
+  ["Moïse tend son bâton : la mer s’ouvre, et le peuple passe à pied sec.", "Moses stretches out his staff: the sea opens, and the people cross on dry ground.", "Moisés extiende su vara: el mar se abre y el pueblo pasa en seco.", "Mosè stende il bastone: il mare si apre e il popolo passa all'asciutto.", "Moisés estende a vara: o mar se abre e o povo passa a pé enxuto.", "Mose asemboli lingenda na ye: mbu efungwami, mpe bato bakatisi na mabele ya kokauka.", "Musa ananyoosha fimbo yake: bahari inagawanyika, na watu wanavuka pakavu.", "يمدّ موسى عصاه: ينشقّ البحر ويعبر الشعب على اليابسة."],
+  ["Sur le mont Carmel, Élie prie, et le feu de Dieu tombe du ciel.", "On Mount Carmel, Elijah prays, and God's fire falls from heaven.", "En el monte Carmelo, Elías ora, y el fuego de Dios cae del cielo.", "Sul monte Carmelo, Elia prega, e il fuoco di Dio scende dal cielo.", "No monte Carmelo, Elias ora, e o fogo de Deus cai do céu.", "Na ngomba Karmele, Eliya asambeli, mpe moto ya Nzambe ekiti uta likolo.", "Juu ya mlima Karmeli, Eliya anaomba, na moto wa Mungu unashuka kutoka mbinguni.", "على جبل الكرمل يصلّي إيليا، فتنزل نار الله من السماء."],
+  ["Sur le Sinaï, Dieu donne à Moïse les dix commandements.", "On Sinai, God gives Moses the ten commandments.", "En el Sinaí, Dios da a Moisés los diez mandamientos.", "Sul Sinai, Dio dà a Mosè i dieci comandamenti.", "No Sinai, Deus dá a Moisés os dez mandamentos.", "Na Sinai, Nzambe apesi Mose mibeko zomi.", "Juu ya Sinai, Mungu anampa Musa amri kumi.", "على سيناء يعطي الله موسى الوصايا العشر."],
+  ["Élie est enlevé au ciel dans un char de feu, sous les yeux d’Élisée.", "Elijah is taken up to heaven in a chariot of fire, as Elisha watches.", "Elías es llevado al cielo en un carro de fuego, ante los ojos de Eliseo.", "Elia è rapito in cielo su un carro di fuoco, sotto gli occhi di Eliseo.", "Elias é levado ao céu num carro de fogo, diante dos olhos de Eliseu.", "Eliya amatisami na likolo na likalo ya moto, Elisa azali kotala.", "Eliya anachukuliwa mbinguni katika gari la moto, Elisha akitazama.", "يُرفع إيليا إلى السماء في مركبة نارية أمام عيني أليشع."],
+  ["Trois jeunes refusent d’adorer la statue. Dans la fournaise, un quatrième marche avec eux.", "Three young men refuse to worship the statue. In the furnace, a fourth walks with them.", "Tres jóvenes se niegan a adorar la estatua. En el horno, un cuarto camina con ellos.", "Tre giovani rifiutano di adorare la statua. Nella fornace, un quarto cammina con loro.", "Três jovens recusam adorar a estátua. Na fornalha, um quarto anda com eles.", "Bilenge misato baboyi kogumbamela ekeko. Na kati ya litumbu, moto ya minei atamboli elongo na bango.", "Vijana watatu wanakataa kuisujudia sanamu. Tanuruni, mtu wa nne anatembea nao.", "ثلاثة شبان يرفضون السجود للتمثال. وفي الأتون يمشي معهم رابع."],
+  ["Daniel prie malgré la loi. Dans la fosse, Dieu ferme la gueule des lions.", "Daniel prays despite the law. In the den, God shuts the lions' mouths.", "Daniel ora a pesar de la ley. En el foso, Dios cierra la boca de los leones.", "Daniele prega nonostante la legge. Nella fossa, Dio chiude la bocca dei leoni.", "Daniel ora apesar da lei. Na cova, Deus fecha a boca dos leões.", "Danyele asambeli atako mobeko epekisi. Na libulu, Nzambe akangi minoko ya bankosi.", "Danieli anaomba licha ya sheria. Shimoni, Mungu anafunga vinywa vya simba.", "يصلّي دانيال رغم الأمر. وفي الجبّ يسدّ الله أفواه الأسود."],
+  ["Dans le jardin, la nuit, Jésus prie son Père avant l’épreuve.", "In the garden at night, Jesus prays to his Father before the trial.", "En el huerto, de noche, Jesús ora a su Padre antes de la prueba.", "Nel giardino, di notte, Gesù prega il Padre prima della prova.", "No jardim, à noite, Jesus ora ao Pai antes da provação.", "Na elanga, na butu, Yesu asambeli Tata na ye liboso ya komekama.", "Bustanini, usiku, Yesu anamwomba Baba yake kabla ya jaribu.", "في البستان ليلًا يصلّي يسوع لأبيه قبل المحنة."],
+  ["Sur le mont des Oliviers, Jésus demande à ses amis de veiller et prier.", "On the Mount of Olives, Jesus asks his friends to watch and pray.", "En el monte de los Olivos, Jesús pide a sus amigos que velen y oren.", "Sul monte degli Ulivi, Gesù chiede agli amici di vegliare e pregare.", "No monte das Oliveiras, Jesus pede aos amigos que vigiem e orem.", "Na ngomba ya Olive, Yesu asengi baninga na ye bákengela mpe básambela.", "Juu ya mlima wa Mizeituni, Yesu anawaomba rafiki zake wakeshe na kuomba.", "على جبل الزيتون يطلب يسوع من أصدقائه أن يسهروا ويصلّوا."],
+  ["À la Pentecôte, des langues de feu se posent sur les disciples : l’Esprit est donné.", "At Pentecost, tongues of fire rest on the disciples: the Spirit is given.", "En Pentecostés, lenguas de fuego se posan sobre los discípulos: el Espíritu es dado.", "A Pentecoste, lingue di fuoco si posano sui discepoli: lo Spirito è donato.", "No Pentecostes, línguas de fogo pousam sobre os discípulos: o Espírito é dado.", "Na Pantekote, minoko ya moto ekiti likolo ya bayekoli: Molimo apesami.", "Siku ya Pentekoste, ndimi za moto zinawashukia wanafunzi: Roho anatolewa.", "في يوم الخمسين تستقرّ ألسنة نار على التلاميذ: يُعطى الروح."],
+  ["Au désert, Jésus résiste au tentateur avec la Parole de Dieu.", "In the desert, Jesus resists the tempter with the Word of God.", "En el desierto, Jesús resiste al tentador con la Palabra de Dios.", "Nel deserto, Gesù resiste al tentatore con la Parola di Dio.", "No deserto, Jesus resiste ao tentador com a Palavra de Deus.", "Na esobe, Yesu aboyi momekisi na Liloba ya Nzambe.", "Jangwani, Yesu anampinga mjaribu kwa Neno la Mungu.", "في البرية يقاوم يسوع المجرّب بكلمة الله."],
+  ["Même dans la vallée la plus sombre, le Bon Berger est là.", "Even in the darkest valley, the Good Shepherd is there.", "Incluso en el valle más oscuro, el Buen Pastor está allí.", "Anche nella valle più oscura, il Buon Pastore è lì.", "Mesmo no vale mais escuro, o Bom Pastor está lá.", "Ata na lobwaku oyo eleki molili, Mobateli Malamu azali wana.", "Hata katika bonde lenye giza zaidi, Mchungaji Mwema yupo.", "حتى في أظلم وادٍ، الراعي الصالح هناك."],
+  ["Sur la croix, Jésus donne sa vie… et le troisième jour, il ressuscite : le mal est vaincu !", "On the cross, Jesus gives his life… and on the third day he rises: evil is defeated!", "En la cruz, Jesús da su vida… y al tercer día resucita: ¡el mal es vencido!", "Sulla croce, Gesù dà la sua vita… e il terzo giorno risorge: il male è vinto!", "Na cruz, Jesus dá a sua vida… e ao terceiro dia ressuscita: o mal é vencido!", "Na ekulusu, Yesu apesi bomoi na ye… mpe na mokolo ya misato asekwi: mabe elongami!", "Msalabani, Yesu anatoa uhai wake… na siku ya tatu anafufuka: uovu umeshindwa!", "على الصليب يبذل يسوع حياته… وفي اليوم الثالث يقوم: الشرّ مهزوم!"]
+];
+const storyText = i => STORIES[i][Math.max(0, LANGS.indexOf(LANG))];
+
+// ----- la carte du monde, entre deux niveaux -----
+const MAPPTS = LEVELS.map((_, i) => { const row = Math.floor(i / 8), k = i % 8, x = row % 2 ? 715 - k * 90 : 85 + k * 90; return [x, 96 + row * 62 + Math.sin(k * 1.3) * 8]; });
+function drawWorldMap() {
+  const t = Date.now(), L = LEVELS[level], nx = level + 1;
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#3a2412'], [1, '#1a0e06']]); ctx.fillRect(0, 0, 800, 400);
+  rrPath(ctx, 16, 54, 768, 210, 14); ctx.fillStyle = LG(0, 54, 0, 264, [[0, '#f4e4bc'], [1, '#dcc48e']]); ctx.fill(); ctx.strokeStyle = '#8a5a2a'; ctx.lineWidth = 3; ctx.stroke();
+  // petites collines et vagues peintes sur le parchemin
+  for (let i = 0; i < 14; i++) { const x = 40 + hsh(i) * 720, y = 70 + hsh(i + 9) * 180; ctx.strokeStyle = 'rgba(120,80,30,.18)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y + 8, 10, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); }
+  label('NIVEAU TERMINÉ !', 400, 38, 28, '#ffc83d');
+  ctx.setLineDash([5, 6]); ctx.strokeStyle = 'rgba(110,60,20,.6)'; ctx.lineWidth = 2.5; ctx.beginPath(); MAPPTS.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.setLineDash([]);
+  MAPPTS.forEach(([x, y], i) => {
+    const doneLv = i <= level, isNext = i === nx;
+    gEll(ctx, x, y, isNext ? 12 + Math.sin(t / 200) * 2 : 10, isNext ? 12 + Math.sin(t / 200) * 2 : 10, doneLv ? '#c9a227' : isNext ? '#ff8a3a' : '#b8a888');
+    ctx.strokeStyle = '#5a3412'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, isNext ? 12 : 10, 0, 7); ctx.stroke();
+    ctx.fillStyle = doneLv || isNext ? '#fff' : '#6a5a40'; ctx.font = 'bold 10px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(String(i + 1), x, y + 4);
+  });
+  if (nx < LEVELS.length) { // le héros avance d'une étape sur la carte
+    const a = MAPPTS[level], b = MAPPTS[nx], u = Math.min(1, stT / 70), e = u * u * (3 - 2 * u);
+    const hx = a[0] + (b[0] - a[0]) * e, hy = a[1] + (b[1] - a[1]) * e - Math.abs(Math.sin(u * Math.PI * 3)) * 6;
+    heroAt(hero(), hx, hy - 8, .55, b[0] >= a[0] ? 1 : -1, { k:u < 1 ? 0 : -1, v:2 }, false);
+    label(LEVELS[nx].name, Math.max(90, Math.min(710, b[0])), b[1] + 30, 13, '#7a2a0a');
+  }
+  ctx.fillStyle = '#fff'; ctx.font = '14px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText((L.kind === 'mal' ? 'Malades guéris : ' : 'Démons vaincus : ') + done + ' / ' + total + '  —  touche pour continuer', 400, 384, 770);
+  if (nx < LEVELS.length) { // le récit du prochain niveau
+    rrPath(ctx, 60, 280, 680, 80, 12); ctx.fillStyle = 'rgba(255,248,226,.95)'; ctx.fill(); ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#8a4a10'; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.fillText('Prochain niveau : ' + LEVELS[nx].name, 400, 300, 660);
+    ctx.fillStyle = '#3a2408'; ctx.font = 'italic bold 14px Georgia, serif'; wrapText(storyText(nx), 640).slice(0, 3).forEach((l, i) => ctx.fillText(l, 400, 322 + i * 17));
+  }
+}
+
+// ----- la mini-carte de la vue de haut -----
+function tdMiniMap() {
+  const T = td, boss = foes.find(f => f.boss); if (T.arenaOn && boss && !boss.dead) return;
+  const x0 = 640, y0 = 8, k = 150 / TDW, W = 150, Hh = TDH * k, t = Date.now(), P = (x, y) => [x0 + x * k, y0 + y * k];
+  ctx.save(); rrPath(ctx, x0 - 3, y0 - 3, W + 6, Hh + 6, 8); ctx.fillStyle = 'rgba(20,12,40,.62)'; ctx.fill(); rrPath(ctx, x0, y0, W, Hh, 6); ctx.fillStyle = 'rgba(70,130,60,.85)'; ctx.fill(); ctx.clip();
+  ctx.strokeStyle = '#d8b77e'; ctx.lineWidth = 2; ctx.beginPath(); T.path.forEach((q, i) => { const [x, y] = P(q[0], q[1]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+  const [lx, ly] = P(T.lake.cx, T.lake.cy); gEll(ctx, lx, ly, T.lake.rx * k, T.lake.ry * k, '#2a7ab8');
+  const A = T.arena, [ax, ay] = P(A.x, A.y); ctx.fillStyle = 'rgba(150,110,60,.8)'; ctx.fillRect(ax, ay, A.w * k, A.h * k);
+  if (T.garden) { const [gx, gy] = P(T.garden.x, T.garden.y); ctx.strokeStyle = '#1f5a1a'; ctx.lineWidth = 1.5; ctx.strokeRect(gx, gy, T.garden.w * k, T.garden.h * k); }
+  for (const h of T.houses) { const [hx, hy] = P(h.x, h.y); ctx.fillStyle = '#d8ccb0'; ctx.fillRect(hx, hy, h.w * k, h.h * k); }
+  const dot = (x, y, r, c) => { const [X, Y] = P(x, y); gEll(ctx, X, Y, r, r, c); };
+  for (const f of foes) if (!f.dead && !f.horde) dot(f.fx, f.fy, f.boss ? 3.5 : 1.8, f.boss ? '#ff2020' : f.kind === 'mal' ? '#9dff9a' : '#ff6a6a');
+  if (cage && !cage.open) dot(cage.x + cage.w / 2, cage.y, 2.6, '#ffd84a');
+  if (T.lamps) for (const l of T.lamps) if (!l.lit) dot(l.x, l.y, 2.2, '#fff27a');
+  if (vscroll && !vscroll.got) dot(vscroll.x, vscroll.y, 2.2, '#ffe8c0');
+  if (quest && !quest.done) { dot(quest.vx, quest.vy, 2.2, '#7ad0ff'); if (!quest.follow) dot(quest.ix, quest.iy, 2, '#ffffff'); }
+  const [vx, vy] = P(T.camX, T.camY); ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 1; ctx.strokeRect(vx, vy, 800 * k, 400 * k);
+  if (Math.floor(t / 300) % 2) dot(T.h.x, T.h.y, 3, '#fff'); else dot(T.h.x, T.h.y, 2.4, '#ffd84a');
+  ctx.restore();
+}
+
+// ----- le héros vu de face ou de dos (vue de haut, quand il monte ou descend) -----
+function drawHeroFB(c, x, y, back, ph, moving) {
+  const X = Math.round(x - cam + 18), sw = moving ? Math.sin(ph) : 0, skin = c.skin, hair = c.hair || '#2a1a10';
+  const topC = c.jacket || c.hoodie && c.top || c.top || '#eee', robe = c.robe, legC = c.pants || c.legs || skin, shoe = c.kicks || c.shoe || '#5a3a22';
+  if (c.halo && back) { ctx.strokeStyle = 'rgba(255,215,90,.95)'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.ellipse(X, y + 1, 10, 3.5, 0, 0, 7); ctx.stroke(); }
+  if (c.cloak) { ctx.fillStyle = c.cloak; ctx.beginPath(); ctx.moveTo(X - 10, y + 22); ctx.lineTo(X + 10, y + 22); ctx.lineTo(X + 14, y + 54); ctx.lineTo(X - 14, y + 54); ctx.fill(); }
+  // jambes et chaussures (elles avancent l'une après l'autre)
+  for (const s of [-1, 1]) { const lift = Math.max(0, s * sw) * 4; ctx.fillStyle = legC; ctx.fillRect(X + (s < 0 ? -7 : 2), y + 40 - lift, 5, 16); gEll(ctx, X + s * 4.5, y + 57 - lift, 4, 2.6, shoe); }
+  // le corps : robe ou haut + pantalon
+  if (robe) { ctx.fillStyle = LG(X - 12, 0, X + 12, 0, [[0, dark(robe, .15)], [.5, robe], [1, dark(robe, .2)]]); ctx.beginPath(); ctx.moveTo(X - 9, y + 22); ctx.lineTo(X + 9, y + 22); ctx.lineTo(X + 12, y + 52); ctx.lineTo(X - 12, y + 52); ctx.fill(); if (c.stripes) { ctx.fillStyle = c.stripes; ctx.fillRect(X - 5, y + 24, 2, 28); ctx.fillRect(X + 3, y + 24, 2, 28); } }
+  ctx.fillStyle = LG(X - 10, 0, X + 10, 0, [[0, dark(topC, .12)], [.5, topC], [1, dark(topC, .18)]]); rrPath(ctx, X - 9.5, y + 20, 19, robe ? 18 : 22, 4); ctx.fill();
+  if (c.jacketOpen && !back) { ctx.fillStyle = c.top; ctx.fillRect(X - 3, y + 21, 6, 20); }
+  if (c.tie && !back) { ctx.fillStyle = c.tie; ctx.fillRect(X - 1.2, y + 22, 2.4, 12); }
+  if (c.sash && !back) { ctx.strokeStyle = c.sash; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(X - 8, y + 22); ctx.lineTo(X + 8, y + 38); ctx.stroke(); }
+  if (c.belt) { ctx.fillStyle = c.belt; ctx.fillRect(X - 9.5, y + 36, 19, 3); }
+  if (c.print && back) { ctx.fillStyle = '#fff'; ctx.font = 'bold 4px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText(c.print, X, y + 30); }
+  // les bras qui se balancent
+  for (const s of [-1, 1]) { const a = -s * sw * 3; ctx.fillStyle = dark(topC, .08); rrPath(ctx, X + s * 11.5 - 2.5, y + 21 + a * .3, 5, 15, 2.5); ctx.fill(); gEll(ctx, X + s * 11.5, y + 37 + a, 2.6, 2.6, skin); }
+  if (c.staff) { ctx.strokeStyle = '#6a4424'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(X + 13, y + 6); ctx.lineTo(X + 13, y + 58); ctx.stroke(); }
+  // la tête
+  ctx.fillStyle = skin; ctx.fillRect(X - 2.5, y + 16, 5, 5);
+  const long = c.hairStyle === 'long' || c.hairStyle === 'longW' || c.hairStyle === 'braids';
+  if (back) {
+    if (long) { ctx.fillStyle = hair; rrPath(ctx, X - 8, y + 8, 16, c.hairStyle === 'long' ? 18 : 22, 6); ctx.fill(); }
+    gEll(ctx, X, y + 11, 8, 9, c.hairStyle === 'bald' ? skin : hair);
+  } else {
+    if (long) { ctx.fillStyle = hair; rrPath(ctx, X - 8.5, y + 6, 17, c.hairStyle === 'long' ? 18 : 22, 6); ctx.fill(); }
+    gEll(ctx, X, y + 12, 7.5, 8.5, skin);
+    if (c.hairStyle !== 'bald') { gEll(ctx, X, y + 6, 8, 4.5, hair); if (c.hairStyle === 'curly') for (let i = -2; i <= 2; i++) gEll(ctx, X + i * 3.2, y + 5, 2.6, 2.6, hair); }
+    gEll(ctx, X - 3, y + 12, 1.1, 1.4, '#1a0f08'); gEll(ctx, X + 3, y + 12, 1.1, 1.4, '#1a0f08');
+    if (c.shades) { ctx.fillStyle = '#111'; ctx.fillRect(X - 6, y + 10.5, 12, 3); }
+    if (c.beard) { ctx.fillStyle = c.beard === 'long' ? hair : dark(hair, .1); ctx.beginPath(); ctx.ellipse(X, y + 17, 6, c.beard === 'long' ? 6 : 3.5, 0, 0, Math.PI); ctx.fill(); }
+    else { ctx.strokeStyle = 'rgba(120,40,30,.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(X, y + 15, 2, .2, Math.PI - .2); ctx.stroke(); }
+    if (c.hoops) { gEll(ctx, X - 8, y + 15, 1.6, 2.2, '#d4a52a'); gEll(ctx, X + 8, y + 15, 1.6, 2.2, '#d4a52a'); }
+  }
+  if (c.veil) { ctx.fillStyle = c.veil; ctx.beginPath(); ctx.ellipse(X, y + 9, 10, 8, 0, Math.PI, 0); ctx.lineTo(X + 10, y + 24); ctx.lineTo(X - 10, y + 24); ctx.fill(); }
+  if (c.hat === 'cap') { gEll(ctx, X, y + 5, 8.5, 4.5, c.jacket || '#4a74b8'); if (!back) gEll(ctx, X, y + 7.5, 7, 2, dark(c.jacket || '#4a74b8', .25)); }
+  if (c.kufi) gEll(ctx, X, y + 4, 7.5, 4, c.kufi);
+  if (c.beanie) gEll(ctx, X, y + 4.5, 8.5, 5, c.beanie);
+  if (c.band) { ctx.fillStyle = '#d62020'; ctx.fillRect(X - 8, y + 6, 16, 2.4); }
+  if (c.crown) { ctx.fillStyle = '#ffd23a'; ctx.beginPath(); ctx.moveTo(X - 7, y + 4); for (let i = 0; i <= 4; i++) ctx.lineTo(X - 7 + i * 3.5, y + (i % 2 ? 3.5 : -1)); ctx.lineTo(X + 7, y + 4); ctx.fill(); }
+  if (c.halo && !back) { ctx.strokeStyle = 'rgba(255,215,90,.95)'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.ellipse(X, y - 1, 10, 3.5, 0, Math.PI, 0); ctx.stroke(); }
+}
+
 function loop() {
   stT++;
   if (vBtn) vBtn.classList.toggle('off', !((state === 'play' || state === 'tdplay') && rains > 0));
@@ -3690,7 +3816,7 @@ function loop() {
     draw();
     const L = LEVELS[level];
     if (state === 'title') { banner('SUPER JESUS', 'Appuie sur une touche pour jouer', LEVELS.length + ' niveaux : de la Galilée au Golgotha'); drawGemLegend(312); drawRecord(); }
-    if (state === 'next') banner('NIVEAU TERMINÉ !', (L.kind === 'mal' ? 'Malades guéris : ' : 'Démons vaincus : ') + done + ' / ' + total + '  —  touche pour continuer', 'Prochain niveau : ' + LEVELS[level + 1].name);
+    if (state === 'next') drawWorldMap();
     if (state === 'over') banner('PARTIE TERMINÉE', 'Appuie sur une touche pour recommencer ce niveau', L.name);
     if (state === 'win') banner('VICTOIRE !', 'Le Père du mensonge est vaincu ! Points : ' + score, 'Touche pour rejouer');
   }
