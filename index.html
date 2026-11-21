@@ -426,6 +426,21 @@ for (const r of [
   ["↑ ↓ : difficulté · L : versets · 2 : deux joueurs (J2 : I J K L pour marcher, U pour frapper)", "↑ ↓: difficulty · L: verses · 2: two players (P2: I J K L to walk, U to strike)", "↑ ↓: dificultad · L: versículos · 2: dos jugadores (J2: I J K L para andar, U para golpear)", "↑ ↓: difficoltà · L: versetti · 2: due giocatori (G2: I J K L per camminare, U per colpire)", "↑ ↓: dificuldade · L: versículos · 2: dois jogadores (J2: I J K L para andar, U para bater)", "↑ ↓: bokasi · L: bavese · 2: basakani mibale (J2: I J K L mpo na kotambola, U mpo na kobeta)", "↑ ↓: ugumu · L: mistari · 2: wachezaji wawili (M2: I J K L kutembea, U kupiga)", "↑ ↓: الصعوبة · L: الآيات · 2: لاعبان (ل2: I J K L للمشي، U للضرب)"]
 ]) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; }
 TR_TPL.push([/^👥 Deux joueurs : (.+)$/, ['👥 Two players: {t1}', '👥 Dos jugadores: {t1}', '👥 Due giocatori: {t1}', '👥 Dois jogadores: {t1}', '👥 Basakani mibale: {t1}', '👥 Wachezaji wawili: {t1}', '👥 لاعبان: {t1}']]);
+// textes du lot 5 (vue de haut, monde ouvert)
+for (const r of [
+  ["Monde ouvert : la Galilée", "Open world: Galilee", "Mundo abierto: Galilea", "Mondo aperto: la Galilea", "Mundo aberto: a Galileia", "Mokili mofungwami: Galilaya", "Ulimwengu wazi: Galilaya", "العالم المفتوح: الجليل"],
+  ["VUE DE HAUT : QUE VEUX-TU FAIRE ?", "TOP-DOWN: WHAT DO YOU WANT TO DO?", "VISTA DESDE ARRIBA: ¿QUÉ QUIERES HACER?", "VISTA DALL'ALTO: COSA VUOI FARE?", "VISTA DE CIMA: O QUE VOCÊ QUER FAZER?", "KOTALA UTA LIKOLO: OLINGI KOSALA NINI?", "MTAZAMO WA JUU: UNATAKA KUFANYA NINI?", "منظور علوي: ماذا تريد أن تفعل؟"],
+  ["Aucune partie en cours", "No game in progress", "Ninguna partida en curso", "Nessuna partita in corso", "Nenhum jogo em andamento", "Lisano moko te ezali kotambola", "Hakuna mchezo unaoendelea", "لا توجد لعبة جارية"],
+  ["Les 23 niveaux", "The 23 levels", "Los 23 niveles", "I 23 livelli", "Os 23 níveis", "Biteni 23", "Ngazi 23", "المراحل الـ23"],
+  ["Du niveau 1 au 23", "From level 1 to 23", "Del nivel 1 al 23", "Dal livello 1 al 23", "Do nível 1 ao 23", "Kobanda eteni 1 tii 23", "Kuanzia ngazi ya 1 hadi 23", "من المرحلة 1 إلى 23"],
+  ["Monde ouvert", "Open world", "Mundo abierto", "Mondo aperto", "Mundo aberto", "Mokili mofungwami", "Ulimwengu wazi", "عالم مفتوح"],
+  ["La Galilée, Nazareth et le lac", "Galilee, Nazareth and the lake", "Galilea, Nazaret y el lago", "La Galilea, Nazaret e il lago", "A Galileia, Nazaré e o lago", "Galilaya, Nazarete mpe laki", "Galilaya, Nazareti na ziwa", "الجليل والناصرة والبحيرة"],
+  ["23 niveaux et un monde ouvert", "23 levels and an open world", "23 niveles y un mundo abierto", "23 livelli e un mondo aperto", "23 níveis e um mundo aberto", "Biteni 23 mpe mokili mofungwami", "Ngazi 23 na ulimwengu wazi", "23 مرحلة وعالم مفتوح"],
+  ["LA GALILÉE EST LIBÉRÉE !", "GALILEE IS SET FREE!", "¡GALILEA ES LIBRE!", "LA GALILEA È LIBERA!", "A GALILEIA ESTÁ LIVRE!", "GALILAYA EKANGOLAMI!", "GALILAYA IMEWEKWA HURU!", "الجليل تحرّر!"],
+  ["VICTOIRE !", "VICTORY!", "¡VICTORIA!", "VITTORIA!", "VITÓRIA!", "ELONGI!", "USHINDI!", "النصر!"],
+  ["Cana", "Cana", "Caná", "Cana", "Caná", "Kana", "Kana", "قانا"],
+  ["Magdala", "Magdala", "Magdala", "Magdala", "Magdala", "Magadala", "Magdala", "المجدل"]
+]) { if (!TR_ROWS.some(q => q[0] === r[0])) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; } }
 // la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
 const VICTORY = {
   en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
@@ -622,8 +637,8 @@ setInterval(() => {
   }
 }, 25);
 function pickSong() {
-  if (['title', 'select', 'mode', 'book', 'cont'].includes(state)) return 'title';
-  if (state === 'tdplay') { const b = foes.find(f => f.boss); return td && td.arenaOn && b && !b.dead ? 'boss' : 'l1'; }
+  if (['title', 'select', 'mode', 'book', 'cont', 'tdpick', 'tdnext'].includes(state)) return 'title';
+  if (state === 'tdplay') { const b = foes.find(f => f.boss); return td && td.arenaOn && b && !b.dead ? 'boss' : td && !td.open ? LEVELS[level].song : 'l1'; }
   if (state === 'play' || state === 'talk') {
     const b = foes.find(f => f.boss);
     return b && !b.dead && p.x > arenaX ? 'boss' : LEVELS[level].song;
@@ -958,7 +973,9 @@ function retryLevel() { sfx('ok'); boost = 0; rains = 0; rainMark = 0; lives = s
 // ---------- Contrôles ----------
 function menuInput(k) {
   if (state === 'play' || state === 'tdplay') return;
-  if (state === 'tdover') { if (stT > 40) tdStart(); return; }
+  if (state === 'tdover') { if (stT > 40) tdRetry(); return; }
+  if (state === 'tdnext') { if (stT > 40) tdNextLevel(); return; }
+  if (state === 'tdpick') { if (['ArrowLeft', 'a'].includes(k)) { tdPickSel = (tdPickSel + 2) % 3; sfx('blip'); } else if (['ArrowRight', 'd'].includes(k)) { tdPickSel = (tdPickSel + 1) % 3; sfx('blip'); } else if ([' ', 'Enter', 'x', 'z'].includes(k)) tdPickChoose(tdPickSel); return; }
   if (state === 'tdwin') { if (stT > 40) go('title'); return; }
   if (state === 'book') { if (k === 'ArrowLeft' || k === 'a') { bookPage = (bookPage + 3) % 4; sfx('blip'); } else if (k === 'ArrowRight' || k === 'd') { bookPage = (bookPage + 1) % 4; sfx('blip'); } else if (stT > 10) go(bookBack); return; }
   if (state === 'cont') { if (['ArrowLeft', 'a', 'ArrowRight', 'd'].includes(k)) { contSel = 1 - contSel; sfx('blip'); } else if ([' ', 'Enter', 'x', 'z'].includes(k)) { if (contSel === 0) resumeGame(); else start(true); } return; }
@@ -1000,6 +1017,7 @@ cv.addEventListener('pointerdown', e => {
   if (state === 'mode') { const r = cv.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height * 400;
     if (fy > 326 && fy < 360) { const si = Math.floor((fx * 800 - 40) / 245); if (si <= 0) setDiff(diff + 1); else if (si === 1) { bookBack = 'mode'; bookPage = 0; go('book'); } else setTwoP(!twoP); return; }
     const i = fx < .5 ? 0 : 1; if (i === modeSel) menuInput('Enter'); else { modeSel = i; sfx('blip'); } return; }
+  if (state === 'tdpick') { const r = cv.getBoundingClientRect(), i = Math.max(0, Math.min(2, Math.floor(((e.clientX - r.left) / r.width * 800 - 30) / 250))); if (i === tdPickSel) tdPickChoose(i); else { tdPickSel = i; sfx('blip'); } return; }
   if (state === 'cont') { const r = cv.getBoundingClientRect(), i = (e.clientX - r.left) / r.width < .5 ? 0 : 1; if (i === contSel) menuInput('Enter'); else { contSel = i; sfx('blip'); } return; }
   if (state === 'book') { const r = cv.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width; menuInput(fx < .2 ? 'ArrowLeft' : fx > .8 ? 'ArrowRight' : 'Escape'); return; }
   if (state !== 'select') { menuInput(' '); return; }
@@ -3001,7 +3019,7 @@ const vBtn = document.getElementById('vbtn');
 // Les serviteurs, maladies, démons, anges, pierres et captifs du jeu de plateforme sont réutilisés.
 // =====================================================================
 let gameMode = 'plat', modeSel = 0, td = null, joy = null;
-const TDW = 2400, TDH = 1500;
+let TDW = 2400, TDH = 1500;
 const TOUCH = matchMedia('(pointer:coarse)').matches;
 function heroAt(c, X, Y, s, f, a, punch) { const oc = cam; cam = 0; ctx.save(); ctx.translate(X, Y); ctx.scale(s, s); drawHeroP(c, -18, -60, f, a, punch); ctx.restore(); cam = oc; }
 
@@ -3010,7 +3028,7 @@ function drawMode() {
   const t = Date.now();
   ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#2a1b4a'], [1, '#140c26']]); ctx.fillRect(0, 0, 800, 400);
   label('CHOISIS TON MODE DE JEU', 400, 50, 30, '#ffc83d');
-  [['Plateforme', '23 niveaux : cours, saute, vole'], ['Vue de haut', "Niveau d'essai : explore la Galilée"]].forEach(([n, d], i) => {
+  [['Plateforme', '23 niveaux : cours, saute, vole'], ['Vue de haut', '23 niveaux et un monde ouvert']].forEach(([n, d], i) => {
     const x = 120 + i * 300, y = 82, w = 260, h = 240, on = modeSel === i;
     rrPath(ctx, x, y, w, h, 16); ctx.fillStyle = on ? 'rgba(110,70,190,.85)' : 'rgba(255,255,255,.07)'; ctx.fill();
     if (on) { ctx.strokeStyle = '#ffc83d'; ctx.lineWidth = 4; ctx.stroke(); }
@@ -3043,61 +3061,12 @@ function drawMode() {
 
 // ----- construire la carte -----
 function tdDistSeg(px, py, a, b) { const dx = b[0] - a[0], dy = b[1] - a[1], l = dx * dx + dy * dy, u = Math.max(0, Math.min(1, ((px - a[0]) * dx + (py - a[1]) * dy) / l)); return Math.hypot(px - a[0] - u * dx, py - a[1] - u * dy); }
-function tdBuild() {
-  const R = rng(20261121), L = LEVELS[0];
-  const path = [[120, 1400], [360, 1290], [560, 1100], [700, 900], [980, 860], [1240, 800], [1480, 740], [1700, 760], [1960, 760], [1960, 600]];
-  const lake = { cx:760, cy:500, rx:310, ry:175 };
-  const arena = { x:1800, y:110, w:540, h:530, gx0:1900, gx1:2020 }; // l'enclos du géant (ouverture en bas)
-  const houses = [{ x:1100, y:980, w:130, h:74 }, { x:1290, y:1050, w:116, h:66 }, { x:1120, y:1150, w:104, h:62 }, { x:1430, y:930, w:100, h:62 }, { x:1310, y:1210, w:120, h:64 }];
-  td = { h:{ x:150, y:1380, vx:0, vy:0, face:1, dx:1, dy:0, inv:90, punch:0, cd:0 }, path, lake, arena, houses, trees:[], rocks:[], decos:[], posts:[],
-    balls:[], words:[], lies:[], camX:0, camY:1100, arenaOn:false, won:false, portal:null, prev:{}, wordCd:0, total:0 };
-  const nearPath = (x, y, d) => { for (let i = 0; i < path.length - 1; i++) if (tdDistSeg(x, y, path[i], path[i + 1]) < d) return true; return false; };
-  const inLake = (x, y, m) => ((x - lake.cx) / (lake.rx + m)) ** 2 + ((y - lake.cy) / (lake.ry + m)) ** 2 < 1;
-  const inRect = (x, y, r, m) => x > r.x - m && x < r.x + r.w + m && y > r.y - m && y < r.y + r.h + m;
-  const free = (x, y, m) => !nearPath(x, y, 46 + m) && !inLake(x, y, 30 + m) && !inRect(x, y, arena, 50 + m) && !houses.some(h => inRect(x, y, h, 30 + m)) && Math.hypot(x - 150, y - 1380) > 140;
-  for (let i = 0; i < 400 && td.trees.length < 75; i++) { const x = 40 + R() * (TDW - 80), y = 60 + R() * (TDH - 80); if (free(x, y, 10) && !td.trees.some(t => Math.hypot(t.x - x, t.y - y) < 70)) td.trees.push({ x, y, r:26 + R() * 16, k:R() < .25 ? 'palm' : 'oak', s:R() }); }
-  for (let i = 0; i < 200 && td.rocks.length < 22; i++) { const x = 40 + R() * (TDW - 80), y = 60 + R() * (TDH - 80); if (free(x, y, 0)) td.rocks.push({ x, y, r:12 + R() * 12 }); }
-  for (let i = 0; i < 320; i++) { const x = R() * TDW, y = R() * TDH; if (!inLake(x, y, 10) && !nearPath(x, y, 30)) td.decos.push({ x, y, k:R() < .55 ? 'tuft' : 'flower', c:['#ffd23a', '#ff7aa8', '#ffffff', '#b98aff', '#ff6a3a'][Math.floor(R() * 5)] }); }
-  // la palissade de l'enclos : des pieux, avec une ouverture en bas
-  const A = arena;
-  for (let x = A.x; x <= A.x + A.w; x += 20) { td.posts.push({ x, y:A.y }); if (x < A.gx0 || x > A.gx1) td.posts.push({ x, y:A.y + A.h }); }
-  for (let y = A.y + 20; y < A.y + A.h; y += 20) td.posts.push({ x:A.x, y }, { x:A.x + A.w, y });
-  // les malades à guérir, et quelques démons volants
-  foes = []; coins = []; fires = []; texts = []; encs = []; lies = []; bigMsg = null; done = 0; levelT = 0;
-  const names = L.foes.concat(['Grippe', 'Asthme', 'Rougeole', 'Varicelle', 'Paludisme', 'Cécité']);
-  const spot = m => { for (let i = 0; i < 300; i++) { const x = 80 + R() * (TDW - 160), y = 120 + R() * (TDH - 200); if (free(x, y, m) || (nearPath(x, y, 60) && !inRect(x, y, arena, 60) && Math.hypot(x - 150, y - 1380) > 420 && !inLake(x, y, 30))) return [x, y]; } return [600, 1200]; };
-  names.forEach((name, i) => { const [x, y] = spot(0); const w = 32 + (i * 7) % 12, h = 28 + (i * 5) % 10;
-    foes.push({ name, kind:'mal', td:true, fx:x, fy:y, hx:x, hy:y, w, h, x:x - w / 2, y:y - h, d:1, dead:false, hp:HEAVY.has(name) ? 2 : 1, hurt:0, spd:.55 + R() * .45, col:SICK[i % 6], tx:x, ty:y }); });
-  for (let i = 0; i < 4; i++) { const [x, y] = spot(0); foes.push({ name:FLYERS[i], kind:'dem', fly:true, td:true, fx:x, fy:y, hx:x, hy:y, w:34, h:28, x, y, d:1, dead:false, hp:1, hurt:0, spd:.8, col:EVIL[i], tx:x, ty:y }); }
-  td.total = foes.filter(f => f.kind === 'mal').length; total = td.total;
-  // pierres le long du chemin et dans les coins, paroles d'encouragement
-  for (let i = 0; i < path.length - 1; i++) for (let k = 0; k < 4; k++) { const u = (k + .5) / 4, a = path[i], b = path[i + 1]; coins.push({ x:a[0] + (b[0] - a[0]) * u + (R() - .5) * 40, y:a[1] + (b[1] - a[1]) * u + (R() - .5) * 40, got:false, kind:pickKind(W_LEVEL, R()) }); }
-  for (let i = 0; i < 18; i++) { const [x, y] = spot(0); coins.push({ x, y, got:false, kind:pickKind(W_FOE, R()) }); }
-  for (let i = 0; i < 5; i++) { const [x, y] = spot(0); encs.push({ x, y:y - 30, t:ENCOUR[Math.floor(R() * ENCOUR.length)], got:false }); }
-  // le géant, sa horde et les captifs, dans l'enclos
-  const gi = GIANTS[0];
-  foes.push({ name:gi.name, look:gi.look, kind:'dem', boss:true, giant:true, td:true, fx:A.x + A.w / 2, fy:A.y + 330, hx:A.x + A.w / 2, hy:A.y + 330, w:84, h:96, x:0, y:0, d:-1, dead:false, hp:14, hpMax:14, hurt:0, spd:.55, shot:0, tx:0, ty:0 });
-  td.horde = { pool:20, t:0, cap:12 };
-  for (let i = 0; i < 10; i++) tdSpawnHorde(A.x + 80 + R() * (A.w - 160), A.y + 160 + R() * (A.h - 230), R);
-  cage = { x:A.x + A.w / 2 - 62, y:A.y + 120, w:124, h:78, open:0 };
-  captives = []; for (let i = 0; i < 7; i++) captives.push({ x:cage.x + 12 + i * (100 / 7), c:captiveLook(R), f:R() < .5 ? 1 : -1, ph:R() * 6, free:0, gone:false, y:cage.y });
-  for (const f of foes) { f.x = f.fx - f.w / 2; f.y = f.fy - f.h; }
-  vscroll = { x:1120, y:640, got:false, i:VERSES.length - 1 }; // un parchemin au bord du lac
-  tdLot3Build();
-}
 function tdSpawnHorde(x, y, R) {
   R = R || rnd; const fly = R() < .25, mal = !fly && R() < .5;
   const name = fly ? FLYERS[Math.floor(R() * FLYERS.length)] : mal ? MALADIES[Math.floor(R() * MALADIES.length)] : DEMONS[Math.floor(R() * DEMONS.length)];
   const w = fly ? 34 : 28 + Math.floor(R() * 14), h = fly ? 28 : 24 + Math.floor(R() * 12);
   foes.push({ name, kind:mal ? 'mal' : 'dem', horde:true, fly, td:true, fx:x, fy:y, hx:x, hy:y, w, h, x:x - w / 2, y:y - h, d:1, dead:false, hp:2, hurt:0, spd:.9 + R() * .7, col:(mal ? SICK : EVIL)[Math.floor(R() * 6)], tx:x, ty:y });
 }
-function tdStart() {
-  if (!unlocked(sel)) { sfx('hurt'); return; }
-  sfx('ok'); score = 0; lives = startLives(); faith = hero().startFaith || 0; flameLvl = flameFor(faith); level = 0;
-  angels = []; balls = []; boost = 0; rains = 0; rainMark = 0; storm = 0; shake = 0; flash = 0;
-  p2 = null; tdBuild(); hardenFoes(td.horde); verseShow = null; go('tdplay');
-}
-
 // ----- collisions : le héros et les ennemis sont des petits cercles posés au sol -----
 function tdBlocked(x, y, r, who) {
   const T = td;
@@ -3139,7 +3108,7 @@ function tdUpdate() {
   // entrée dans l'enclos : l'ouverture se ferme par un mur de feu, la horde attaque
   const boss = foes.find(f => f.boss);
   if (!T.arenaOn && tdInArena(H.x, H.y - 30) && H.y < T.arena.y + T.arena.h - 20) { T.arenaOn = true; shake = 8; sfx('thunder'); say(H.x, H.y - 70, 'La horde attaque !', '#ff8a6a', true); }
-  if (!T.arenaOn && !T.hinted && Math.hypot(H.x - 1960, H.y - 760) < 160) { T.hinted = true; say(H.x, H.y - 70, "Entre dans l'arène : le géant t'attend !", '#ffd0d0', true); }
+  if (!T.arenaOn && !T.hinted && Math.hypot(H.x - T.hint.x, H.y - T.hint.y) < 160) { T.hinted = true; say(H.x, H.y - 70, "Entre dans l'arène : le géant t'attend !", '#ffd0d0', true); }
   // les touches d'action (au moment où on appuie)
   const kx = !!(keys.x || keys.X), kb = !!(keys.b || keys.B), kc = !!(keys.c || keys.C);
   const ex = kx && !T.prev.x, eb = kb && !T.prev.b, ec = kc && !T.prev.c; T.prev = { x:kx, b:kb, c:kc };
@@ -3208,7 +3177,7 @@ function tdUpdate() {
   // victoire sur le géant : la horde s'enfuit (géré par damageFoe), la cage s'ouvre, un passage de lumière apparaît
   if (boss && boss.dead && !T.won) { T.won = true; T.portal = { x:A.x + A.w - 70, y:A.y + 90 }; say(T.portal.x, T.portal.y - 60, 'Le passage est ouvert !', '#bfffd0', true); }
   if (cage && cage.open) { cage.open++; for (const h of captives) { if (h.gone) continue; h.free++; if (h.free > 130 && T.portal) { const dx = T.portal.x - h.x, dy = T.portal.y - h.y, l = Math.hypot(dx, dy); if (l < 14) { h.gone = true; spawnFire(h.x, h.y, 10, true); } else { h.x += dx / l * 1.3; h.y += dy / l * 1.3; h.f = dx > 0 ? 1 : -1; } } } }
-  if (T.portal && Math.hypot(H.x - T.portal.x, H.y - T.portal.y) < 34) { score += 200; sfx('ok'); go('tdwin'); return; }
+  if (T.portal && Math.hypot(H.x - T.portal.x, H.y - T.portal.y) < 34) { tdPortal(); return; }
   // particules, textes, caméra
   for (const q of fires) { q.x += q.vx + (q.dust ? 0 : Math.sin(q.life * .3 + (q.seed || 0)) * .35); q.y += q.vy; q.vy += q.dust ? .03 : -.025; q.life--; }
   fires = fires.filter(q => q.life > 0);
@@ -3240,6 +3209,7 @@ function tdDrawTree(t) {
   const X = t.x - cam, Y = t.y, r = t.r;
   gEll(ctx, X + 8, Y + 2, r * .95, r * .38, 'rgba(0,0,0,.28)');
   ctx.fillStyle = LG(X - 5, 0, X + 5, 0, [[0, '#4a2c16'], [1, '#7a4a26']]); ctx.fillRect(X - 5, Y - r * 1.2, 10, r * 1.2);
+  if (t.k === 'dead') { ctx.strokeStyle = '#3a2a1e'; ctx.lineWidth = 3; ctx.beginPath(); for (const [a, l] of [[-2.2, .8], [-1.3, 1], [-.6, .75], [-2.8, .6], [-1.8, .5]]) { ctx.moveTo(X, Y - r * 1.15); ctx.lineTo(X + Math.cos(a) * r * l, Y - r * 1.15 + Math.sin(a) * r * l); } ctx.stroke(); return; }
   if (t.k === 'palm') {
     for (let i = 0; i < 7; i++) { const a = i / 7 * 6.283 + t.s; ctx.save(); ctx.translate(X, Y - r * 1.25); ctx.rotate(a); gEll(ctx, r * .6, 0, r * .7, r * .18, i % 2 ? '#3f8a36' : '#2f6e2a'); ctx.restore(); }
     gEll(ctx, X, Y - r * 1.25, 5, 5, '#6a4a20');
@@ -3268,11 +3238,11 @@ function tdDraw() {
   cam = Math.round(T.camX); const cy = Math.round(T.camY);
   ctx.save(); if (shake > .3) ctx.translate((rnd() - .5) * shake, (rnd() - .5) * shake); ctx.translate(0, -cy);
   // le sol : herbe, chemin, lac, terre battue de l'enclos
-  if (!TDGRASS) TDGRASS = tdGrass();
+  if (!TDGRASS || TDGKEY !== td.theme) { TDGRASS = tdGround(THEMES[td.theme]); TDGKEY = td.theme; }
   ctx.save(); ctx.translate(-cam, 0); ctx.fillStyle = TDGRASS; ctx.fillRect(cam, cy, 800, 400);
   ctx.fillStyle = 'rgba(150,110,60,.55)'; ctx.fillRect(A.x, A.y, A.w, A.h);
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  for (const [lw, col] of [[56, '#8a6a3a'], [46, '#c9a46a'], [30, '#d8b77e']]) { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.beginPath(); T.path.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.stroke(); }
+  for (const [lw, col] of [[56, '#8a6a3a'], [46, '#c9a46a'], [30, '#d8b77e']]) { ctx.strokeStyle = col; ctx.lineWidth = lw; for (const P of T.paths) { ctx.beginPath(); P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.stroke(); } }
   const Lk = T.lake;
   gEll(ctx, Lk.cx, Lk.cy, Lk.rx + 16, Lk.ry + 12, '#d8c48a');
   ctx.fillStyle = RG(Lk.cx - 60, Lk.cy - 40, 20, Lk.rx, [[0, '#4ab0e0'], [.7, '#2a7ab8'], [1, '#1a5a8a']]); ctx.beginPath(); ctx.ellipse(Lk.cx, Lk.cy, Lk.rx, Lk.ry, 0, 0, 7); ctx.fill();
@@ -3298,6 +3268,7 @@ function tdDraw() {
   if (vscroll && !vscroll.got && vis(vscroll.x, vscroll.y, 30)) E.push([vscroll.y, () => { tdShadow(vscroll.x, vscroll.y, 11); drawScrollItem(vscroll.x - cam, vscroll.y - 24, t); }]);
   tdLot3Draw(E, vis, t);
   tdP2Draw(E, vis);
+  for (const sg of T.signs || []) if (vis(sg.x, sg.y, 80)) E.push([sg.y, () => tdDrawSign(sg)]);
   E.push([H.y, () => { tdShadow(H.x, H.y, 14); if (!(H.inv > 0 && Math.floor(H.inv / 5) % 2)) { if (Math.abs(H.dy) > Math.abs(H.dx) * 1.2 && H.punch <= 0) drawHeroFB(hero(), H.x - 18, H.y - 60, H.dy < 0, levelT * .28, Math.hypot(H.vx, H.vy) > .4); else drawHeroP(hero(), H.x - 18, H.y - 60, H.face, { air:false, k:Math.hypot(H.vx, H.vy) > .4 ? 0 : -1, v:Math.hypot(H.vx, H.vy) * 1.6, fast:false }, H.punch > 0); } }]);
   if (T.portal) E.push([T.portal.y, () => { const X = T.portal.x - cam, Y = T.portal.y; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y - 40, 4, 70, [[0, 'rgba(255,255,230,.9)'], [.4, 'rgba(255,230,140,.45)'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 70, Y - 120, 140, 140); ctx.fillStyle = LG(X - 16, 0, X + 16, 0, [[0, 'rgba(255,240,180,0)'], [.5, 'rgba(255,250,220,.8)'], [1, 'rgba(255,240,180,0)']]); ctx.fillRect(X - 16, Y - 160 + Math.sin(t / 200) * 4, 32, 160); ctx.restore(); }]);
   E.sort((a, b) => a[0] - b[0]); for (const e of E) e[1]();
@@ -3315,11 +3286,12 @@ function tdDraw() {
   for (const x of texts) { ctx.globalAlpha = Math.min(1, x.life / 25); label(x.t, Math.max(90, Math.min(710, x.x - cam)), x.y, x.big ? 26 : 16, x.col); ctx.globalAlpha = 1; }
   ctx.restore();
   if (flash > .02) { ctx.fillStyle = 'rgba(235,235,255,' + (flash * .6).toFixed(2) + ')'; ctx.fillRect(0, 0, 800, 400); }
+  tdDarkness();
   tdHUD();
   tdMiniMap();
   drawVerseShow();
   drawBigMsg();
-  if (levelT < 220 && state === 'tdplay' && !bigMsg) { ctx.globalAlpha = Math.min(1, (220 - levelT) / 40); label('La Galilée — vue de haut', 400, 130, 30, '#ffc83d'); label('Explore, guéris les malades, libère les captifs !', 400, 160, 18, '#fff'); ctx.globalAlpha = 1; }
+  if (levelT < 220 && state === 'tdplay' && !bigMsg) { ctx.globalAlpha = Math.min(1, (220 - levelT) / 40); label(td.title, 400, 130, 30, '#ffc83d'); label(td.sub, 400, 160, 18, '#fff'); ctx.globalAlpha = 1; }
   // le joystick tactile
   if (TOUCH && state === 'tdplay') {
     const ox = joy ? joy.ox : 100, oy = joy ? joy.oy : 300;
@@ -3331,8 +3303,8 @@ function tdDraw() {
 function tdHUD() {
   const T = td, boss = foes.find(f => f.boss);
   rrPath(ctx, 8, 8, 312, 78, 12); ctx.fillStyle = 'rgba(20,12,40,.62)'; ctx.fill();
-  ctx.textAlign = 'left'; ctx.font = 'bold 15px Trebuchet MS, sans-serif'; ctx.fillStyle = '#ffc83d'; ctx.fillText('La Galilée — vue de haut', 18, 28, 220);
-  ctx.font = 'bold 14px Trebuchet MS, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText('Points : ' + score, 18, 50); ctx.fillText('Guéris : ' + done + ' / ' + T.total, 18, 72);
+  ctx.textAlign = 'left'; ctx.font = 'bold 15px Trebuchet MS, sans-serif'; ctx.fillStyle = '#ffc83d'; ctx.fillText(td.title, 18, 28, 220);
+  ctx.font = 'bold 14px Trebuchet MS, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText('Points : ' + score, 18, 50); ctx.fillText((LEVELS[level].kind === 'mal' ? 'Guéris : ' : 'Vaincus : ') + done + ' / ' + T.total, 18, 72);
   for (let i = 0; i < lives; i++) heartIcon(150 + i * 17, 44, 7, '#e8364f');
   if (angels.length) { gEll(ctx, 255, 70, 6, 6, 'rgba(255,240,180,.9)'); ctx.fillStyle = '#fff'; ctx.fillText('× ' + angels.length, 266, 75); }
   if (boss && !boss.dead && T.arenaOn) {
@@ -3623,24 +3595,6 @@ function buildLot3(n) { // appelé à la fin de buildLevel : rocher secret et mi
 }
 
 // ----- vue de haut : le jardin fermé (trois lampes à allumer, un rocher à pousser) et le berger -----
-function tdLot3Build() {
-  const T = td, G0 = { x:2000, y:1050, w:300, h:300 };
-  T.garden = G0;
-  T.walls = [{ x:2000, y:1050, w:300, h:14 }, { x:2000, y:1336, w:300, h:14 }, { x:2286, y:1050, w:14, h:300 },
-    { x:2000, y:1050, w:14, h:110 }, { x:2000, y:1240, w:14, h:110 }, { x:2000, y:1160, w:14, h:80, door:true, open:false },
-    { x:2170, y:1064, w:14, h:110 }, { x:2170, y:1226, w:14, h:110 }];
-  T.boulder = { x:2177, y:1200, r:22 };
-  T.chest = { x:2240, y:1300, open:false };
-  T.lamps = [{ x:380, y:300 }, { x:1300, y:420 }, { x:1700, y:1380 }].map(l => Object.assign(l, { lit:false }));
-  quest = { m:0, vx:1000, vy:1150, ix:250, iy:720, follow:false, done:false };
-  const clear = (x, y, d) => { T.trees = T.trees.filter(o => Math.hypot(o.x - x, o.y - y) > d); T.rocks = T.rocks.filter(o => Math.hypot(o.x - x, o.y - y) > d); };
-  for (const l of T.lamps) clear(l.x, l.y, 70); clear(1000, 1150, 70); clear(250, 720, 70);
-  const inG = (x, y) => x > G0.x - 50 && x < G0.x + G0.w + 50 && y > G0.y - 50 && y < G0.y + G0.h + 50;
-  T.trees = T.trees.filter(o => !inG(o.x, o.y)); T.rocks = T.rocks.filter(o => !inG(o.x, o.y));
-  coins = coins.filter(k => !inG(k.x, k.y)); encs = encs.filter(k => !inG(k.x, k.y));
-  for (const f of foes) if (inG(f.fx, f.fy)) { f.fx = f.hx = f.tx = 1700; f.fy = f.hy = f.ty = 1250; f.x = f.fx - f.w / 2; f.y = f.fy - f.h; }
-  for (let i = 0; i < 6; i++) coins.push({ x:2050 + (i % 3) * 40, y:1100 + Math.floor(i / 3) * 190, got:false, kind:pickKind(W_GIANT, rnd()) });
-}
 function tdWallHit(x, y, r, who) {
   const T = td; if (!T.walls) return false;
   for (const w of T.walls) if (!w.open && x > w.x - r && x < w.x + w.w + r && y > w.y - r * .5 && y < w.y + w.h + r * .5) return true;
@@ -3664,7 +3618,7 @@ function tdLot3Update(H) {
     else { T.walls.find(w => w.door).open = true; sfx('bless'); say(l.x, l.y - 80, 'Les trois lampes brillent : la porte du jardin s’ouvre !', '#ffe27a', true); }
   }
   const door = T.walls.find(w => w.door);
-  if (!door.open && !T.doorHint && Math.hypot(H.x - 1985, H.y - 1200) < 90) { T.doorHint = true; say(H.x, H.y - 80, 'Allume les trois lampes pour ouvrir la porte', '#ffe0a0', true); }
+  if (!door.open && !T.doorHint && Math.hypot(H.x - T.doorAt.x, H.y - T.doorAt.y) < 90) { T.doorHint = true; say(H.x, H.y - 80, 'Allume les trois lampes pour ouvrir la porte', '#ffe0a0', true); }
   const C = T.chest;
   if (!C.open && Math.hypot(H.x - C.x, H.y - C.y) < 32) {
     C.open = true; score += 300; lives = Math.min(9, lives + 1); sfx('bless'); flash = .4;
@@ -3759,7 +3713,7 @@ function tdMiniMap() {
   const T = td, boss = foes.find(f => f.boss); if (T.arenaOn && boss && !boss.dead) return;
   const x0 = 640, y0 = 8, k = 150 / TDW, W = 150, Hh = TDH * k, t = Date.now(), P = (x, y) => [x0 + x * k, y0 + y * k];
   ctx.save(); rrPath(ctx, x0 - 3, y0 - 3, W + 6, Hh + 6, 8); ctx.fillStyle = 'rgba(20,12,40,.62)'; ctx.fill(); rrPath(ctx, x0, y0, W, Hh, 6); ctx.fillStyle = 'rgba(70,130,60,.85)'; ctx.fill(); ctx.clip();
-  ctx.strokeStyle = '#d8b77e'; ctx.lineWidth = 2; ctx.beginPath(); T.path.forEach((q, i) => { const [x, y] = P(q[0], q[1]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+  ctx.strokeStyle = '#d8b77e'; ctx.lineWidth = 2; for (const Q of T.paths) { ctx.beginPath(); Q.forEach((q, i) => { const [x, y] = P(q[0], q[1]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); }
   const [lx, ly] = P(T.lake.cx, T.lake.cy); gEll(ctx, lx, ly, T.lake.rx * k, T.lake.ry * k, '#2a7ab8');
   const A = T.arena, [ax, ay] = P(A.x, A.y); ctx.fillStyle = 'rgba(150,110,60,.8)'; ctx.fillRect(ax, ay, A.w * k, A.h * k);
   if (T.garden) { const [gx, gy] = P(T.garden.x, T.garden.y); ctx.strokeStyle = '#1f5a1a'; ctx.lineWidth = 1.5; ctx.strokeRect(gx, gy, T.garden.w * k, T.garden.h * k); }
@@ -3955,6 +3909,162 @@ function tdP2Draw(E, vis) {
     label('J2', p2.x - cam, p2.y - 66, 11, '#9ad8ff'); }]);
 }
 
+// ================== Lot 5 : les 23 niveaux en vue de haut, et le monde ouvert ==================
+let tdLv = 0, tdMode = 'levels', tdPickSel = 1, TDGKEY = null;
+const TD_WATER = new Set(['jordan', 'capharnaum', 'lake', 'eaux', 'storm', 'merrouge', 'ciel']);
+const TD_TOWN = new Set(['nazareth', 'capharnaum', 'bethanie', 'jerusalem', 'jericho', 'pentecote']);
+const TD_DRY = new Set(['desert', 'jericho', 'merrouge', 'sinai', 'tentation', 'carmel', 'lions', 'fournaise', 'bethanie']);
+const TD_DEAD = new Set(['valley', 'golgotha', 'tentation', 'fournaise']);
+// construit la carte : un niveau (0 à 22) ou le monde ouvert
+function tdBuild() {
+  const open = tdMode === 'open', n = open ? 0 : tdLv, L = LEVELS[n], theme = open ? 'galilee' : L.theme;
+  TDW = open ? 4800 : 2400; TDH = open ? 3000 : 1500;
+  const R = rng(open ? 7771 : 20261121 + n * 131), W = TDW, Hh = TDH, j = () => (R() - .5) * 90;
+  const A = { x:W - 600, y:110, w:540, h:530 }; A.gx0 = A.x + 100; A.gx1 = A.x + 220; const gx = A.x + 160;
+  let paths, lake, villages, signs = [];
+  if (open) {
+    paths = [[[120, Hh - 100], [500, Hh - 380], [1300, 2250], [1900, 1950], [2600, 1650], [3500, 1550], [4000, 1200], [gx, 900], [gx, A.y + A.h - 40]],
+      [[1300, 2250], [1050, 1600], [1500, 1150], [2150, 1050]], [[3500, 1550], [3300, 2300], [3900, 2650]]];
+    lake = { cx:3000, cy:850, rx:720, ry:360 };
+    villages = [{ x:520, y:2620, n:6 }, { x:1350, y:2080, n:3 }, { x:3550, y:1380, n:6 }, { x:2000, y:900, n:3 }];
+    signs = [{ x:300, y:2760, t:'Nazareth' }, { x:1180, y:2330, t:'Cana' }, { x:3300, y:1620, t:'Capharnaüm' }, { x:2150, y:1120, t:'Magdala' }, { x:2600, y:1300, t:'La mer de Galilée' }];
+  } else {
+    paths = [[[120, Hh - 100], [W * .15 + j(), Hh - 210 + j()], [W * .3 + j(), Hh * .8 + j()], [W * .45 + j(), Hh * .7 + j()], [W * .6 + j(), Hh * .63 + j()], [W * .72, Hh * .55], [gx, Hh * .5], [gx, A.y + A.h - 40]]];
+    lake = TD_WATER.has(theme) ? { cx:W * .32, cy:Hh * .33, rx:310, ry:175 } : { cx:-9999, cy:-9999, rx:1, ry:1 };
+    villages = [{ x:W * .55, y:Hh * .86, n:TD_TOWN.has(theme) ? 6 : 2 }].concat(TD_TOWN.has(theme) ? [{ x:W * .2, y:Hh * .55, n:4 }] : []);
+  }
+  td = { h:{ x:150, y:Hh - 120, vx:0, vy:0, face:1, dx:1, dy:0, inv:90, punch:0, cd:0 }, path:paths[0], paths, lake, arena:A, houses:[], trees:[], rocks:[], decos:[], posts:[], signs,
+    balls:[], words:[], lies:[], camX:0, camY:Hh - 400, arenaOn:false, won:false, portal:null, prev:{}, wordCd:0, total:0, theme, open, n, dark:open ? 0 : L.dark,
+    title:open ? 'Monde ouvert : la Galilée' : L.name, sub:open ? 'Explore, guéris les malades, libère les captifs !' : L.sub, hint:{ x:gx, y:Hh * .5 }, startScore:score };
+  const nearPath = (x, y, d) => { for (const P of paths) for (let i = 0; i < P.length - 1; i++) if (tdDistSeg(x, y, P[i], P[i + 1]) < d) return true; return false; };
+  const inLake = (x, y, m) => ((x - lake.cx) / (lake.rx + m)) ** 2 + ((y - lake.cy) / (lake.ry + m)) ** 2 < 1;
+  const inRect = (x, y, r, m) => x > r.x - m && x < r.x + r.w + m && y > r.y - m && y < r.y + r.h + m;
+  const garden = open ? { x:4300, y:2500, w:300, h:300 } : { x:W - 400, y:Hh - 450, w:300, h:300 };
+  const free = (x, y, m) => !nearPath(x, y, 46 + m) && !inLake(x, y, 30 + m) && !inRect(x, y, A, 50 + m) && !inRect(x, y, garden, 50 + m) && !td.houses.some(h => inRect(x, y, h, 30 + m)) && Math.hypot(x - 150, y - (Hh - 120)) > 140;
+  // les villages : des maisons autour d'un centre, jamais sur le chemin ni dans l'eau
+  for (const v of villages) for (let i = 0, k = 0; i < 200 && k < v.n; i++) {
+    const w = 100 + R() * 34, h = 60 + R() * 16, x = v.x + (R() - .5) * 520, y = v.y + (R() - .5) * 300;
+    if (x < 40 || y < 80 || x + w > W - 40 || y + h > Hh - 40) continue;
+    const hb = { x, y, w, h }; let ok = !inRect(x + w / 2, y + h / 2, A, 120) && !inRect(x + w / 2, y + h / 2, garden, 120) && !td.houses.some(o => inRect(x + w / 2, y + h / 2, o, 90));
+    for (let a = 0; a < 5 && ok; a++) for (let b = 0; b < 3 && ok; b++) { const px = x + w * a / 4, py = y - 34 + (h + 34) * b / 2; if (nearPath(px, py, 50) || inLake(px, py, 30)) ok = false; }
+    if (ok) { td.houses.push(hb); k++; }
+  }
+  const area = W * Hh / (2400 * 1500), dry = TD_DRY.has(theme), dead = TD_DEAD.has(theme);
+  const nTrees = Math.round((dry ? 34 : 75) * area), nRocks = Math.round((dry ? 40 : 22) * area);
+  for (let i = 0; i < 500 * area && td.trees.length < nTrees; i++) { const x = 40 + R() * (W - 80), y = 60 + R() * (Hh - 80); if (free(x, y, 10) && !td.trees.some(t => Math.hypot(t.x - x, t.y - y) < 70)) td.trees.push({ x, y, r:26 + R() * 16, k:dead && R() < .7 ? 'dead' : dry ? (R() < .75 ? 'palm' : 'oak') : R() < .25 ? 'palm' : 'oak', s:R() }); }
+  for (let i = 0; i < 300 * area && td.rocks.length < nRocks; i++) { const x = 40 + R() * (W - 80), y = 60 + R() * (Hh - 80); if (free(x, y, 0)) td.rocks.push({ x, y, r:12 + R() * 12 }); }
+  const flw = dry ? ['#e8d0a0', '#c8a070'] : ['#ffd23a', '#ff7aa8', '#ffffff', '#b98aff', '#ff6a3a'];
+  for (let i = 0; i < 320 * area; i++) { const x = R() * W, y = R() * Hh; if (!inLake(x, y, 10) && !nearPath(x, y, 30)) td.decos.push({ x, y, k:R() < (dry ? .8 : .55) ? 'tuft' : 'flower', c:flw[Math.floor(R() * flw.length)] }); }
+  for (let x = A.x; x <= A.x + A.w; x += 20) { td.posts.push({ x, y:A.y }); if (x < A.gx0 || x > A.gx1) td.posts.push({ x, y:A.y + A.h }); }
+  for (let y = A.y + 20; y < A.y + A.h; y += 20) td.posts.push({ x:A.x, y }, { x:A.x + A.w, y });
+  // les ennemis à guérir ou à chasser
+  foes = []; coins = []; fires = []; texts = []; encs = []; lies = []; bigMsg = null; done = 0; levelT = 0; level = n;
+  const kind = L.kind === 'dem' ? 'dem' : 'mal', pool = kind === 'mal' ? MALADIES : DEMONS, nFoes = open ? 34 : 12;
+  const names = (L.foes.length ? L.foes : DEMONS.slice(0, 6)).slice(); while (names.length < nFoes) names.push(pool[Math.floor(R() * pool.length)]);
+  const spot = m => { for (let i = 0; i < 300; i++) { const x = 80 + R() * (W - 160), y = 120 + R() * (Hh - 200); if (free(x, y, m) || (nearPath(x, y, 60) && !inRect(x, y, A, 60) && !inRect(x, y, garden, 60) && Math.hypot(x - 150, y - (Hh - 120)) > 420 && !inLake(x, y, 30))) return [x, y]; } return [W * .4, Hh * .8]; };
+  names.forEach((name, i) => { const [x, y] = spot(0); const w = 32 + (i * 7) % 12, h = 28 + (i * 5) % 10;
+    foes.push({ name, kind, td:true, fx:x, fy:y, hx:x, hy:y, w, h, x:x - w / 2, y:y - h, d:1, dead:false, hp:(HEAVY.has(name) ? 2 : 1) + (L.strong ? 1 : 0), hurt:0, spd:.55 + R() * .45 + n * .012, col:(kind === 'mal' ? SICK : EVIL)[i % 6], tx:x, ty:y }); });
+  for (let i = 0, nf = open ? 10 : 4 + Math.floor(n / 6); i < nf; i++) { const [x, y] = spot(0); foes.push({ name:FLYERS[(i + n) % FLYERS.length], kind:'dem', fly:true, td:true, fx:x, fy:y, hx:x, hy:y, w:34, h:28, x, y, d:1, dead:false, hp:1 + (L.strong ? 1 : 0), hurt:0, spd:.8, col:EVIL[i % 6], tx:x, ty:y }); }
+  td.total = foes.filter(f => f.kind === L.kind && !f.boss && !f.horde).length; total = td.total;
+  for (const P of paths) for (let i = 0; i < P.length - 1; i++) for (let k = 0; k < 4; k++) { const u = (k + .5) / 4, a = P[i], b = P[i + 1]; coins.push({ x:a[0] + (b[0] - a[0]) * u + (R() - .5) * 40, y:a[1] + (b[1] - a[1]) * u + (R() - .5) * 40, got:false, kind:pickKind(W_LEVEL, R()) }); }
+  for (let i = 0; i < 18 * area; i++) { const [x, y] = spot(0); coins.push({ x, y, got:false, kind:pickKind(W_FOE, R()) }); }
+  if (L.tongues) for (const k of coins) if (R() < .3) k.kind = 'tongue';
+  for (let i = 0; i < 5 * Math.sqrt(area); i++) { const [x, y] = spot(0); encs.push({ x, y:y - 30, t:ENCOUR[Math.floor(R() * ENCOUR.length)], got:false }); }
+  // le géant (ou le Père du mensonge au Golgotha), sa horde et les captifs
+  const last = !open && L.boss, gi = open ? GIANTS[0] : GIANTS[n % GIANTS.length], ghp = last ? 30 : open ? 22 : Math.min(26, 12 + n);
+  foes.push({ name:last ? 'Père du mensonge' : gi.name, look:last ? 'Haine' : gi.look, kind:'dem', boss:true, giant:true, td:true, fx:A.x + A.w / 2, fy:A.y + 330, hx:A.x + A.w / 2, hy:A.y + 330, w:last ? 96 : 84, h:last ? 110 : 96, x:0, y:0, d:-1, dead:false, hp:ghp, hpMax:ghp, hurt:0, spd:.55 + n * .01, shot:0, tx:0, ty:0 });
+  td.horde = { pool:20 + n + (open ? 10 : 0), t:0, cap:12 + Math.floor(n / 3) };
+  for (let i = 0; i < 10 + Math.floor(n / 3); i++) tdSpawnHorde(A.x + 80 + R() * (A.w - 160), A.y + 160 + R() * (A.h - 230), R);
+  cage = { x:A.x + A.w / 2 - 62, y:A.y + 120, w:124, h:78, open:0 };
+  captives = []; for (let i = 0; i < 7; i++) captives.push({ x:cage.x + 12 + i * (100 / 7), c:captiveLook(R), f:R() < .5 ? 1 : -1, ph:R() * 6, free:0, gone:false, y:cage.y });
+  for (const f of foes) { f.x = f.fx - f.w / 2; f.y = f.fy - f.h; }
+  vscroll = open ? { x:2250, y:1330, got:false, i:VERSES.length - 1 } : { x:W * .47, y:Hh * .43, got:false, i:n };
+  if (!open && inLake(vscroll.x, vscroll.y, 20)) vscroll.y = Hh * .5;
+  tdLot3Build(garden, open);
+}
+// le jardin fermé, les trois lampes et l'habitant, placés selon la carte
+function tdLot3Build(G0, open) {
+  const T = td, W = TDW, Hh = TDH, gx = G0.x, gy = G0.y;
+  T.garden = G0;
+  T.walls = [{ x:gx, y:gy, w:300, h:14 }, { x:gx, y:gy + 286, w:300, h:14 }, { x:gx + 286, y:gy, w:14, h:300 },
+    { x:gx, y:gy, w:14, h:110 }, { x:gx, y:gy + 190, w:14, h:110 }, { x:gx, y:gy + 110, w:14, h:80, door:true, open:false },
+    { x:gx + 170, y:gy + 14, w:14, h:110 }, { x:gx + 170, y:gy + 176, w:14, h:110 }];
+  T.boulder = { x:gx + 177, y:gy + 150, r:22 };
+  T.chest = { x:gx + 240, y:gy + 250, open:false };
+  T.doorAt = { x:gx - 15, y:gy + 150 };
+  T.lamps = (open ? [[600, 600], [2700, 2050], [3900, 2880]] : [[W * .16, Hh * .2], [W * .54, Hh * .28], [W * .71, Hh * .92]]).map(([x, y]) => ({ x, y, lit:false }));
+  quest = open ? { m:tdLv % 4, vx:3420, vy:1700, ix:900, iy:700, follow:false, done:false } : { m:(T.n + 1) % 4, vx:W * .42, vy:Hh * .77, ix:W * .1, iy:Hh * .48, follow:false, done:false };
+  for (const l of T.lamps) { const L = T.lake; if (((l.x - L.cx) / (L.rx + 40)) ** 2 + ((l.y - L.cy) / (L.ry + 40)) ** 2 < 1) l.y = L.cy + L.ry + 60; }
+  const clear = (x, y, d) => { T.trees = T.trees.filter(o => Math.hypot(o.x - x, o.y - y) > d); T.rocks = T.rocks.filter(o => Math.hypot(o.x - x, o.y - y) > d); T.houses = T.houses.filter(h => Math.hypot(h.x + h.w / 2 - x, h.y + h.h / 2 - y) > d + 50); };
+  for (const l of T.lamps) clear(l.x, l.y, 70); clear(quest.vx, quest.vy, 70); clear(quest.ix, quest.iy, 70); clear(vscroll.x, vscroll.y, 60);
+  const inG = (x, y) => x > G0.x - 50 && x < G0.x + G0.w + 50 && y > G0.y - 50 && y < G0.y + G0.h + 50;
+  T.trees = T.trees.filter(o => !inG(o.x, o.y)); T.rocks = T.rocks.filter(o => !inG(o.x, o.y));
+  coins = coins.filter(k => !inG(k.x, k.y)); encs = encs.filter(k => !inG(k.x, k.y));
+  for (const f of foes) if (inG(f.fx, f.fy)) { f.fx = f.hx = f.tx = gx - 200; f.fy = f.hy = f.ty = gy + 150; f.x = f.fx - f.w / 2; f.y = f.fy - f.h; }
+  for (let i = 0; i < 6; i++) coins.push({ x:gx + 50 + (i % 3) * 40, y:gy + 50 + Math.floor(i / 3) * 190, got:false, kind:pickKind(W_GIANT, rnd()) });
+}
+// le sol peint selon le lieu : herbe, sable ou dalles
+function tdGround(TH) {
+  const k = document.createElement('canvas'); k.width = 160; k.height = 160; const g = k.getContext('2d'), R = rng(77), base = TH.grass ? dark(TH.top, .12) : TH.top;
+  g.fillStyle = base; g.fillRect(0, 0, 160, 160);
+  for (let i = 0; i < 260; i++) { const x = R() * 160, y = R() * 160; g.fillStyle = R() < .5 ? rgbaC(dark(base, .35), .35) : rgbaC(TH.top2, .3); g.fillRect(x, y, 2 + R() * 3, 1 + R() * 2); }
+  for (let i = 0; i < 9; i++) { const x = R() * 160, y = R() * 160, rx = 14 + R() * 20, ry = 8 + R() * 10; for (const ox of [-160, 0, 160]) for (const oy of [-160, 0, 160]) gEll(g, x + ox, y + oy, rx, ry, rgbaC(dark(base, .2), .25)); }
+  if (TH.paved) { g.strokeStyle = rgbaC(dark(base, .35), .5); g.lineWidth = 1.5; for (let y = 0; y < 160; y += 32) { g.beginPath(); g.moveTo(0, y); g.lineTo(160, y); g.stroke(); for (let x = (y / 32) % 2 ? 0 : 20; x < 160; x += 40) { g.beginPath(); g.moveTo(x, y); g.lineTo(x, y + 32); g.stroke(); } } }
+  return ctx.createPattern(k, 'repeat');
+}
+function tdDarkness() { // les niveaux de nuit : on voit autour du héros
+  const T = td; if (!T.dark) return; const X = T.h.x - cam, Y = T.h.y - Math.round(T.camY) - 30;
+  ctx.fillStyle = RG(X, Y, 70, 330, [[0, 'rgba(8,6,30,0)'], [1, 'rgba(8,6,30,' + Math.min(.85, T.dark * 1.4).toFixed(2) + ')']]); ctx.fillRect(0, 0, 800, 400);
+}
+function tdDrawSign(s) { // panneau de bois avec le nom du lieu
+  const X = s.x - cam; ctx.fillStyle = '#5a3a1e'; ctx.fillRect(X - 3, s.y - 46, 6, 46);
+  ctx.font = 'bold 13px Trebuchet MS, sans-serif'; const w = ctx.measureText(s.t).width + 20;
+  rrPath(ctx, X - w / 2, s.y - 66, w, 24, 5); ctx.fillStyle = '#a0703a'; ctx.fill(); ctx.strokeStyle = '#5a3a1e'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.fillStyle = '#fff3d0'; ctx.textAlign = 'center'; ctx.fillText(s.t, X, s.y - 49);
+}
+// commencer, recommencer, passer au niveau suivant
+function tdStart() { if (!unlocked(sel)) { sfx('hurt'); return; } sfx('ok'); tdPickSel = loadJ('sj-save-td', null) ? 0 : 1; go('tdpick'); }
+function tdBegin(mode, lv, sc, fa) {
+  sfx('ok'); tdMode = mode; tdLv = lv; score = sc; lives = startLives(); faith = fa; flameLvl = flameFor(faith);
+  angels = []; balls = []; boost = 0; rains = 0; rainMark = 0; storm = 0; shake = 0; flash = 0;
+  p2 = null; tdBuild(); hardenFoes(td.horde); verseShow = null; go('tdplay');
+}
+function tdRetry() { tdBegin(tdMode, tdLv, td.startScore, faith); }
+function tdPortal() {
+  score += 200; sfx('ok');
+  if (tdMode === 'levels' && tdLv < LEVELS.length - 1) { saveJ('sj-save-td', { level:tdLv + 1, score, faith }); go('tdnext'); }
+  else { if (tdMode === 'levels') saveJ('sj-save-td', null); go('tdwin'); }
+}
+function tdNextLevel() {
+  if (hero().lifeLvl) lives = Math.min(9, lives + 1);
+  tdLv++; angels = angels.slice(0, 60); balls = []; p2 = null; tdBuild(); hardenFoes(td.horde); verseShow = null; go('tdplay');
+}
+function tdPickChoose(i) {
+  const s = loadJ('sj-save-td', null);
+  if (i === 0) { if (!s) { sfx('hurt'); return; } tdBegin('levels', s.level, s.score, s.faith); }
+  else if (i === 1) { saveJ('sj-save-td', null); tdBegin('levels', 0, 0, hero().startFaith || 0); }
+  else tdBegin('open', 0, 0, hero().startFaith || 0);
+}
+function drawTdPick() {
+  const s = loadJ('sj-save-td', null), t = Date.now();
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#1e3a1a'], [1, '#0e1a0c']]); ctx.fillRect(0, 0, 800, 400);
+  label('VUE DE HAUT : QUE VEUX-TU FAIRE ?', 400, 48, 26, '#ffc83d');
+  [['Continuer', s ? 'Niveau ' + (s.level + 1) + ' : ' + LEVELS[s.level].name : 'Aucune partie en cours'], ['Les 23 niveaux', 'Du niveau 1 au 23'], ['Monde ouvert', 'La Galilée, Nazareth et le lac']].forEach(([nm, d], i) => {
+    const x = 30 + i * 250, y = 80, w = 240, h = 240, on = tdPickSel === i, off = i === 0 && !s;
+    rrPath(ctx, x, y, w, h, 16); ctx.fillStyle = on ? 'rgba(70,150,70,.85)' : 'rgba(255,255,255,.07)'; ctx.fill();
+    if (on) { ctx.strokeStyle = '#ffc83d'; ctx.lineWidth = 4; ctx.stroke(); }
+    ctx.globalAlpha = off ? .35 : 1;
+    if (i === 2) { gEll(ctx, x + w / 2 + 40, y + 70, 50, 24, '#2a7ab8'); for (const [hx, hy] of [[x + 50, y + 110], [x + 80, y + 120], [x + 60, y + 135]]) { ctx.fillStyle = '#e8d8b0'; ctx.fillRect(hx, hy, 22, 14); } ctx.strokeStyle = '#d8b77e'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x + 30, y + 160); ctx.quadraticCurveTo(x + 120, y + 120, x + 200, y + 110); ctx.stroke(); }
+    else if (i === 1) { for (let k = 0; k < 8; k++) { gEll(ctx, x + 40 + k * 23, y + 70 + Math.sin(k) * 14, 8, 8, k < 3 ? '#c9a227' : '#b8a888'); } }
+    heroAt(hero(), x + w / 2, y + 160 - (on ? Math.abs(Math.sin(t / 250)) * 8 : 0), .9, 1, on ? { k:0, v:2 } : { k:-1, v:0 }, false);
+    ctx.globalAlpha = 1;
+    label(nm, x + w / 2, y + 196, 21, on ? '#fff' : '#cfe8c6');
+    ctx.fillStyle = on ? '#ffe27a' : '#a8c8a0'; ctx.font = 'bold 12px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(d, x + w / 2, y + 222, w - 16);
+  });
+  ctx.fillStyle = '#e8f0e0'; ctx.font = '14px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Flèches pour choisir, Espace ou Entrée pour valider — ou touche une carte', 400, 360, 760);
+}
+
 function loop() {
   stT++;
   if (vBtn) vBtn.classList.toggle('off', !((state === 'play' || state === 'tdplay') && rains > 0));
@@ -3965,7 +4075,9 @@ function loop() {
   else if (state === 'mode') drawMode();
   else if (state === 'book') drawBook();
   else if (state === 'cont') drawCont();
-  else if (state === 'tdwin' || state === 'tdover') { tdDraw(); if (state === 'tdwin') banner("NIVEAU D'ESSAI TERMINÉ !", 'Points : ' + score, 'Touche pour revenir au menu'); else banner('PARTIE TERMINÉE', 'Appuie sur une touche pour recommencer ce niveau', 'La Galilée — vue de haut'); }
+  else if (state === 'tdpick') drawTdPick();
+  else if (state === 'tdnext') drawWorldMap();
+  else if (state === 'tdwin' || state === 'tdover') { tdDraw(); if (state === 'tdwin') banner(td.open ? 'LA GALILÉE EST LIBÉRÉE !' : 'VICTOIRE !', 'Points : ' + score, 'Touche pour revenir au menu'); else banner('PARTIE TERMINÉE', 'Appuie sur une touche pour recommencer ce niveau', td.title); }
   else if (state === 'select') drawSelect();
   else if (state === 'talk') { draw(); drawTalk(); }
   else {
