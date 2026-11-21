@@ -33,7 +33,10 @@
     .pad button { width:clamp(44px, 13vh, 70px); height:clamp(44px, 13vh, 70px); padding:0; border-radius:50%; border:2px solid rgba(255,255,255,.6);
       background:rgba(29,18,48,.4); color:#fff; font-size:clamp(18px, 5vh, 28px); font-weight:bold; touch-action:none; user-select:none; -webkit-user-select:none; }
     .pad button.on { background:rgba(255,200,61,.6); }
-    .pad button.off { opacity:.3; }
+    .pad button.off .ic { opacity:.3; }
+    .pad .acts button { position:relative; }
+    .pad .acts button[data-p]:not([data-p=''])::after { content:attr(data-p); position:absolute; left:50%; bottom:-7px; transform:translateX(-50%); white-space:nowrap;
+      font:bold 11px Trebuchet MS, sans-serif; color:#2a1a3e; background:#ffc83d; border-radius:8px; padding:1px 5px; line-height:1.25; pointer-events:none; }
     .tdmode .pad > div:first-child, .tdmode .pad .jump { visibility:hidden; }
     .pad .jump { width:clamp(54px, 16vh, 84px); height:clamp(54px, 16vh, 84px); }
     .ui { position:absolute; top:6px; margin:0; padding:4px 10px; font-size:.72rem; background:rgba(29,18,48,.55); border-color:rgba(255,255,255,.4); }
@@ -41,6 +44,8 @@
     #fs { display:block; left:46%; }
     #mute { left:calc(46% + 46px); }
     #lang { left:calc(46% + 92px); }
+    #helpb { left:calc(46% + 156px); }
+    .helpon .pad, .helpon .ui { visibility:hidden; }
   }
   @media (pointer:coarse) and (orientation:portrait) {
     #rotate { display:flex; position:fixed; inset:0; z-index:9; background:#2a1b4a; flex-direction:column; align-items:center; justify-content:center; font-size:1.3rem; padding:30px; }
@@ -54,10 +59,11 @@
   <canvas id="c" width="1600" height="800"></canvas>
   <div class="pad">
     <div><button data-k="ArrowLeft">&#9664;</button><button data-k="ArrowRight">&#9654;</button></div>
-    <div class="acts"><button data-k="v" id="vbtn" class="off">&#9889;</button><button data-k="b">&#128172;</button><button data-k="c">&#128293;</button><button data-k="x">&#9995;</button><button data-k="ArrowUp" class="jump">&#9650;</button></div>
+    <div class="acts"><button data-k="v" id="vbtn" class="off"><span class="ic">&#9889;</span></button><button data-k="b">&#128172;</button><button data-k="c">&#128293;</button><button data-k="x">&#9995;</button><button data-k="ArrowUp" class="jump">&#9650;</button></div>
   </div>
   <button id="fs" class="ui">&#x26F6;<span class="lbl" data-i18n data-pre=" ">Plein écran</span></button>
   <button id="mute" class="ui">🔊 Son (M)</button>
+  <button id="helpb" class="ui">?</button>
   <button id="lang" class="ui">🌐 FR</button>
 </div>
 <div id="rotate"><div style="font-size:3rem">📱↻</div><p data-i18n>Tourne ton téléphone<br>en mode paysage pour jouer</p></div>
@@ -1234,6 +1240,24 @@ const UI_TPL = [
 // textes du lot 6
 for (const r of UI_ROWS) { if (!TR_ROWS.some(q => q[0] === r[0])) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; } }
 for (const [src, m] of UI_TPL) TR_TPL.push([new RegExp(src), m]);
+const UI7_ROWS = [
+  ["Les 4 actions", "The 4 actions", "Las 4 acciones", "Le 4 azioni", "As 4 ações", "Misala 4", "Vitendo 4", "الأفعال الأربعة"],
+  ["Main de lumière", "Hand of light", "Mano de luz", "Mano di luce", "Mão de luz", "Loboko ya pole", "Mkono wa nuru", "يد النور"],
+  ["Un coup de près, très rapide", "A close, very fast strike", "Un golpe de cerca, muy rápido", "Un colpo da vicino, molto rapido", "Um golpe de perto, muito rápido", "Kobeta ya penepene, noki mingi", "Pigo la karibu, la haraka sana", "ضربة قريبة وسريعة جدًا"],
+  ["Parole de vie", "Word of life", "Palabra de vida", "Parola di vita", "Palavra de vida", "Liloba ya bomoi", "Neno la uzima", "كلمة الحياة"],
+  ["Elle part loin devant toi", "It flies far in front of you", "Sale lejos delante de ti", "Vola lontano davanti a te", "Ela vai longe à sua frente", "Ekendaka mosika liboso na yo", "Linaruka mbali mbele yako", "تنطلق بعيدًا أمامك"],
+  ["Boule de feu", "Fireball", "Bola de fuego", "Palla di fuoco", "Bola de fogo", "Libanga ya moto", "Mpira wa moto", "كرة نار"],
+  ["Un de tes anges devient une boule de feu. Ange doré : x2", "One of your angels becomes a fireball. Golden angel: x2", "Uno de tus ángeles se vuelve bola de fuego. Ángel dorado: x2", "Uno dei tuoi angeli diventa una palla di fuoco. Angelo d'oro: x2", "Um dos seus anjos vira bola de fogo. Anjo dourado: x2", "Anzelu moko ya yo akomi libanga ya moto. Anzelu ya wolo: x2", "Mmoja wa malaika wako anakuwa mpira wa moto. Malaika wa dhahabu: x2", "أحد ملائكتك يصير كرة نار. الملاك الذهبي: x2"],
+  ["Pluie de foudre", "Lightning storm", "Lluvia de rayos", "Pioggia di fulmini", "Chuva de raios", "Mbula ya nkake", "Mvua ya radi", "مطر البرق"],
+  ["Frappe tous les ennemis de l'écran. Une pluie tous les 100 anges", "Strikes every enemy on screen. One storm every 100 angels", "Golpea a todos los enemigos de la pantalla. Una lluvia cada 100 ángeles", "Colpisce tutti i nemici sullo schermo. Una pioggia ogni 100 angeli", "Atinge todos os inimigos da tela. Uma chuva a cada 100 anjos", "Ebetaka banguna nyonso na ekrani. Mbula moko na baanzelu 100 nyonso", "Inapiga maadui wote kwenye skrini. Mvua moja kila malaika 100", "تضرب كل الأعداء على الشاشة. مطر واحد لكل 100 ملاك"],
+  ["Puissance", "Power", "Potencia", "Potenza", "Potência", "Nguya", "Nguvu", "القوة"],
+  ["sur tous", "on all", "a todos", "su tutti", "em todos", "na nyonso", "kwa wote", "على الجميع"],
+  ["H ou ? : revoir cette aide", "H or ?: see this help again", "H o ?: ver esta ayuda otra vez", "H o ?: rivedere questo aiuto", "H ou ?: rever esta ajuda", "H to ? : komona lisalisi oyo lisusu", "H au ? : ona msaada huu tena", "H أو ؟ : أعد رؤية هذه المساعدة"],
+  ["Prête !", "Ready!", "¡Lista!", "Pronta!", "Pronta!", "Ebongi!", "Iko tayari!", "جاهز!"],
+];
+
+// textes du lot 7
+for (const r of UI7_ROWS) { if (!TR_ROWS.some(q => q[0] === r[0])) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; } }
 // la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
 const VICTORY = {
   en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
@@ -3981,7 +4005,7 @@ function tdUpdate() {
   for (const k of coins) if (!k.got && Math.abs(k.x - H.x) < 20 && Math.abs(k.y - (H.y - 14)) < 24) pickGem(k, c);
   for (const e of encs) if (!e.got && Math.abs(e.x - H.x) < 50 && Math.abs(e.y - (H.y - 30)) < 30) pickEnc(e);
   // les anges suivent le héros en nuée
-  { const nb = Math.min(angels.length, BIG_ANGELS); angels.forEach((a, i) => { let tx, ty; if (i < BIG_ANGELS) { const an = Math.PI * (1.04 + .92 * (i + .5) / nb), rad = 48 + (i % 3) * 13; tx = H.x + Math.cos(an) * rad * 1.15; ty = H.y - 58 + Math.sin(an) * rad * .8; } else { const j = i - BIG_ANGELS, an = j * 2.39996 + levelT * .01, rad = 90 + Math.sqrt(j) * 5; tx = H.x + Math.cos(an) * rad; ty = H.y - 112 - Math.abs(Math.sin(an)) * rad * .3; } a.x += (tx - a.x) * .08; a.y += (ty - a.y) * .08; }); }
+  tdAngelTargets(H);
   p.x = H.x - 18; p.y = H.y - 60; // la pluie de foudre (V) place ses messages au-dessus du héros
   updateStorm();
   // victoire sur le géant : la horde s'enfuit (géré par damageFoe), la cage s'ouvre, un passage de lumière apparaît
@@ -4433,7 +4457,7 @@ function tdLot3Update(H) {
   const C = T.chest;
   if (!C.open && Math.hypot(H.x - C.x, H.y - C.y) < 32) {
     C.open = true; score += 300; lives = Math.min(9, lives + 1); sfx('bless'); flash = .4;
-    for (let i = 0; i < 8; i++) coins.push({ x:C.x - 70 + (i % 4) * 22, y:C.y - 60 + Math.floor(i / 4) * 26, got:false, kind:pickKind(W_GIANT, rnd()) });
+    chestGems(C);
     say(C.x, C.y - 80, 'Un coffre rempli de trésors ! +1 vie', '#ffe27a', true);
   }
   questUpdate(H.x, H.y, H.dx >= 0 ? 1 : -1);
@@ -4751,7 +4775,10 @@ function tdBuild() {
   const nearPath = (x, y, d) => { for (const P of paths) for (let i = 0; i < P.length - 1; i++) if (tdDistSeg(x, y, P[i], P[i + 1]) < d) return true; return false; };
   const inLake = (x, y, m) => ((x - lake.cx) / (lake.rx + m)) ** 2 + ((y - lake.cy) / (lake.ry + m)) ** 2 < 1;
   const inRect = (x, y, r, m) => x > r.x - m && x < r.x + r.w + m && y > r.y - m && y < r.y + r.h + m;
-  const garden = open ? { x:4300, y:2500, w:300, h:300 } : { x:W - 400, y:Hh - 450, w:300, h:300 };
+  let garden = open ? { x:4300, y:2500, w:300, h:300 } : { x:W - 400, y:Hh - 450, w:300, h:300 };
+  if (!open) { const C3 = [[W - 400, Hh - 450], [160, 110], [1300, 110]]; for (let k = 0; k < 3; k++) { const [gx0, gy0] = C3[(n + k) % 3]; let ok = true;
+    for (let a = 0; a <= 6 && ok; a++) for (let b = 0; b <= 6 && ok; b++) { const px = gx0 + a * 50, py = gy0 + b * 50; if (nearPath(px, py, 70) || inLake(px, py, 50) || inRect(px, py, A, 60)) ok = false; }
+    if (ok) { garden = { x:gx0, y:gy0, w:300, h:300 }; break; } } }
   const free = (x, y, m) => !nearPath(x, y, 46 + m) && !inLake(x, y, 30 + m) && !inRect(x, y, A, 50 + m) && !inRect(x, y, garden, 50 + m) && !td.houses.some(h => inRect(x, y, h, 30 + m)) && Math.hypot(x - 150, y - (Hh - 120)) > 140;
   // les villages : des maisons autour d'un centre, jamais sur le chemin ni dans l'eau
   for (const v of villages) for (let i = 0, k = 0; i < 200 && k < v.n; i++) {
@@ -5636,12 +5663,125 @@ function drawNewStates() {
 { const b0 = tdBuild; tdBuild = function () { b0(); tdCritSpawn(); wxReset(); }; }
 { const u0 = tdUpdate; tdUpdate = function () { u0(); if (state === 'tdplay' && td) tdCritUpdate(); }; }
 
+// ================== Lot 7 : retours du testeur ==================
+// 1) lampes, rouleau, habitant et coffre changent de place à chaque niveau
+{ const b0 = tdLot3Build; tdLot3Build = function (G0, open) {
+  b0(G0, open);
+  const T = td; if (open || !T || !T.lamps) return;
+  const n = T.n, W = TDW, Hh = TDH, R = rng(5150 + n * 97), L = T.lake, A = T.arena;
+  const inR = (x, y, r, m) => x > r.x - m && x < r.x + r.w + m && y > r.y - m && y < r.y + r.h + m;
+  const pts = [];
+  const pick = () => { for (let i = 0; i < 600; i++) {
+    const x = 120 + R() * (W - 240), y = 160 + R() * (Hh - 270), far = i < 300 ? 420 : i < 500 ? 280 : 160;
+    if (((x - L.cx) / (L.rx + 70)) ** 2 + ((y - L.cy) / (L.ry + 70)) ** 2 < 1) continue;
+    if (inR(x, y, A, 90) || inR(x, y, G0, 90) || T.houses.some(h => inR(x, y, h, 45))) continue;
+    if (Math.hypot(x - 150, y - (Hh - 120)) < 300 || pts.some(p => Math.hypot(p[0] - x, p[1] - y) < far)) continue;
+    pts.push([x, y]); return [x, y]; }
+    const q = [W * .5, Hh * .5]; pts.push(q); return q; };
+  for (const l of T.lamps) [l.x, l.y] = pick();
+  [vscroll.x, vscroll.y] = pick();
+  if (quest) { [quest.vx, quest.vy] = pick(); [quest.ix, quest.iy] = pick(); }
+  for (const [x, y] of pts) { T.trees = T.trees.filter(o => Math.hypot(o.x - x, o.y - y) > 70); T.rocks = T.rocks.filter(o => Math.hypot(o.x - x, o.y - y) > 70); }
+  T.chest.y = G0.y + (n % 2 ? 70 : 250);
+}; }
+
+// 2) les gemmes du coffre jaillissent autour de lui, jamais dans un mur
+function chestGems(C) {
+  const G = td.garden, x0 = G.x + 200, x1 = G.x + 272, y0 = G.y + 36, y1 = G.y + 278;
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2;
+    coins.push({ x:Math.max(x0, Math.min(x1, C.x + Math.cos(a) * 40)), y:Math.max(y0, Math.min(y1, C.y - 12 + Math.sin(a) * 40)), got:false, kind:pickKind(W_GIANT, rnd()) }); }
+}
+
+// 3) en vue de haut, les anges volent DERRIÈRE le héros (du côté opposé à sa marche)
+function tdAngelTargets(H) {
+  const dx = H.dx || 0, dy = H.dy || 0; let ba = (dx || dy) ? Math.atan2(-dy, -dx) : -Math.PI / 2;
+  if (H.bAng === undefined) H.bAng = ba;
+  let d = ba - H.bAng; d = Math.atan2(Math.sin(d), Math.cos(d)); H.bAng += d * .07;
+  const B = H.bAng, cx = H.x, cy = H.y - 32, nb = Math.min(angels.length, BIG_ANGELS);
+  angels.forEach((a, i) => { let tx, ty;
+    if (i < BIG_ANGELS) { const an = B + ((i + .5) / nb - .5) * 2.1, rad = 54 + (i % 3) * 13; tx = cx + Math.cos(an) * rad * 1.15; ty = cy + Math.sin(an) * rad * .85; }
+    else { const j = i - BIG_ANGELS, an = B + (((j * .618034) % 1) - .5) * 1.5, rad = 104 + Math.sqrt(j) * 5 + Math.sin(levelT * .02 + j) * 6; tx = cx + Math.cos(an) * rad; ty = cy + Math.sin(an) * rad * .8; }
+    a.x += (tx - a.x) * .08; a.y += (ty - a.y) * .08; });
+}
+
+// 4) la puissance de chaque action, écrite sous son bouton
+const ACT_BTN = {}; document.querySelectorAll('.pad .acts button').forEach(b => { ACT_BTN[b.dataset.k] = b; });
+function actPower() {
+  const c = hero(), up = boost >= 3 ? 1 : 0, gold = angels.some(a => a.gold);
+  return { x:'x' + ((c.dmg || 1)), b:'x' + (1 + up), c:gold ? 'x' + (1 + up) + '-' + (2 + up) : 'x' + (1 + up), v:'x2' };
+}
+function boltLeft() { return Math.max(0, rainMark + 100 - angels.length); }
+let actLblT = 0;
+function updateActLabels() {
+  if (++actLblT % 10) return;
+  const on = state === 'play' || state === 'tdplay', P = actPower();
+  for (const k of ['x', 'b', 'c', 'v']) { const b = ACT_BTN[k]; if (!b) continue;
+    let t = on ? P[k] : '';
+    if (k === 'v' && on && rains <= 0) t = (100 - boltLeft()) + '/100';
+    if (b.dataset.p !== t) b.dataset.p = t; }
+}
+
+// 5) l'écran d'aide des 4 actions (la 1re fois, puis avec H ou ?)
+let helpOn = false, helpT = 0, helpSeen = false;
+try { helpSeen = localStorage.getItem('sj-help') === '1'; } catch (e) {}
+function helpOpen() { helpOn = true; helpT = 0; for (const k in keys) keys[k] = false; }
+function helpClose() { helpOn = false; helpSeen = true; try { localStorage.setItem('sj-help', '1'); } catch (e) {} sfx('ok'); }
+function helpCheck() {
+  const on = state === 'play' || state === 'tdplay';
+  if (!helpSeen && on && !helpOn) helpOpen();
+  if (helpOn && !on) helpOn = false;
+  document.body.classList.toggle('helpon', helpOn);
+}
+addEventListener('keydown', e => {
+  const on = state === 'play' || state === 'tdplay';
+  if (helpOn) { if (helpT > 12 && !e.repeat) helpClose(); e.stopImmediatePropagation(); e.preventDefault(); return; }
+  if (on && (e.key === 'h' || e.key === 'H' || e.key === '?') && !e.repeat) { helpOpen(); e.stopImmediatePropagation(); }
+}, true);
+document.addEventListener('pointerdown', e => {
+  if (e.target && e.target.id === 'helpb') { if (state === 'play' || state === 'tdplay') { if (helpOn) helpClose(); else helpOpen(); } e.stopPropagation(); return; }
+  if (helpOn) { if (helpT > 12) helpClose(); e.stopPropagation(); e.preventDefault(); }
+}, true);
+function drawHelp() {
+  helpT++;
+  const oc = cam, P = actPower(), a = Math.min(1, helpT / 12); cam = 0;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.fillStyle = 'rgba(10,6,20,.86)'; ctx.fillRect(0, 0, 800, 400);
+  label('Les 4 actions', 400, 38, 24, '#ffc83d');
+  const rows = [
+    ['✋', 'Main de lumière', 'X', 'Un coup de près, très rapide', P.x, ''],
+    ['💬', 'Parole de vie', 'B', 'Elle part loin devant toi', P.b, ''],
+    ['🔥', 'Boule de feu', 'C', 'Un de tes anges devient une boule de feu. Ange doré : x2', P.c, ''],
+    ['⚡', 'Pluie de foudre', 'V', "Frappe tous les ennemis de l'écran. Une pluie tous les 100 anges", 'x2', 'sur tous'],
+  ];
+  ctx.textAlign = 'right'; ctx.fillStyle = '#cfc6e8'; ctx.font = 'bold 12px Trebuchet MS, sans-serif'; ctx.fillText('Puissance', 720, 64);
+  rows.forEach((r, i) => {
+    const y = 74 + i * 66;
+    rrPath(ctx, 50, y, 700, 58, 12); ctx.fillStyle = 'rgba(255,255,255,.07)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(92, y + 29, 22, 0, Math.PI * 2); ctx.fillStyle = 'rgba(29,18,48,.9)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.textAlign = 'center'; ctx.font = '22px sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText(r[0], 92, y + 37);
+    ctx.textAlign = 'left'; ctx.fillStyle = '#ffe9a8'; ctx.font = 'bold 17px Trebuchet MS, sans-serif'; ctx.fillText(r[1], 128, y + 24);
+    const w = ctx.measureText(r[1]).width; ctx.fillStyle = '#9a90c0'; ctx.font = 'bold 12px Trebuchet MS, sans-serif'; ctx.fillText('(' + r[2] + ')', 136 + w, y + 24);
+    ctx.fillStyle = '#e8e2f6'; ctx.font = '13px Trebuchet MS, sans-serif'; ctx.fillText(r[3], 128, y + 44);
+    rrPath(ctx, 640, y + 12, 86, 34, 17); ctx.fillStyle = '#ffc83d'; ctx.fill();
+    ctx.textAlign = 'center'; ctx.fillStyle = '#2a1a3e'; ctx.font = 'bold 18px Trebuchet MS, sans-serif'; ctx.fillText(r[4], 683, y + (r[5] ? 30 : 35));
+    if (r[5]) { ctx.font = 'bold 9px Trebuchet MS, sans-serif'; ctx.fillText(r[5], 683, y + 41); }
+  });
+  ctx.textAlign = 'center'; ctx.fillStyle = '#cfc6e8'; ctx.font = '12px Trebuchet MS, sans-serif';
+  if (rains <= 0) { ctx.fillStyle = '#ffd27a'; ctx.fillText('⚡ ' + (100 - boltLeft()) + ' / 100', 400, 352); }
+  else { ctx.fillStyle = '#ffd27a'; ctx.fillText('⚡ ' + tr('Prête !'), 400, 352); }
+  ctx.fillStyle = '#cfc6e8'; ctx.fillText('H ou ? : revoir cette aide', 250, 384);
+  if (helpT > 12 && Math.floor(helpT / 30) % 2 === 0) { ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.fillText('Touche pour continuer', 560, 384); }
+  ctx.restore(); cam = oc;
+}
+
 function loop() {
   stT++;
   if (vBtn) vBtn.classList.toggle('off', !((state === 'play' || state === 'tdplay') && rains > 0));
   setSong(pickSong());
   document.body.classList.toggle('tdmode', state === 'tdplay');
-  if (state === 'play') { if (hitStop > 0) hitStop--; else { update(); if (race && state === 'play') raceT++; } if (state === 'play') { draw(); if (race) drawRaceClock(); } }
+  updateActLabels(); helpCheck();
+  if (helpOn) { if (state === 'play') draw(); else tdDraw(); drawHelp(); }
+  else if (state === 'play') { if (hitStop > 0) hitStop--; else { update(); if (race && state === 'play') raceT++; } if (state === 'play') { draw(); if (race) drawRaceClock(); } }
   else if (state === 'tdplay') { tdUpdate(); if (state === 'tdplay') tdDraw(); }
   else if (state === 'mode') drawMode();
   else if (state === 'book') drawBook();
