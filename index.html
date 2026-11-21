@@ -1262,6 +1262,69 @@ const UI7_ROWS = [
 
 // textes du lot 7
 for (const r of UI7_ROWS) { if (!TR_ROWS.some(q => q[0] === r[0])) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; } }
+const THOUGHTS = [
+  ["La Bible a beaucoup d’auteurs, mais un seul inspirateur : Dieu.", "The Bible has many writers but one Inspirer: God.", "La Biblia tiene muchos autores, pero un solo inspirador: Dios.", "La Bibbia ha molti autori, ma un solo ispiratore: Dio.", "A Bíblia tem muitos autores, mas um só inspirador: Deus.", "Biblia ezali na bakomi ebele, kasi Nzambe moko nde apemeli yango.", "Biblia ina waandishi wengi, lakini aliyeivuvia ni Mungu mmoja.", "للكتاب المقدس كتّاب كثيرون، لكن الموحي به واحد: الله.", "2 Tm 3:16", "bible"],
+  ["La Bible t’apprend, te corrige et te rend prêt à faire le bien.", "The Bible teaches you, corrects you and prepares you to do good.", "La Biblia te enseña, te corrige y te prepara para hacer el bien.", "La Bibbia ti insegna, ti corregge e ti prepara a fare il bene.", "A Bíblia te ensina, te corrige e te prepara para fazer o bem.", "Biblia eteyaka yo, esembolaka yo mpe ebongisaka yo mpo na kosala malamu.", "Biblia inakufundisha, inakurekebisha na kukuandaa kutenda mema.", "الكتاب المقدس يعلّمك ويقوّمك ويُعدّك لعمل الخير.", "2 Tm 3:17", "bible"],
+  ["Ce que les prophètes annonçaient, Jésus l’a accompli.", "What the prophets announced, Jesus fulfilled.", "Lo que anunciaban los profetas, Jesús lo cumplió.", "Ciò che i profeti annunciavano, Gesù l’ha compiuto.", "O que os profetas anunciaram, Jesus cumpriu.", "Oyo basakoli balobaki, Yesu akokisaki yango.", "Yale manabii waliyotabiri, Yesu ameyatimiza.", "ما أعلنه الأنبياء، أتمّه يسوع.", "Lc 24:44", "bible"],
+  ["Lis la Bible avec le Saint-Esprit : il t’aide à comprendre.", "Read the Bible with the Holy Spirit: He helps you understand.", "Lee la Biblia con el Espíritu Santo: él te ayuda a entender.", "Leggi la Bibbia con lo Spirito Santo: ti aiuta a capire.", "Leia a Bíblia com o Espírito Santo: ele te ajuda a entender.", "Tanga Biblia elongo na Molimo Mosantu: asalisaka yo na kososola.", "Soma Biblia pamoja na Roho Mtakatifu: anakusaidia kuelewa.", "اقرأ الكتاب المقدس مع الروح القدس: هو يساعدك على الفهم.", "Jn 14:26", "bible"],
+  ["Toute la Bible parle de Jésus, du début jusqu’à la fin.", "The whole Bible speaks of Jesus, from beginning to end.", "Toda la Biblia habla de Jesús, de principio a fin.", "Tutta la Bibbia parla di Gesù, dall’inizio alla fine.", "A Bíblia inteira fala de Jesus, do começo ao fim.", "Biblia mobimba elobeli Yesu, banda ebandeli tii na nsuka.", "Biblia yote inamhusu Yesu, tangu mwanzo hadi mwisho.", "الكتاب المقدس كله يتكلم عن يسوع من البداية إلى النهاية.", "Jn 5:39", "bible"],
+  ["Le visible est le reflet de l’invisible.", "The visible is a reflection of the invisible.", "Lo visible es reflejo de lo invisible.", "Il visibile è il riflesso dell’invisibile.", "O visível é o reflexo do invisível.", "Oyo emonanaka ezali elilingi ya oyo emonanaka te.", "Kinachoonekana ni kioo cha kisichoonekana.", "المنظور انعكاس لغير المنظور.", "Hé 11:3", "ombre"],
+  ["Tu es un esprit, tu as une âme, et tu habites un corps.", "You are a spirit, you have a soul, and you live in a body.", "Eres un espíritu, tienes un alma y vives en un cuerpo.", "Sei uno spirito, hai un’anima e abiti in un corpo.", "Você é um espírito, tem uma alma e mora num corpo.", "Ozali elimo, ozali na molimo, mpe ofandi kati na nzoto.", "Wewe ni roho, una nafsi, na unaishi ndani ya mwili.", "أنت روح، ولك نفس، وتسكن في جسد.", "1 Th 5:23", "ombre"],
+  ["Ce qu’on voit passe ; ce qu’on ne voit pas dure pour toujours.", "What we see passes; what we can’t see lasts forever.", "Lo que se ve pasa; lo que no se ve dura para siempre.", "Ciò che si vede passa; ciò che non si vede dura per sempre.", "O que se vê passa; o que não se vê dura para sempre.", "Oyo emonanaka esilaka; oyo emonanaka te ewumelaka libela.", "Vinavyoonekana hupita; visivyoonekana hudumu milele.", "ما يُرى يزول، وما لا يُرى يدوم إلى الأبد.", "2 Co 4:18", "ombre"],
+  ["Les choses d’ici sont l’ombre ; la vraie réalité, c’est Jésus.", "Things here are the shadow; the true reality is Jesus.", "Las cosas de aquí son la sombra; la verdadera realidad es Jesús.", "Le cose di quaggiù sono l’ombra; la vera realtà è Gesù.", "As coisas daqui são a sombra; a verdadeira realidade é Jesus.", "Makambo ya awa ezali elili; solo ya solo ezali Yesu.", "Mambo ya hapa ni kivuli; uhalisia wa kweli ni Yesu.", "أمور هذه الأرض ظلّ، والحقيقة هي يسوع.", "Col 2:17", "ombre"],
+  ["Le pain nourrit le corps ; Jésus, le pain de vie, nourrit le cœur.", "Bread feeds the body; Jesus, the bread of life, feeds the heart.", "El pan alimenta el cuerpo; Jesús, pan de vida, alimenta el corazón.", "Il pane nutre il corpo; Gesù, pane di vita, nutre il cuore.", "O pão alimenta o corpo; Jesus, o pão da vida, alimenta o coração.", "Limpa eleisaka nzoto; Yesu, limpa ya bomoi, aleisaka motema.", "Mkate hulisha mwili; Yesu, mkate wa uzima, hulisha moyo.", "الخبز يغذّي الجسد، ويسوع خبز الحياة يغذّي القلب.", "Jn 6:35", "ombre"],
+  ["On ne vit pas que de pain, mais de chaque parole de Dieu.", "We don’t live on bread alone, but on every word from God.", "No solo de pan vivimos, sino de cada palabra de Dios.", "Non viviamo di solo pane, ma di ogni parola di Dio.", "Não vivemos só de pão, mas de cada palavra de Deus.", "Tozali na bomoi na limpa kaka te, kasi na liloba nyonso ya Nzambe.", "Hatuishi kwa mkate tu, bali kwa kila neno la Mungu.", "لا نحيا بالخبز وحده، بل بكل كلمة من الله.", "Mt 4:4", "parole"],
+  ["Les paroles de Jésus ne sont pas que des mots : elles donnent la vie.", "Jesus’ words are more than words: they give life.", "Las palabras de Jesús no son solo palabras: dan vida.", "Le parole di Gesù non sono solo parole: danno vita.", "As palavras de Jesus não são só palavras: elas dão vida.", "Maloba ya Yesu ezali kaka maloba te: epesaka bomoi.", "Maneno ya Yesu si maneno tu: yanatoa uzima.", "كلام يسوع ليس مجرد كلمات: إنه يعطي الحياة.", "Jn 6:63", "parole"],
+  ["La Parole de Dieu est l’épée de l’Esprit.", "God’s Word is the sword of the Spirit.", "La Palabra de Dios es la espada del Espíritu.", "La Parola di Dio è la spada dello Spirito.", "A Palavra de Deus é a espada do Espírito.", "Liloba ya Nzambe ezali mopanga ya Molimo.", "Neno la Mungu ni upanga wa Roho.", "كلمة الله هي سيف الروح.", "Ép 6:17", "parole"],
+  ["Tout change sur la terre, mais la Parole de Dieu reste pour toujours.", "Everything on earth changes, but God’s Word remains forever.", "Todo cambia en la tierra, pero la Palabra de Dios permanece.", "Tutto cambia sulla terra, ma la Parola di Dio resta per sempre.", "Tudo muda na terra, mas a Palavra de Deus permanece para sempre.", "Nyonso ebongwanaka na mabele, kasi Liloba ya Nzambe ewumelaka libela.", "Kila kitu duniani hubadilika, lakini Neno la Mungu hudumu milele.", "كل شيء على الأرض يتغيّر، أما كلمة الله فتبقى إلى الأبد.", "1 P 1:25", "parole"],
+  ["Laisse la Parole renouveler tes pensées chaque jour.", "Let the Word renew your thoughts every day.", "Deja que la Palabra renueve tus pensamientos cada día.", "Lascia che la Parola rinnovi i tuoi pensieri ogni giorno.", "Deixe a Palavra renovar seus pensamentos todo dia.", "Tika Liloba ezongisa makanisi na yo sika mokolo na mokolo.", "Acha Neno lifanye upya mawazo yako kila siku.", "دع الكلمة تجدّد أفكارك كل يوم.", "Rm 12:2", "parole"],
+  ["Jésus est ressuscité : la mort n’a plus le dernier mot !", "Jesus is risen: death no longer has the last word!", "¡Jesús resucitó: la muerte ya no tiene la última palabra!", "Gesù è risorto: la morte non ha più l’ultima parola!", "Jesus ressuscitou: a morte não tem mais a última palavra!", "Yesu asekwaki: liwa ezali lisusu na liloba ya suka te!", "Yesu amefufuka: mauti hayana tena neno la mwisho!", "قام يسوع: لم يعد للموت الكلمة الأخيرة!", "1 Co 15:20", "croix"],
+  ["Avec Jésus, l’ancien est passé : tout devient nouveau !", "With Jesus, the old is gone: everything becomes new!", "¡Con Jesús, lo viejo pasó: todo es hecho nuevo!", "Con Gesù, il vecchio è passato: tutto diventa nuovo!", "Com Jesus, o velho passou: tudo se faz novo!", "Elongo na Yesu, ya kala elekaki: nyonso ekomi sika!", "Pamoja na Yesu, ya kale yamepita: yote yamekuwa mapya!", "مع يسوع، القديم قد مضى: كل شيء صار جديدًا!", "2 Co 5:17", "croix"],
+  ["Ce n’est plus moi qui vis : c’est Christ qui vit en moi.", "It is no longer I who live: Christ lives in me.", "Ya no vivo yo: Cristo vive en mí.", "Non sono più io che vivo: Cristo vive in me.", "Já não sou eu quem vive: Cristo vive em mim.", "Ezali lisusu ngai te: Klisto nde azali na bomoi kati na ngai.", "Si mimi tena ninayeishi: Kristo anaishi ndani yangu.", "لست أنا أحيا بعد، بل المسيح يحيا فيّ.", "Ga 2:20", "croix"],
+  ["Sauvé par grâce, par la foi : c’est un cadeau de Dieu !", "Saved by grace, through faith: it’s a gift from God!", "¡Salvado por gracia, por la fe: es un regalo de Dios!", "Salvato per grazia, mediante la fede: è un dono di Dio!", "Salvo pela graça, por meio da fé: é um presente de Deus!", "Obikisami na ngolu, na nzela ya kondima: ezali likabo ya Nzambe!", "Umeokolewa kwa neema, kwa imani: ni zawadi ya Mungu!", "خلصت بالنعمة بالإيمان: إنها عطية الله!", "Ép 2:8", "croix"],
+  ["Jésus a donné sa vie pour nous quand on était encore loin de Dieu.", "Jesus gave His life for us while we were still far from God.", "Jesús dio su vida por nosotros cuando aún estábamos lejos de Dios.", "Gesù ha dato la vita per noi quando eravamo ancora lontani da Dio.", "Jesus deu a vida por nós quando ainda estávamos longe de Deus.", "Yesu apesaki bomoi na ye mpo na biso ntango tozalaki naino mosika na Nzambe.", "Yesu alitoa uhai wake kwa ajili yetu tulipokuwa bado mbali na Mungu.", "بذل يسوع حياته لأجلنا ونحن بعدُ بعيدون عن الله.", "Rm 5:8", "croix"],
+  ["La loi est venue par Moïse, la grâce et la vérité par Jésus.", "The law came through Moses, grace and truth through Jesus.", "La ley vino por Moisés; la gracia y la verdad, por Jesús.", "La legge venne da Mosè, grazia e verità da Gesù.", "A lei veio por Moisés; a graça e a verdade, por Jesus.", "Mobeko eyaki na nzela ya Moize, ngolu mpe solo na nzela ya Yesu.", "Torati ilikuja kwa Musa, neema na kweli kwa Yesu.", "الناموس جاء بموسى، أما النعمة والحق فبيسوع.", "Jn 1:17", "alliance"],
+  ["L’amour de Dieu ne se gagne pas : il se reçoit.", "God’s love isn’t earned: it is received.", "El amor de Dios no se gana: se recibe.", "L’amore di Dio non si guadagna: si riceve.", "O amor de Deus não se conquista: se recebe.", "Bolingo ya Nzambe ezwamaka na mosala te: eyambamaka.", "Upendo wa Mungu haupatikani kwa kazi: unapokelewa.", "محبة الله لا تُكتسب بالأعمال، بل تُقبَل.", "Ép 2:9", "alliance"],
+  ["Tu n’es plus esclave, tu es un enfant de Dieu !", "You are no longer a slave, you are God’s child!", "¡Ya no eres esclavo, eres hijo de Dios!", "Non sei più schiavo, sei figlio di Dio!", "Você não é mais escravo, é filho de Deus!", "Ozali lisusu moombo te, ozali mwana ya Nzambe!", "Wewe si mtumwa tena, wewe ni mtoto wa Mungu!", "لست عبدًا بعد، بل أنت ابن الله!", "Ga 4:7", "alliance"],
+  ["Jésus nous donne une alliance meilleure, aux promesses meilleures.", "Jesus gives us a better covenant with better promises.", "Jesús nos da un pacto mejor, con mejores promesas.", "Gesù ci dà un’alleanza migliore, con promesse migliori.", "Jesus nos dá uma aliança melhor, com promessas melhores.", "Yesu apesi biso boyokani ya malamu koleka, na bilaka ya malamu koleka.", "Yesu anatupa agano bora zaidi, lenye ahadi bora zaidi.", "يسوع يعطينا عهدًا أفضل بمواعيد أفضل.", "Hé 8:6", "alliance"],
+  ["Aujourd’hui, Dieu nous parle par son Fils Jésus.", "Today, God speaks to us through His Son Jesus.", "Hoy Dios nos habla por su Hijo Jesús.", "Oggi Dio ci parla per mezzo di suo Figlio Gesù.", "Hoje Deus nos fala por meio de seu Filho Jesus.", "Lelo, Nzambe alobaka na biso na nzela ya Mwana na ye Yesu.", "Leo, Mungu anasema nasi kupitia Mwanawe Yesu.", "اليوم يكلّمنا الله بابنه يسوع.", "Hé 1:2", "alliance"],
+  ["Qui regarde Jésus voit le Père.", "Whoever looks at Jesus sees the Father.", "Quien mira a Jesús ve al Padre.", "Chi guarda Gesù vede il Padre.", "Quem olha para Jesus vê o Pai.", "Oyo atali Yesu amoni Tata.", "Anayemtazama Yesu amemwona Baba.", "من ينظر إلى يسوع يرى الآب.", "Jn 14:9", "jesus"],
+  ["Jésus est l’image du Dieu qu’on ne voit pas.", "Jesus is the image of the invisible God.", "Jesús es la imagen del Dios invisible.", "Gesù è l’immagine del Dio invisibile.", "Jesus é a imagem do Deus invisível.", "Yesu azali elilingi ya Nzambe oyo amonanaka te.", "Yesu ni sura ya Mungu asiyeonekana.", "يسوع هو صورة الله غير المنظور.", "Col 1:15", "jesus"],
+  ["Jésus est le chemin : c’est par lui qu’on arrive au Père.", "Jesus is the way: through Him we come to the Father.", "Jesús es el camino: por él llegamos al Padre.", "Gesù è la via: per mezzo di lui arriviamo al Padre.", "Jesus é o caminho: por ele chegamos ao Pai.", "Yesu azali nzela: na nzela na ye nde tokomaka epai ya Tata.", "Yesu ndiye njia: kupitia yeye tunafika kwa Baba.", "يسوع هو الطريق: به نصل إلى الآب.", "Jn 14:6", "jesus"],
+  ["Le Père veut que celui qui croit en Jésus ait la vie éternelle.", "The Father wants all who believe in Jesus to have eternal life.", "El Padre quiere que quien cree en Jesús tenga vida eterna.", "Il Padre vuole che chi crede in Gesù abbia la vita eterna.", "O Pai quer que quem crê em Jesus tenha a vida eterna.", "Tata alingi ete oyo andimi Yesu azala na bomoi ya seko.", "Baba anataka kila amwaminiye Yesu awe na uzima wa milele.", "يريد الآب أن تكون لكل من يؤمن بيسوع حياة أبدية.", "Jn 6:40", "jesus"],
+  ["Jésus est ton modèle : marche comme il a marché.", "Jesus is your model: walk as He walked.", "Jesús es tu modelo: camina como él caminó.", "Gesù è il tuo modello: cammina come lui.", "Jesus é o seu modelo: ande como ele andou.", "Yesu azali ndakisa na yo: tambola ndenge ye atambolaki.", "Yesu ni kielelezo chako: enenda kama yeye alivyoenenda.", "يسوع قدوتك: اسلك كما سلك هو.", "1 Jn 2:6", "jesus"],
+  ["La foi, c’est être sûr de ce qu’on espère, même sans le voir.", "Faith is being sure of what we hope for, even unseen.", "La fe es estar seguro de lo que esperamos, aun sin verlo.", "La fede è essere certi di ciò che speriamo, anche senza vederlo.", "Fé é ter certeza do que esperamos, mesmo sem ver.", "Kondima ezali koyeba solo oyo tozali kozela, ata tomoni yango te.", "Imani ni kuwa na uhakika wa tunayotarajia, hata bila kuona.", "الإيمان هو الثقة بما نرجوه، حتى دون أن نراه.", "Hé 11:1", "foi"],
+  ["La foi grandit quand on écoute la Parole du Christ.", "Faith grows when we listen to the word of Christ.", "La fe crece cuando escuchamos la Palabra de Cristo.", "La fede cresce quando ascoltiamo la Parola di Cristo.", "A fé cresce quando ouvimos a Palavra de Cristo.", "Kondima ekolaka soki toyoki Liloba ya Klisto.", "Imani hukua tunaposikia Neno la Kristo.", "ينمو الإيمان حين نسمع كلمة المسيح.", "Rm 10:17", "foi"],
+  ["Garde les yeux fixés sur Jésus : c’est lui qui fait grandir ta foi.", "Keep your eyes on Jesus: He makes your faith grow.", "Mantén los ojos en Jesús: él hace crecer tu fe.", "Tieni gli occhi su Gesù: è lui che fa crescere la tua fede.", "Mantenha os olhos em Jesus: ele faz sua fé crescer.", "Tala Yesu ntango nyonso: ye nde akolisaka kondima na yo.", "Kaza macho yako kwa Yesu: yeye hukuza imani yako.", "ثبّت عينيك على يسوع: هو من يُنمي إيمانك.", "Hé 12:2", "foi"],
+  ["Une foi vivante se voit dans ce qu’on fait.", "A living faith shows in what we do.", "Una fe viva se ve en lo que hacemos.", "Una fede viva si vede da ciò che facciamo.", "Uma fé viva se vê no que fazemos.", "Kondima ya bomoi emonanaka na misala na biso.", "Imani hai huonekana katika matendo yetu.", "الإيمان الحي يظهر في أعمالنا.", "Jc 2:18", "foi"],
+  ["L’espérance ne déçoit pas : l’Esprit met l’amour de Dieu en nous.", "Hope does not disappoint: the Spirit pours God’s love into us.", "La esperanza no defrauda: el Espíritu pone en nosotros el amor de Dios.", "La speranza non delude: lo Spirito mette in noi l’amore di Dio.", "A esperança não decepciona: o Espírito põe em nós o amor de Deus.", "Elikya eyokisaka soni te: Molimo atiaka bolingo ya Nzambe kati na biso.", "Tumaini halitahayarishi: Roho humimina upendo wa Mungu ndani yetu.", "الرجاء لا يُخيّب: الروح يسكب محبة الله فينا.", "Rm 5:5", "foi"],
+  ["La Parole de Dieu est une graine pleine de vie.", "God’s Word is a seed full of life.", "La Palabra de Dios es una semilla llena de vida.", "La Parola di Dio è un seme pieno di vita.", "A Palavra de Deus é uma semente cheia de vida.", "Liloba ya Nzambe ezali mboto etondi na bomoi.", "Neno la Mungu ni mbegu iliyojaa uzima.", "كلمة الله بذرة مملوءة بالحياة.", "Lc 8:11", "semeur"],
+  ["Un cœur qui écoute et comprend porte beaucoup de fruit.", "A heart that listens and understands bears much fruit.", "Un corazón que escucha y entiende da mucho fruto.", "Un cuore che ascolta e capisce porta molto frutto.", "Um coração que ouve e entende dá muito fruto.", "Motema oyo eyokaka mpe esosolaka ebotaka mbuma mingi.", "Moyo unaosikia na kuelewa huzaa matunda mengi.", "القلب الذي يسمع ويفهم يأتي بثمر كثير.", "Mt 13:23", "semeur"],
+  ["Les soucis sont comme des épines : ils étouffent la Parole en nous.", "Worries are like thorns: they choke the Word inside us.", "Las preocupaciones son como espinas: ahogan la Palabra en nosotros.", "Le preoccupazioni sono come spine: soffocano la Parola in noi.", "As preocupações são como espinhos: sufocam a Palavra em nós.", "Mitungisi ezali lokola nzube: efinaka Liloba kati na biso.", "Masumbufu ni kama miiba: yanasonga Neno ndani yetu.", "الهموم كالأشواك: تخنق الكلمة في داخلنا.", "Mc 4:19", "semeur"],
+  ["Avec de bonnes racines, on tient bon même quand c’est dur.", "With good roots, you stand firm even when it’s hard.", "Con buenas raíces, te mantienes firme aunque sea difícil.", "Con buone radici resti saldo anche quando è dura.", "Com boas raízes, você fica firme mesmo quando é difícil.", "Na misisa ya malamu, otelemaka makasi ata ntango ezali pasi.", "Ukiwa na mizizi mizuri, unasimama imara hata ikiwa ngumu.", "بجذور جيدة تثبت حتى في الأوقات الصعبة.", "Mc 4:17", "semeur"],
+  ["L’un plante, l’autre arrose, mais Dieu fait grandir.", "One plants, another waters, but God makes it grow.", "Uno planta, otro riega, pero Dios hace crecer.", "Uno pianta, l’altro annaffia, ma Dio fa crescere.", "Um planta, outro rega, mas Deus faz crescer.", "Moko alonaka, mosusu asopelaka mai, kasi Nzambe nde akolisaka.", "Mmoja hupanda, mwingine hutia maji, lakini Mungu huikuza.", "واحد يغرس وآخر يسقي، لكن الله يُنمي.", "1 Co 3:6", "semeur"],
+  ["Dieu t’aime tant qu’il t’appelle son enfant : voilà qui tu es !", "God loves you so much He calls you His child: that’s who you are!", "Dios te ama tanto que te llama su hijo: ¡eso eres!", "Dio ti ama tanto da chiamarti suo figlio: ecco chi sei!", "Deus te ama tanto que te chama de filho: é isso que você é!", "Nzambe alingi yo mingi, abengi yo mwana na ye: yango nde ozali!", "Mungu anakupenda sana hata anakuita mtoto wake: ndivyo ulivyo!", "يحبك الله حتى إنه يدعوك ابنه: هذا هو أنت!", "1 Jn 3:1", "identite"],
+  ["Dieu t’a choisi et mis à part pour lui.", "God chose you and set you apart for Himself.", "Dios te eligió y te apartó para él.", "Dio ti ha scelto e messo da parte per sé.", "Deus te escolheu e te separou para ele.", "Nzambe aponaki yo mpe atiaki yo pembeni mpo na ye.", "Mungu amekuchagua na kukutenga kwa ajili yake.", "الله اختارك وخصّصك لنفسه.", "2 Th 2:13", "identite"],
+  ["Tu es un membre précieux du corps du Christ.", "You are a precious member of the body of Christ.", "Eres un miembro valioso del cuerpo de Cristo.", "Sei un membro prezioso del corpo di Cristo.", "Você é um membro precioso do corpo de Cristo.", "Ozali eteni ya motuya ya nzoto ya Klisto.", "Wewe ni kiungo cha thamani cha mwili wa Kristo.", "أنت عضو ثمين في جسد المسيح.", "1 Co 12:27", "identite"],
+  ["Nos vrais combats sont invisibles : Dieu nous prête son armure.", "Our real battles are unseen: God lends us His armor.", "Nuestras verdaderas batallas son invisibles: Dios nos da su armadura.", "Le nostre vere battaglie sono invisibili: Dio ci dà la sua armatura.", "Nossas verdadeiras batalhas são invisíveis: Deus nos dá sua armadura.", "Bitumba na biso ya solo emonanaka te: Nzambe apesaka biso bibundeli na ye.", "Vita vyetu halisi havionekani: Mungu hutupa silaha zake.", "معاركنا الحقيقية غير منظورة: والله يعطينا سلاحه.", "Ép 6:11", "identite"],
+  ["Aie le même cœur que Jésus : humble et prêt à servir.", "Have the same heart as Jesus: humble and ready to serve.", "Ten el mismo corazón que Jesús: humilde y listo para servir.", "Abbi lo stesso cuore di Gesù: umile e pronto a servire.", "Tenha o mesmo coração de Jesus: humilde e pronto a servir.", "Zala na motema lokola ya Yesu: komikitisa mpe kosalela basusu.", "Kuwa na moyo kama wa Yesu: mnyenyekevu na tayari kutumika.", "ليكن لك قلب يسوع: متواضعًا ومستعدًا للخدمة.", "Ph 2:5", "identite"],
+  ["La bonne nouvelle est pour le monde entier : chacun peut la partager.", "The good news is for the whole world: anyone can share it.", "La buena noticia es para todo el mundo: cada uno puede compartirla.", "La buona notizia è per tutto il mondo: ognuno può condividerla.", "A boa notícia é para o mundo inteiro: cada um pode compartilhá-la.", "Sango malamu ezali mpo na mokili mobimba: moto nyonso akoki kosakola yango.", "Habari njema ni kwa ulimwengu wote: kila mtu anaweza kuishiriki.", "البشارة للعالم كله: ويمكن لكل واحد أن يشاركها.", "Mc 16:15", "mission"],
+  ["Reste attaché à Jésus comme la branche à la vigne.", "Stay connected to Jesus like a branch to the vine.", "Permanece unido a Jesús como la rama a la vid.", "Resta unito a Gesù come il tralcio alla vite.", "Permaneça ligado a Jesus como o ramo à videira.", "Fanda elongo na Yesu lokola etape na nzete ya vino.", "Kaa ndani ya Yesu kama tawi ndani ya mzabibu.", "اثبت في يسوع كما يثبت الغصن في الكرمة.", "Jn 15:5", "mission"],
+  ["Les amis de Jésus se reconnaissent à l’amour qu’ils ont entre eux.", "Jesus’ friends are known by the love they have for each other.", "A los amigos de Jesús se les reconoce por su amor mutuo.", "Gli amici di Gesù si riconoscono dall’amore reciproco.", "Os amigos de Jesus são conhecidos pelo amor entre eles.", "Baninga ya Yesu bayebanaka na bolingo oyo bazali na yango kati na bango.", "Rafiki wa Yesu hutambulika kwa upendo walio nao wao kwa wao.", "يُعرف أصدقاء يسوع بالمحبة التي بينهم.", "Jn 13:35", "mission"],
+  ["Le Saint-Esprit te donne la force d’être témoin de Jésus.", "The Holy Spirit gives you power to be Jesus’ witness.", "El Espíritu Santo te da fuerza para ser testigo de Jesús.", "Lo Spirito Santo ti dà la forza di essere testimone di Gesù.", "O Espírito Santo te dá força para ser testemunha de Jesus.", "Molimo Mosantu apesaka yo nguya ya kozala motatoli ya Yesu.", "Roho Mtakatifu anakupa nguvu ya kuwa shahidi wa Yesu.", "الروح القدس يمنحك القوة لتكون شاهدًا ليسوع.", "Ac 1:8", "mission"],
+  ["Dieu t’a tout donné gratuitement : toi aussi, tu peux donner sans compter.", "God gave you everything freely: you too can give freely.", "Dios te lo dio todo gratis: tú también puedes dar sin medida.", "Dio ti ha dato tutto gratis: anche tu puoi donare senza misura.", "Deus te deu tudo de graça: você também pode dar sem medida.", "Nzambe apesaki yo nyonso ofele: yo mpe okoki kopesa ofele.", "Mungu amekupa yote bure: wewe pia unaweza kutoa bure.", "أعطاك الله كل شيء مجانًا: وأنت أيضًا تستطيع أن تعطي بسخاء.", "Mt 10:8", "mission"],
+  ["Chaque jour est une occasion de faire du bien à quelqu’un.", "Every day is a chance to do good to someone.", "Cada día es una oportunidad de hacer el bien a alguien.", "Ogni giorno è un’occasione per fare del bene a qualcuno.", "Cada dia é uma chance de fazer o bem a alguém.", "Mokolo nyonso ezali libaku ya kosalela moto malamu.", "Kila siku ni nafasi ya kumtendea mtu mema.", "كل يوم فرصة لعمل الخير مع أحد.", "Ga 6:10", "pratique"],
+  ["En entrant chez quelqu’un, dis : « Que la paix soit ici ! »", "When you enter a home, say: “Peace be here!”", "Al entrar en una casa, di: «¡Paz a esta casa!»", "Entrando in una casa, di’: «Pace a questa casa!»", "Ao entrar numa casa, diga: “Paz a esta casa!”", "Soki okoti na ndako, loba: « Kimya ezala awa! »", "Ukiingia nyumbani, sema: “Amani iwe hapa!”", "عندما تدخل بيتًا قل: «سلام لهذا البيت!»", "Lc 10:5", "pratique"],
+  ["Prier pour un malade, c’est le confier à Dieu avec foi.", "Praying for a sick person is entrusting them to God in faith.", "Orar por un enfermo es confiarlo a Dios con fe.", "Pregare per un malato è affidarlo a Dio con fede.", "Orar por um doente é confiá-lo a Deus com fé.", "Kosambela mobeli ezali kopesa ye na maboko ya Nzambe na kondima.", "Kumwombea mgonjwa ni kumkabidhi kwa Mungu kwa imani.", "الصلاة لأجل مريض هي أن تودعه بين يدي الله بإيمان.", "Jc 5:15", "pratique"],
+  ["Dieu ouvre des cœurs : sois attentif à ceux qu’il prépare.", "God opens hearts: watch for the people He prepares.", "Dios abre corazones: fíjate en los que él prepara.", "Dio apre i cuori: fai attenzione a chi lui prepara.", "Deus abre corações: fique atento a quem ele prepara.", "Nzambe afungolaka mitema: keba na bato oyo ye abongisi.", "Mungu hufungua mioyo: kuwa makini na wale anaowaandaa.", "الله يفتح القلوب: انتبه لمن يُعدّهم.", "Ac 16:14", "pratique"],
+  ["Écouter et faire : c’est bâtir sa maison sur le roc.", "Listening and doing is building your house on the rock.", "Escuchar y hacer es construir tu casa sobre la roca.", "Ascoltare e fare è costruire la casa sulla roccia.", "Ouvir e praticar é construir sua casa sobre a rocha.", "Koyoka mpe kosala ezali kotonga ndako na yo likolo ya libanga.", "Kusikia na kutenda ni kujenga nyumba yako juu ya mwamba.", "أن تسمع وتعمل هو أن تبني بيتك على الصخر.", "Lc 6:48", "pratique"],
+  ["Ne crois pas tout : vérifie dans la Parole de Dieu.", "Don’t believe everything: check it in God’s Word.", "No creas todo: compruébalo en la Palabra de Dios.", "Non credere a tutto: verifica nella Parola di Dio.", "Não acredite em tudo: confira na Palavra de Deus.", "Kondima nyonso te: tala soki ezali na Liloba ya Nzambe.", "Usiamini kila kitu: hakikisha katika Neno la Mungu.", "لا تصدّق كل شيء: تحقّق منه في كلمة الله.", "Ac 17:11", "croyances"],
+  ["Dieu est amour : avec lui, plus besoin d’avoir peur.", "God is love: with Him, there’s no need to fear.", "Dios es amor: con él, no hay que tener miedo.", "Dio è amore: con lui non serve aver paura.", "Deus é amor: com ele, não precisa ter medo.", "Nzambe azali bolingo: elongo na ye, esengeli kobanga te.", "Mungu ni upendo: pamoja naye, hakuna haja ya kuogopa.", "الله محبة: معه لا داعي للخوف.", "1 Jn 4:18", "croyances"],
+  ["La Parole de Dieu passe avant les traditions des hommes.", "God’s Word comes before human traditions.", "La Palabra de Dios está por encima de las tradiciones humanas.", "La Parola di Dio viene prima delle tradizioni umane.", "A Palavra de Deus vem antes das tradições humanas.", "Liloba ya Nzambe eleki bimeseno ya bato.", "Neno la Mungu liko juu ya mapokeo ya wanadamu.", "كلمة الله تسبق تقاليد البشر.", "Mc 7:13", "croyances"],
+  ["Le cadeau de Dieu ne s’achète pas, il est gratuit !", "God’s gift can’t be bought: it’s free!", "¡El regalo de Dios no se compra: es gratis!", "Il dono di Dio non si compra: è gratuito!", "O presente de Deus não se compra: é de graça!", "Likabo ya Nzambe esombamaka te, ezali ofele!", "Zawadi ya Mungu hainunuliwi: ni bure!", "عطية الله لا تُشترى: إنها مجانية!", "Ac 8:20", "croyances"],
+  ["Dieu n’envoie pas le mal : tout ce qui est bon vient de lui.", "God doesn’t send evil: every good thing comes from Him.", "Dios no envía el mal: todo lo bueno viene de él.", "Dio non manda il male: ogni cosa buona viene da lui.", "Deus não envia o mal: tudo o que é bom vem dele.", "Nzambe atindaka mabe te: eloko nyonso ya malamu euti na ye.", "Mungu haleti uovu: kila jema hutoka kwake.", "الله لا يرسل الشر: كل صالح يأتي منه.", "Jc 1:17", "croyances"],
+];
+
 // la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
 const VICTORY = {
   en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
@@ -5777,6 +5840,117 @@ function drawHelp() {
   if (helpT > 12 && Math.floor(helpT / 30) % 2 === 0) { ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.fillText('Touche pour continuer', 560, 384); }
   ctx.restore(); cam = oc;
 }
+
+// ================== Lot 8 : les passants qui partagent une pensée ==================
+// Chaque niveau a quelques passants. Quand le héros s'approche, l'un d'eux s'arrête et partage
+// une petite pensée tirée du Nouveau Testament (amour, foi, espérance, monde spirituel).
+let passers = [], heardTh = new Set(loadJ('sj-th', []));
+function thText(i) { const r = THOUGHTS[i]; return (r && (r[LIX()] || r[0])) || ''; }
+function thQueue() { // les pensées jamais entendues d'abord, mélangées
+  const all = THOUGHTS.map((_, i) => i), fresh = shuffle(all.filter(i => !heardTh.has(i)));
+  return fresh.concat(shuffle(all.filter(i => heardTh.has(i))));
+}
+function thHear(P) {
+  if (P.met) return; P.met = true;
+  speak(thText(P.th));
+  if (!heardTh.has(P.th)) { heardTh.add(P.th); try { localStorage.setItem('sj-th', JSON.stringify([...heardTh])); } catch (e) {} score += 25; sfx('blip'); }
+}
+// ----- mode plateforme -----
+function passSpawn(n) {
+  passers = []; const L = LEVELS[n]; if (!L || race || L.theme === 'ciel' || L.sea || !THOUGHTS.length) return;
+  const R = rng(n * 977 + 31), q = thQueue(), end = Math.min(arenaX, LEVEL_W) - 500, k = 3;
+  for (let i = 0; i < k; i++) {
+    for (let a = 0; a < 30; a++) {
+      const x = 380 + (end - 380) * (i + .25 + R() * .5) / k, b = groundAt(x); if (!b) continue;
+      passers.push({ x, x0:x, y:b.y, f:R() < .5 ? 1 : -1, c:captiveLook(R), th:q[i % q.length], talk:0, met:false, ph:R() * 6, walk:0 }); break;
+    }
+  }
+}
+function passUpdate() {
+  if (!passers.length) return;
+  const hx = p.x + (p.w || 36) / 2, hy = p.y + (p.h || 60);
+  for (const P of passers) {
+    const near = Math.abs(hx - P.x) < 80 && Math.abs(hy - P.y) < 100;
+    if (near) { P.talk = Math.min(P.talk + 1, 40) ; P.hold = 150; P.f = hx < P.x ? -1 : 1; P.walk = 0; thHear(P); continue; }
+    if (P.hold > 0) { P.hold--; continue; }
+    if (P.talk > 0) P.talk = Math.max(0, P.talk - 2);
+    P.walk = (levelT + P.ph * 60) % 360 < 200 ? .45 : 0;
+    if (P.walk) { const nx = P.x + P.f * P.walk, b = groundAt(nx); if (Math.abs(nx - P.x0) > 70 || !b || Math.abs(b.y - P.y) > 2) P.f = -P.f; else P.x = nx; }
+  }
+}
+function drawPasser(P, X, Y, sc) {
+  ctx.save(); ctx.translate(X, Y); ctx.scale(sc, sc);
+  drawHeroP(P.c, cam - 18, -60, P.f, P.walk ? { k:0, air:false, v:2 } : { k:-1, air:false, v:0 }, false); ctx.restore();
+  if (P.talk <= 0) { // trois petits points : « j'ai quelque chose à te dire »
+    const t = Date.now() / 300, by = Y - 60 * sc - 16;
+    gEll(ctx, X, by, 13, 9, 'rgba(255,255,255,.85)');
+    for (let i = 0; i < 3; i++) gEll(ctx, X - 6 + i * 6, by + (Math.floor(t) % 3 === i ? -1.5 : 0), 1.7, 1.7, '#5a3a8a');
+  }
+}
+function drawThBubble(P, X, Y) { // X, Y : le haut de la tête du passant, à l'écran
+  if (P.talk <= 0) return;
+  const a = Math.min(1, P.talk / 18), txt = thText(P.th), ref = (THOUGHTS[P.th] || [])[8] || '';
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.font = 'bold 13px Trebuchet MS, sans-serif';
+  const lines = wrapText(txt, 230), w = Math.max(120, ...lines.map(l => ctx.measureText(l).width)) + 24, h = lines.length * 17 + 30;
+  const bx = Math.max(8, Math.min(792 - w, X - w / 2)), by = Math.max(6, Y - h - 14);
+  ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 8;
+  rrPath(ctx, bx, by, w, h, 12); ctx.fillStyle = '#fff8e6'; ctx.fill(); ctx.shadowBlur = 0;
+  ctx.strokeStyle = '#d4a52a'; ctx.lineWidth = 2; ctx.stroke();
+  const tx = Math.max(bx + 14, Math.min(bx + w - 14, X)); ctx.beginPath(); ctx.moveTo(tx - 7, by + h - 1); ctx.lineTo(tx, by + h + 10); ctx.lineTo(tx + 7, by + h - 1); ctx.closePath(); ctx.fillStyle = '#fff8e6'; ctx.fill();
+  ctx.textAlign = 'center'; ctx.fillStyle = '#3a2408';
+  lines.forEach((l, i) => ctx.fillText(l, bx + w / 2, by + 19 + i * 17));
+  ctx.font = 'italic bold 10px Trebuchet MS, sans-serif'; ctx.fillStyle = '#9a6a1a'; ctx.textAlign = 'right'; ctx.fillText(ref, bx + w - 10, by + h - 7);
+  ctx.textAlign = 'left'; ctx.fillStyle = '#8a7a9a'; ctx.fillText('💭 ' + heardTh.size + ' / ' + THOUGHTS.length, bx + 10, by + h - 7);
+  ctx.restore();
+}
+function drawPassers() { for (const P of passers) { const X = P.x - cam; if (X > -60 && X < 860) drawPasser(P, X, P.y, .82); } }
+function drawPassBubbles() { for (const P of passers) { const X = P.x - cam; if (X > -60 && X < 860) drawThBubble(P, X, P.y - 60 * .82 - 4); } }
+
+// ----- mode vue de haut -----
+function tdPassSpawn() {
+  const T = td; if (!T || !THOUGHTS.length) return; T.pass = [];
+  const R = rng((T.open ? 4242 : T.n * 313) + 17), q = thQueue(), n = T.open ? 12 : 4, Lk = T.lake, A = T.arena, G = T.garden;
+  const bad = (x, y) => ((x - Lk.cx) / (Lk.rx + 50)) ** 2 + ((y - Lk.cy) / (Lk.ry + 50)) ** 2 < 1 || (x > A.x - 80 && x < A.x + A.w + 80 && y > A.y - 80 && y < A.y + A.h + 80)
+    || (G && x > G.x - 60 && x < G.x + G.w + 60 && y > G.y - 60 && y < G.y + G.h + 60) || T.houses.some(h => x > h.x - 30 && x < h.x + h.w + 30 && y > h.y - 50 && y < h.y + h.h + 30)
+    || Math.hypot(x - T.h.x, y - T.h.y) < 260 || T.pass.some(o => Math.hypot(o.x - x, o.y - y) < (T.open ? 420 : 380));
+  for (let i = 0, k = 0; i < 800 && k < n; i++) {
+    const P = T.paths[Math.floor(R() * T.paths.length)], s = Math.floor(R() * (P.length - 1)), u = R(), a = P[s], b = P[s + 1];
+    const x = a[0] + (b[0] - a[0]) * u + (R() - .5) * 90, y = a[1] + (b[1] - a[1]) * u + (R() - .5) * 90;
+    if (bad(x, y)) continue;
+    T.pass.push({ x, y, x0:x, y0:y, f:R() < .5 ? 1 : -1, vx:0, vy:0, c:captiveLook(R), th:q[k % q.length], talk:0, met:false, ph:R() * 6, walk:0 }); k++;
+  }
+}
+function tdPassUpdate() {
+  const T = td; if (!T || !T.pass) return; const H = T.h;
+  for (const P of T.pass) {
+    const d = Math.hypot(H.x - P.x, H.y - P.y);
+    if (d < 80) { P.talk = Math.min(P.talk + 1, 40); P.hold = 150; P.f = H.x < P.x ? -1 : 1; P.walk = 0; thHear(P); continue; }
+    if (P.hold > 0) { P.hold--; continue; }
+    if (P.talk > 0) P.talk = Math.max(0, P.talk - 2);
+    const ph = (levelT + P.ph * 60) % 400;
+    if (ph === 0 || P.vx === 0 && P.vy === 0) { const an = Math.atan2(P.y0 - P.y, P.x0 - P.x) + (rnd() - .5) * 2.4; P.vx = Math.cos(an) * .5; P.vy = Math.sin(an) * .35; }
+    P.walk = ph < 220 ? 1 : 0;
+    if (P.walk) { const nx = P.x + P.vx, ny = P.y + P.vy; if (!tdBlocked(nx, ny, 12) && Math.hypot(nx - P.x0, ny - P.y0) < 90) { P.x = nx; P.y = ny; if (Math.abs(P.vx) > .1) P.f = P.vx < 0 ? -1 : 1; } else { P.vx = -P.vx; P.vy = -P.vy; } }
+  }
+}
+function tdPassDraw(E, vis) {
+  const T = td; if (!T || !T.pass) return;
+  for (const P of T.pass) {
+    if (!vis(P.x, P.y, 80)) continue;
+    E.push([P.y, () => { tdShadow(P.x, P.y, 12); drawPasser(P, P.x - cam, P.y, .9); }]);
+    if (P.talk > 0) E.push([1e9, () => drawThBubble(P, P.x - cam, P.y - 60 * .9 - 4)]);
+  }
+}
+
+// branchements
+{ const b0 = buildLevel; buildLevel = function () { const r = b0.apply(this, arguments); passSpawn(arguments[0]); return r; }; }
+{ const u0 = update; update = function () { u0(); if (state === 'play') passUpdate(); }; }
+{ const d0 = drawCritters; drawCritters = function () { d0(); drawPassers(); }; }
+{ const w0 = drawWeather; drawWeather = function () { const r = w0.apply(this, arguments); if (state === 'play') drawPassBubbles(); return r; }; }
+{ const b0 = tdBuild; tdBuild = function () { b0(); tdPassSpawn(); }; }
+{ const u0 = tdUpdate; tdUpdate = function () { u0(); if (state === 'tdplay' && td) tdPassUpdate(); }; }
+{ const d0 = tdCritDraw; tdCritDraw = function (E, vis) { d0(E, vis); tdPassDraw(E, vis); }; }
 
 function loop() {
   stT++;
