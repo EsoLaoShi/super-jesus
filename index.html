@@ -380,6 +380,41 @@ TR_TPL.push(
   [/^Niveau (\d+) : (.+)$/, ['Level {1}: {t2}', 'Nivel {1}: {t2}', 'Livello {1}: {t2}', 'Nível {1}: {t2}', 'Eteni {1}: {t2}', 'Ngazi {1}: {t2}', 'المرحلة {1}: {t2}']],
   [/^Record : (\d+) points · niveau (\d+) · (\d+) captifs libérés$/, ['Record: {1} points · level {2} · {3} captives set free', 'Récord: {1} puntos · nivel {2} · {3} cautivos liberados', 'Record: {1} punti · livello {2} · {3} prigionieri liberati', 'Recorde: {1} pontos · nível {2} · {3} cativos libertados', 'Rekodi: ba points {1} · eteni {2} · bato {3} bakangolami', 'Rekodi: pointi {1} · ngazi {2} · mateka {3} wameachiliwa', 'الرقم القياسي: {1} نقطة · المرحلة {2} · {3} أسير محرَّر']]
 );
+// textes du lot 3 (géants, secrets, habitants, énigmes, serviteurs)
+for (const r of [
+  ["Le découragement te ralentit…", "Discouragement slows you down…", "El desánimo te frena…", "Lo scoraggiamento ti rallenta…", "O desânimo te atrasa…", "Kolemba ezali kokitisa yo…", "Kukata tamaa kunakupunguza kasi…", "الإحباط يبطئك…"],
+  ["Des condamnations tombent du ciel !", "Condemnations fall from the sky!", "¡Caen condenas del cielo!", "Condanne cadono dal cielo!", "Condenações caem do céu!", "Bakweli ya etumbu bazali kokita uta likolo!", "Hukumu zinaanguka kutoka angani!", "إدانات تسقط من السماء!"],
+  ["Tout devient sombre… avance quand même !", "Everything goes dark… keep going anyway!", "Todo se oscurece… ¡sigue adelante!", "Tutto diventa buio… vai avanti lo stesso!", "Tudo fica escuro… siga em frente mesmo assim!", "Nyonso ekómi molili… kende kaka liboso!", "Kila kitu kinakuwa giza… endelea tu!", "كل شيء يظلم… تقدّم رغم ذلك!"],
+  ["Le géant fonce sur toi !", "The giant charges at you!", "¡El gigante carga contra ti!", "Il gigante ti carica!", "O gigante avança contra você!", "Monene azali kopota epai na yo!", "Jitu linakushambulia kwa kasi!", "العملاق يندفع نحوك!"],
+  ["Le géant appelle des renforts !", "The giant calls for reinforcements!", "¡El gigante pide refuerzos!", "Il gigante chiama rinforzi!", "O gigante chama reforços!", "Monene azali kobenga basalisi!", "Jitu linaita msaada!", "العملاق يستدعي التعزيزات!"],
+  ["L'Orgueil grandit !", "Pride grows bigger!", "¡El Orgullo crece!", "L'Orgoglio cresce!", "O Orgulho cresce!", "Lolendo ezali kokola!", "Kiburi kinakua!", "الكبرياء يكبر!"],
+  ["Le Doute fait trembler le sol !", "Doubt shakes the ground!", "¡La Duda hace temblar el suelo!", "Il Dubbio fa tremare il suolo!", "A Dúvida faz o chão tremer!", "Ntembe ezali koningisa mabele!", "Shaka inatikisa ardhi!", "الشك يهزّ الأرض!"],
+  ["La Convoitise t'attire…", "Greed pulls you in…", "La Codicia te atrae…", "La Cupidigia ti attira…", "A Cobiça te atrai…", "Lokoso ezali kobenda yo…", "Tamaa inakuvuta…", "الطمع يجذبك…"],
+  ["Ça craque…", "It's cracking…", "Se está agrietando…", "Si sta crepando…", "Está rachando…", "Ezali kopasuka…", "Inapasuka…", "إنها تتشقق…"],
+  ["Passage secret ! Un trésor caché !", "Secret passage! A hidden treasure!", "¡Pasaje secreto! ¡Un tesoro escondido!", "Passaggio segreto! Un tesoro nascosto!", "Passagem secreta! Um tesouro escondido!", "Nzela ya kobombama! Bomengo ebombami!", "Njia ya siri! Hazina iliyofichwa!", "ممرّ سرّي! كنز مخفي!"],
+  ["Le berger", "The shepherd", "El pastor", "Il pastore", "O pastor", "Mobateli ya bampate", "Mchungaji", "الراعي"],
+  ["La veuve", "The widow", "La viuda", "La vedova", "A viúva", "Mwasi akufelá mobali", "Mjane", "الأرملة"],
+  ["Le pêcheur", "The fisherman", "El pescador", "Il pescatore", "O pescador", "Moluki-mbisi", "Mvuvi", "الصياد"],
+  ["La boulangère", "The baker", "La panadera", "La fornaia", "A padeira", "Mosali mampa", "Mwokaji mikate", "الخبّازة"],
+  ["Ma brebis est perdue ! Ramène-la-moi, je t’en prie.", "My sheep is lost! Please bring it back to me.", "¡Mi oveja se ha perdido! Tráemela, por favor.", "La mia pecora si è persa! Riportamela, ti prego.", "Minha ovelha se perdeu! Traga-a de volta, por favor.", "Mpate na ngai ebungi! Zongisela ngai yango, nabondeli yo.", "Kondoo wangu amepotea! Tafadhali niletee.", "خروفي ضائع! أرجوك أعِده إليّ."],
+  ["Ma cruche d’huile a disparu… peux-tu la retrouver ?", "My jar of oil is gone… can you find it?", "Mi cántaro de aceite ha desaparecido… ¿puedes encontrarlo?", "La mia brocca d'olio è sparita… puoi ritrovarla?", "Meu jarro de azeite sumiu… você pode encontrá-lo?", "Mbeki na ngai ya mafuta ebungi… okoki kozwa yango?", "Mtungi wangu wa mafuta umepotea… unaweza kuupata?", "جرّة زيتي اختفت… هل تستطيع إيجادها؟"],
+  ["Le vent a emporté mon filet ! Aide-moi à le retrouver.", "The wind blew my net away! Help me find it.", "¡El viento se llevó mi red! Ayúdame a encontrarla.", "Il vento ha portato via la mia rete! Aiutami a ritrovarla.", "O vento levou minha rede! Ajude-me a encontrá-la.", "Mopepe ememi monyama na ngai! Salisa ngai nazwa yango.", "Upepo umechukua wavu wangu! Nisaidie kuupata.", "الريح أخذت شبكتي! ساعدني في إيجادها."],
+  ["J’ai perdu les pains pour les pauvres ! Tu les as vus ?", "I lost the bread for the poor! Have you seen it?", "¡Perdí los panes para los pobres! ¿Los has visto?", "Ho perso i pani per i poveri! Li hai visti?", "Perdi os pães para os pobres! Você os viu?", "Nabungisi mampa ya babola! Omoni yango?", "Nimepoteza mikate ya maskini! Umeiona?", "أضعت الخبز المخصّص للفقراء! هل رأيته؟"],
+  ["Ma brebis ! Merci, que Dieu te bénisse !", "My sheep! Thank you, God bless you!", "¡Mi oveja! ¡Gracias, Dios te bendiga!", "La mia pecora! Grazie, Dio ti benedica!", "Minha ovelha! Obrigado, Deus te abençoe!", "Mpate na ngai! Matondo, Nzambe apambola yo!", "Kondoo wangu! Asante, Mungu akubariki!", "خروفي! شكرًا، باركك الله!"],
+  ["Mon huile ! Tu es une bénédiction !", "My oil! You are a blessing!", "¡Mi aceite! ¡Eres una bendición!", "Il mio olio! Sei una benedizione!", "Meu azeite! Você é uma bênção!", "Mafuta na ngai! Ozali lipamboli!", "Mafuta yangu! Wewe ni baraka!", "زيتي! أنت بركة!"],
+  ["Mon filet ! Je vais pouvoir pêcher !", "My net! Now I can fish!", "¡Mi red! ¡Ya puedo pescar!", "La mia rete! Ora posso pescare!", "Minha rede! Agora posso pescar!", "Monyama na ngai! Nakoki koluka mbisi!", "Wavu wangu! Sasa naweza kuvua!", "شبكتي! الآن أستطيع الصيد!"],
+  ["Les pains ! Merci, ils auront à manger !", "The bread! Thank you, they will have food!", "¡Los panes! ¡Gracias, tendrán qué comer!", "I pani! Grazie, avranno da mangiare!", "Os pães! Obrigada, eles terão o que comer!", "Mampa! Matondo, bakozala na eloko ya kolya!", "Mikate! Asante, watapata chakula!", "الخبز! شكرًا، سيجدون ما يأكلون!"],
+  ["Trouvé ! Rapporte-le à son propriétaire.", "Found it! Bring it back to its owner.", "¡Encontrado! Devuélvelo a su dueño.", "Trovato! Riportalo al proprietario.", "Achou! Leve-o de volta ao dono.", "Ozwi yango! Zongisa yango epai ya nkolo na yango.", "Umeipata! Mrudishie mwenyewe.", "وجدته! أعِده إلى صاحبه."],
+  ["Tu l’as trouvé ? Apporte-le-moi !", "Did you find it? Bring it to me!", "¿Lo encontraste? ¡Tráemelo!", "L'hai trovato? Portamelo!", "Você encontrou? Traga para mim!", "Ozwi yango? Memela ngai yango!", "Umeipata? Niletee!", "هل وجدته؟ أحضره إليّ!"],
+  ["Pousse le rocher !", "Push the rock!", "¡Empuja la roca!", "Spingi la roccia!", "Empurre a pedra!", "Tindika libanga!", "Sukuma jiwe!", "ادفع الصخرة!"],
+  ["Les trois lampes brillent : la porte du jardin s’ouvre !", "The three lamps shine: the garden gate opens!", "¡Las tres lámparas brillan: la puerta del jardín se abre!", "Le tre lampade brillano: il cancello del giardino si apre!", "As três lâmpadas brilham: o portão do jardim se abre!", "Minda misato ezali kongenga: ekuke ya elanga efungwami!", "Taa tatu zinang'aa: lango la bustani linafunguka!", "المصابيح الثلاثة تضيء: باب الحديقة ينفتح!"],
+  ["Allume les trois lampes pour ouvrir la porte", "Light the three lamps to open the gate", "Enciende las tres lámparas para abrir la puerta", "Accendi le tre lampade per aprire il cancello", "Acenda as três lâmpadas para abrir o portão", "Pelisa minda misato mpo na kofungola ekuke", "Washa taa tatu kufungua lango", "أشعل المصابيح الثلاثة لفتح الباب"],
+  ["Un coffre rempli de trésors ! +1 vie", "A chest full of treasure! +1 life", "¡Un cofre lleno de tesoros! +1 vida", "Uno scrigno pieno di tesori! +1 vita", "Um baú cheio de tesouros! +1 vida", "Sanduku etondi na bomengo! +1 bomoi", "Sanduku lililojaa hazina! +1 maisha", "صندوق مليء بالكنوز! +1 حياة"]
+]) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; }
+TR_TPL.push(
+  [/^Libère (\d+) captifs$/, ['Free {1} captives', 'Libera {1} cautivos', 'Libera {1} prigionieri', 'Liberte {1} cativos', 'Kangola bato {1}', 'Waweke huru mateka {1}', 'حرّر {1} أسرى']],
+  [/^Une lampe s’allume… \((\d) \/ 3\)$/, ['A lamp lights up… ({1} / 3)', 'Una lámpara se enciende… ({1} / 3)', 'Una lampada si accende… ({1} / 3)', 'Uma lâmpada se acende… ({1} / 3)', 'Mwinda moko epeli… ({1} / 3)', 'Taa moja inawaka… ({1} / 3)', 'مصباح يضيء… ({1} / 3)']]
+);
 // la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
 const VICTORY = {
   en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
@@ -821,6 +856,7 @@ function buildLevel(n) {
   total = foes.filter(f => !f.boss && !f.horde && f.kind === L.kind).length; done = 0; levelT = 0; levelScore = score; faithStart = faith;
   hardenFoes(horde); verseShow = null;
   { const ps = plats.filter(q => !q.range && !q.kind).sort((a, b) => a.y - b.y), sp = ps[1] || ps[0]; vscroll = sp ? { x:sp.x + sp.w / 2, y:sp.y - 30, got:false, i:n } : null; } // le parchemin du niveau
+  buildLot3(n);
 }
 
 // ---------- Bataille finale : la horde du géant, et les captifs ----------
@@ -903,7 +939,7 @@ function placePlayer() {
 
 function go(s) { state = s; stT = 0; if (['next', 'win', 'over', 'tdwin', 'tdover'].includes(s)) noteRecord(); if (s === 'win') saveJ('sj-save', null); const j = { next:'level', win:'win', over:'over', talk:'laugh' }[s]; if (j) sfx(j); }
 const flameFor = f => Math.min(4, Math.floor(f / 7));
-function start(fresh) { if (gameMode === 'td') { tdStart(); return; } if (!fresh && getSave()) { contSel = 0; go('cont'); return; } if (fresh) saveJ('sj-save', null); sfx('ok'); boost = 0; rains = 0; rainMark = 0; lives = startLives(); score = 0; faith = hero().startFaith || 0; flameLvl = flameFor(faith); level = 0; angels = []; balls = []; buildLevel(0); placePlayer(); go('play'); }
+function start(fresh) { if (!unlocked(sel)) { sfx('hurt'); return; } if (gameMode === 'td') { tdStart(); return; } if (!fresh && getSave()) { contSel = 0; go('cont'); return; } if (fresh) saveJ('sj-save', null); sfx('ok'); boost = 0; rains = 0; rainMark = 0; lives = startLives(); score = 0; faith = hero().startFaith || 0; flameLvl = flameFor(faith); level = 0; angels = []; balls = []; buildLevel(0); placePlayer(); go('play'); }
 function retryLevel() { sfx('ok'); boost = 0; rains = 0; rainMark = 0; lives = startLives(); score = levelScore; faith = faithStart; flameLvl = flameFor(faith); angels = []; balls = []; buildLevel(level); placePlayer(); go('play'); }
 
 // ---------- Contrôles ----------
@@ -1138,7 +1174,7 @@ function groundBelow(x, y) {
 
 function update() {
   const c = hero(), L = LEVELS[level], l = keys.ArrowLeft || keys.a, r = keys.ArrowRight || keys.d, j = keys.ArrowUp || keys[' '] || keys.w;
-  const spd = p.ride ? 7.2 : c.spd || 4.5, jEdge = j && !p.prevJ; p.prevJ = j;
+  const spd = (p.ride ? 7.2 : c.spd || 4.5) * (gfx && gfx.k === 'slow' ? .5 : 1), jEdge = j && !p.prevJ; p.prevJ = j;
   levelT++;
   // plateformes et barques qui bougent (elles emportent le joueur)
   for (const q of plats) if (q.range) { const nx = q.bx + (Math.sin(levelT * q.spd + q.ph) * .5 + .5) * q.range; q.dx = nx - q.x; q.x = nx; }
@@ -1280,7 +1316,7 @@ function update() {
     const w = ctx.measureText(t).width + 14;
     lies.push({ x:dir < 0 ? boss.x - w : boss.x + boss.w, y:boss.giant && rnd() < .45 ? FLOOR - 114 : FLOOR - 48, w, h:22, vx:3 * dir, t }); sfx('lie');
   }
-  for (const q of lies) q.x += q.vx;
+  for (const q of lies) { q.x += q.vx; if (q.vy) { q.y += q.vy; if (q.y > FLOOR - 16) { q.gone = true; spawnFire(q.x + q.w / 2, FLOOR, 6); } } }
   for (const q of lies) {
     if (p.punch > 0 && hit(hand, q)) { q.gone = true; score += 20; sfx('pop'); say(q.x + q.w / 2, q.y - 6, 'Faux !', '#fff3a0'); spawnFire(q.x + q.w / 2, q.y + 20, 10, true); }
     else if (p.ride > 0 && hit(body, q)) { q.gone = true; sfx('pop'); spawnFire(q.x + q.w / 2, q.y + 20, 10); }
@@ -1291,6 +1327,7 @@ function update() {
   updateWords();
   updateStorm();
   updateCaptives(boss);
+  updateLot3(boss, hand);
   god.x += (p.x - p.face * 70 - god.x) * 0.08; god.y += (p.y - 90 - god.y) * 0.08;
   // particules
   for (const q of fires) { q.x += q.vx + (q.dust ? 0 : Math.sin(q.life * .3 + (q.seed || 0)) * .35); q.y += q.vy; q.vy += q.dust ? .03 : -.025; q.life--; }
@@ -1991,6 +2028,7 @@ function draw() {
     }
     if (f.lion) drawLion(f); else if (f.giant) drawGiant(f); else if (f.boss) drawSatan(f); else if (f.kind === 'mal') drawSickness(f); else drawDemon(f);
   }
+  drawQuest();
   drawLies();
   drawPlayer();
   for (const q of fires) if (q.dust) { const a = q.life / q.max; ctx.globalAlpha = a * .8; rect(q.x, q.y, q.sz * (1 + (1 - a)), q.sz * (1 + (1 - a)), T.top2); ctx.globalAlpha = 1; }
@@ -2012,6 +2050,7 @@ function draw() {
   for (const f of vis) if (!f.horde) label(f.lion && f.calm ? 'Lion calmé' : f.name, f.x + f.w / 2 - cam, f.y - (f.boss ? 36 : 26), f.boss ? 22 : 18, f.lion ? '#ffe0a0' : f.kind === 'mal' ? '#e8fff0' : '#ffd0d0');
   for (const x of texts) { ctx.globalAlpha = Math.min(1, x.life / 25); const pop = x.big ? 32 * Math.min(1, .5 + (90 - x.life) / 12) : 18; label(x.t, Math.max(90, Math.min(710, x.x - cam)), x.y, Math.round(pop), x.col); ctx.globalAlpha = 1; }
   ctx.restore(); shake *= .86;
+  drawGiantDark();
   drawHUD(L, boss);
   drawVerseShow();
   drawBigMsg();
@@ -2538,7 +2577,7 @@ function boulder(g, x, y, w, h, col, seed, moss) {
 function drawBlock(b, T) {
   const x0 = Math.max(b.x, cam - 10), x1 = Math.min(b.x + b.w, cam + 810); if (x1 <= x0) return;
   const L = LEVELS[level], top = b.y, X0 = x0 - cam, Wd = x1 - x0, t = Date.now();
-  if (b.rock) { boulder(ctx, b.x - cam, top, b.w, b.h, mixC(T.dirt, '#8a8478', .5), b.x, T.grass ? T.top : null); return; }
+  if (b.rock) { boulder(ctx, b.x - cam, top, b.w, b.h, mixC(T.dirt, '#8a8478', .5), b.x, T.grass ? T.top : null); if (b.secret) drawCracks(b); return; }
   const h = 400 - top;
   ctx.fillStyle = LG(0, top, 0, 400, [[0, T.dirt], [.5, mixC(T.dirt, T.dirt2, .6)], [1, dark(T.dirt2, .3)]]); ctx.fillRect(X0, top, Wd, h);
   const pat = dirtPattern(L, T); pat.setTransform(new DOMMatrix().translate(-cam, top).scale(.5)); ctx.fillStyle = pat; ctx.fillRect(X0, top, Wd, h);
@@ -2773,9 +2812,10 @@ function drawSelect() {
     if (on) { ctx.strokeStyle = '#ffc83d'; ctx.lineWidth = 3; ctx.stroke(); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(cx, y0 + 70, 0, 60, [[0, 'rgba(255,230,160,.3)'], [1, 'rgba(255,230,160,0)']]); ctx.fillRect(cx - 60, y0, 120, 140); ctx.restore(); }
     gEll(ctx, cx, y0 + 104, 22, 4, 'rgba(0,0,0,.35)');
     const sc = 1.5; ctx.save(); ctx.translate(cx - 18 * sc, y0 + 14 - (on ? Math.abs(Math.sin(t / 200)) * 6 : 0)); ctx.scale(sc, sc);
-    drawHeroP(c, 0, 0, 1, on ? { k:0, air:false, v:2 } : { k:-1, air:false, v:0 }, false); ctx.restore();
+    if (!unlocked(i)) ctx.globalAlpha = .28; drawHeroP(c, 0, 0, 1, on ? { k:0, air:false, v:2 } : { k:-1, air:false, v:0 }, false); ctx.restore(); ctx.globalAlpha = 1;
+    if (!unlocked(i)) label('🔒', cx, y0 + 66, 26, '#fff');
     ctx.textAlign = 'center'; ctx.fillStyle = on ? '#fff' : '#cfc6e8'; ctx.font = 'bold 16px Trebuchet MS, sans-serif'; ctx.fillText(c.name, cx, y0 + 126);
-    ctx.fillStyle = on ? '#ffc83d' : '#9a8cc0'; ctx.font = 'bold 10px Trebuchet MS, sans-serif'; ctx.fillText(c.desc, cx, y0 + 143, 116); // texte resserré s'il est trop long (certaines langues)
+    ctx.fillStyle = on ? '#ffc83d' : '#9a8cc0'; ctx.font = 'bold 10px Trebuchet MS, sans-serif'; ctx.fillText(unlocked(i) ? c.desc : 'Libère ' + unlockNeed(i) + ' captifs', cx, y0 + 143, 116); // texte resserré s'il est trop long (certaines langues)
   });
   ctx.fillStyle = '#fff'; ctx.font = '14px Trebuchet MS, sans-serif'; ctx.fillText('Flèches pour choisir, Espace ou Entrée pour jouer — ou touche un serviteur, puis touche-le encore', 400, 392);
 }
@@ -3025,6 +3065,7 @@ function tdBuild() {
   captives = []; for (let i = 0; i < 7; i++) captives.push({ x:cage.x + 12 + i * (100 / 7), c:captiveLook(R), f:R() < .5 ? 1 : -1, ph:R() * 6, free:0, gone:false, y:cage.y });
   for (const f of foes) { f.x = f.fx - f.w / 2; f.y = f.fy - f.h; }
   vscroll = { x:1120, y:640, got:false, i:VERSES.length - 1 }; // un parchemin au bord du lac
+  tdLot3Build();
 }
 function tdSpawnHorde(x, y, R) {
   R = R || rnd; const fly = R() < .25, mal = !fly && R() < .5;
@@ -3033,6 +3074,7 @@ function tdSpawnHorde(x, y, R) {
   foes.push({ name, kind:mal ? 'mal' : 'dem', horde:true, fly, td:true, fx:x, fy:y, hx:x, hy:y, w, h, x:x - w / 2, y:y - h, d:1, dead:false, hp:2, hurt:0, spd:.9 + R() * .7, col:(mal ? SICK : EVIL)[Math.floor(R() * 6)], tx:x, ty:y });
 }
 function tdStart() {
+  if (!unlocked(sel)) { sfx('hurt'); return; }
   sfx('ok'); score = 0; lives = startLives(); faith = hero().startFaith || 0; flameLvl = flameFor(faith); level = 0;
   angels = []; balls = []; boost = 0; rains = 0; rainMark = 0; storm = 0; shake = 0; flash = 0;
   tdBuild(); hardenFoes(td.horde); verseShow = null; go('tdplay');
@@ -3046,6 +3088,7 @@ function tdBlocked(x, y, r, who) {
   for (const h of T.houses) if (x > h.x - r && x < h.x + h.w + r && y > h.y - r * .5 && y < h.y + h.h + r * .5) return true;
   for (const t of T.trees) if (Math.hypot(x - t.x, (y - t.y) * 1.6) < r + 9) return true;
   for (const k of T.rocks) if (Math.hypot(x - k.x, (y - k.y) * 1.5) < r + k.r * .8) return true;
+  if (tdWallHit(x, y, r, who)) return true;
   const A = T.arena, onWall = (px, py) => Math.abs(px - x) < r + 6 && Math.abs(py - y) < r + 6;
   // la palissade : on ne passe que par l'ouverture, et elle se ferme par un mur de feu pendant le combat
   const inX = x > A.x - r && x < A.x + A.w + r, inY = y > A.y - r && y < A.y + A.h + r;
@@ -3064,6 +3107,7 @@ function tdInArena(x, y) { const A = td.arena; return x > A.x && x < A.x + A.w &
 function tdUpdate() {
   const T = td, H = T.h, c = hero(); levelT++;
   if (vscroll && !vscroll.got && Math.hypot(H.x - vscroll.x, H.y - vscroll.y) < 30) gotScroll();
+  tdLot3Update(H);
   // déplacement : flèches / ZQSD, ou le joystick tactile
   let ix = (keys.ArrowRight || keys.d || keys.D ? 1 : 0) - (keys.ArrowLeft || keys.a || keys.A || keys.q ? 1 : 0);
   let iy = (keys.ArrowDown || keys.s || keys.S ? 1 : 0) - (keys.ArrowUp || keys.w || keys.W || keys.z ? 1 : 0);
@@ -3071,7 +3115,7 @@ function tdUpdate() {
   const il = Math.hypot(ix, iy), spd = 2.5 + ((c.spd || 4.5) - 4.5) * .45;
   if (il > 0) { ix /= il; iy /= il; H.dx = ix; H.dy = iy; if (Math.abs(ix) > .2) H.face = ix > 0 ? 1 : -1; }
   H.vx += (ix * spd - H.vx) * .3; H.vy += (iy * spd - H.vy) * .3;
-  tdMove(H, H.vx, H.vy, 11, 'hero');
+  tdPush(H); tdMove(H, H.vx, H.vy, 11, 'hero');
   if (H.inv > 0) H.inv--; if (H.punch > 0) H.punch--; if (H.cd > 0) H.cd--; if (T.wordCd > 0) T.wordCd--;
   // entrée dans l'enclos : l'ouverture se ferme par un mur de feu, la horde attaque
   const boss = foes.find(f => f.boss);
@@ -3233,6 +3277,7 @@ function tdDraw() {
     if (f.giant) drawGiant(f); else if (f.kind === 'mal') drawSickness(f); else drawDemon(f); }]);
   if (cage && vis(cage.x + cage.w / 2, cage.y, 160)) E.push([cage.y, () => drawCaptives()]);
   if (vscroll && !vscroll.got && vis(vscroll.x, vscroll.y, 30)) E.push([vscroll.y, () => { tdShadow(vscroll.x, vscroll.y, 11); drawScrollItem(vscroll.x - cam, vscroll.y - 24, t); }]);
+  tdLot3Draw(E, vis, t);
   E.push([H.y, () => { tdShadow(H.x, H.y, 14); if (!(H.inv > 0 && Math.floor(H.inv / 5) % 2)) drawHeroP(hero(), H.x - 18, H.y - 60, H.face, { air:false, k:Math.hypot(H.vx, H.vy) > .4 ? 0 : -1, v:Math.hypot(H.vx, H.vy) * 1.6, fast:false }, H.punch > 0); }]);
   if (T.portal) E.push([T.portal.y, () => { const X = T.portal.x - cam, Y = T.portal.y; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y - 40, 4, 70, [[0, 'rgba(255,255,230,.9)'], [.4, 'rgba(255,230,140,.45)'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 70, Y - 120, 140, 140); ctx.fillStyle = LG(X - 16, 0, X + 16, 0, [[0, 'rgba(255,240,180,0)'], [.5, 'rgba(255,250,220,.8)'], [1, 'rgba(255,240,180,0)']]); ctx.fillRect(X - 16, Y - 160 + Math.sin(t / 200) * 4, 32, 160); ctx.restore(); }]);
   E.sort((a, b) => a[0] - b[0]); for (const e of E) e[1]();
@@ -3430,6 +3475,202 @@ function drawRecord() { // le meilleur score, sur l'écran titre
   if (!best.score && !versesGot.length) return;
   ctx.textAlign = 'center'; ctx.font = 'bold 15px Trebuchet MS, sans-serif'; ctx.fillStyle = '#bfffd0';
   ctx.fillText('Record : ' + best.score + ' points · niveau ' + best.level + ' · ' + best.freed + ' captifs libérés', 400, 96, 760);
+}
+
+// ================== Lot 3 : serviteurs à débloquer, géants, passages secrets, habitants, énigmes ==================
+// ----- serviteurs à débloquer : les 4 premiers sont libres, les autres se gagnent en libérant des captifs -----
+const unlockNeed = i => i < 4 ? 0 : (i - 3) * 8;
+const unlocked = i => best.freed >= unlockNeed(i);
+
+// ----- chaque géant a son attaque -----
+const GPOW = { 'Le Découragement':'slow', 'La Condamnation':'rain', 'La Peur':'dark', 'Le Chaos':'charge', "L'Angoisse":'summon', 'Le Désespoir':'dark', "L'Orgueil":'grow', 'La Honte':'slow', 'Le Doute':'shake', 'La Convoitise':'pull' };
+const GPOW_TXT = { slow:'Le découragement te ralentit…', rain:'Des condamnations tombent du ciel !', dark:'Tout devient sombre… avance quand même !', charge:'Le géant fonce sur toi !', summon:'Le géant appelle des renforts !', grow:"L'Orgueil grandit !", shake:'Le Doute fait trembler le sol !', pull:"La Convoitise t'attire…" };
+let gfx = null, quest = null;
+function updateGiantPow(boss) {
+  const k = boss && boss.giant ? GPOW[boss.name] : null;
+  if (!k || boss.dead || p.x < arenaX + 200) { if (gfx && gfx.k === 'grow' && boss) { boss.x += (boss.w - boss.ow) / 2; boss.w = boss.ow; boss.h = boss.oh; boss.y = FLOOR - boss.h; } gfx = null; return; }
+  if (!gfx) {
+    if (++boss.pw < 400) return;
+    boss.pw = 0; gfx = { k, t:k === 'charge' ? 100 : 260, d:p.x < boss.x ? -1 : 1 };
+    say(p.x + p.w / 2, p.y - 70, GPOW_TXT[k], '#ffb0b0', true); sfx('lie');
+    if (k === 'summon') for (let i = 0; i < 4; i++) { const x = boss.x + boss.w / 2 + (i - 1.5) * 70; spawnHorde(x, rnd); spawnFire(x, FLOOR - 20, 12); }
+    if (k === 'grow') { boss.ow = boss.w; boss.oh = boss.h; }
+    return;
+  }
+  gfx.t--;
+  if (k === 'shake') shake = Math.max(shake, 5);
+  if (k === 'pull' && !p.ride) p.x += Math.sign(boss.x + boss.w / 2 - p.x - p.w / 2) * 1.3;
+  if (k === 'rain' && gfx.t % 24 === 0) { const t = ACCUSE[Math.floor(rnd() * ACCUSE.length)]; ctx.font = 'bold 12px Trebuchet MS, sans-serif'; const w = ctx.measureText(t).width + 14; lies.push({ x:p.x + p.w / 2 - w / 2 + (rnd() - .5) * 180, y:-24, w, h:22, vx:0, vy:3, t }); }
+  if (k === 'grow') { const s = gfx.t > 50 ? Math.min(1.45, boss.w / boss.ow + .008) : Math.max(1, boss.w / boss.ow - .01), nw = boss.ow * s, nh = boss.oh * s; boss.x -= (nw - boss.w) / 2; boss.w = nw; boss.h = nh; boss.y = FLOOR - nh; }
+  if (k === 'charge') { boss.d = gfx.d; boss.x = Math.max(boss.min, Math.min(boss.max - boss.w, boss.x + gfx.d * 5)); if (gfx.t % 4 === 0) dust(boss.x + boss.w / 2, FLOOR, 4); }
+  if (gfx.t <= 0) { if (k === 'grow') { boss.x += (boss.w - boss.ow) / 2; boss.w = boss.ow; boss.h = boss.oh; boss.y = FLOOR - boss.h; } gfx = null; }
+}
+function drawGiantDark() { // la Peur et le Désespoir : on ne voit plus qu'autour du héros
+  if (!gfx || gfx.k !== 'dark') return;
+  const a = Math.min(1, gfx.t / 30, (260 - gfx.t) / 30), X = p.x + p.w / 2 - cam, Y = p.y + 30;
+  ctx.fillStyle = RG(X, Y, 50, 230, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,' + (.92 * a).toFixed(2) + ')']]); ctx.fillRect(0, 0, 800, 400);
+}
+
+// ----- passage secret : un rocher fissuré cache un trésor (frappe-le 3 fois) -----
+function updateSecrets(hand) {
+  for (const b of blocks) if (b.secret && !b.open) {
+    if (b.cd > 0) b.cd--;
+    if (p.punch > 0 && b.cd <= 0 && hit(hand, b)) {
+      b.cd = 14; b.hp--; shake = 5; dust(b.x + b.w / 2, b.y + b.h, 10); sfx('pop');
+      if (b.hp > 0) say(b.x + b.w / 2, b.y - 20, 'Ça craque…', '#ffe0a0');
+      else {
+        b.open = true; blocks = blocks.filter(q => q !== b); score += 200; sfx('bless'); flash = .35;
+        for (let i = 0; i < 8; i++) dropGem(b.x + b.w / 2, b.y + 10, false, (rnd() - .5) * 7, true);
+        hearts.push({ x:b.x + b.w / 2, y:b.y - 10, got:false });
+        say(b.x + b.w / 2, b.y - 50, 'Passage secret ! Un trésor caché !', '#ffe27a', true);
+      }
+    }
+  }
+}
+function drawCracks(b) {
+  const X = b.x - cam, cx = X + b.w / 2, cy = b.y + b.h * .45, n = 4 - (b.hp || 0), t = Date.now();
+  ctx.strokeStyle = 'rgba(30,15,5,.75)'; ctx.lineWidth = 2; ctx.beginPath();
+  for (let i = 0; i < 2 + n * 2; i++) { const a = i * 2.4 + 1, l = b.w * (.25 + .08 * n); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * l * .5 + 4, cy + Math.sin(a) * l * .3); ctx.lineTo(cx + Math.cos(a) * l, cy + Math.sin(a) * l * .6); }
+  ctx.stroke();
+  const tw = Math.max(0, Math.sin(t / 260)); ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = RG(cx, cy, 1, 14, [[0, 'rgba(255,240,170,' + (.8 * tw).toFixed(2) + ')'], [1, 'rgba(255,220,120,0)']]); ctx.fillRect(cx - 14, cy - 14, 28, 28); ctx.restore();
+}
+
+// ----- les habitants et leurs missions -----
+const MISSIONS = [
+  { who:'Le berger', item:'sheep', ask:'Ma brebis est perdue ! Ramène-la-moi, je t’en prie.', thanks:'Ma brebis ! Merci, que Dieu te bénisse !',
+    look:{ skin:'#c08a5e', hair:'#3a2414', top:'#8a6a44', robe:'#a07c50', belt:'#5a3a1a', legs:'#c08a5e', shoe:'#6b4a2b', hairStyle:'long', beard:true, staff:true } },
+  { who:'La veuve', item:'jar', ask:'Ma cruche d’huile a disparu… peux-tu la retrouver ?', thanks:'Mon huile ! Tu es une bénédiction !',
+    look:{ fem:true, skin:'#c99068', hair:'#3a2414', top:'#4a4a5a', robe:'#3a3a48', belt:'#1a1a22', legs:'#c99068', shoe:'#3a2a1a', veil:'#5a5a6a' } },
+  { who:'Le pêcheur', item:'net', ask:'Le vent a emporté mon filet ! Aide-moi à le retrouver.', thanks:'Mon filet ! Je vais pouvoir pêcher !',
+    look:{ skin:'#a86a3b', hair:'#1a0f08', top:'#e8e4dc', robe:'#5a7a9a', belt:'#3a2412', legs:'#a86a3b', shoe:'#5a3a22', hairStyle:'curly', beard:true } },
+  { who:'La boulangère', item:'bread', ask:'J’ai perdu les pains pour les pauvres ! Tu les as vus ?', thanks:'Les pains ! Merci, ils auront à manger !',
+    look:{ fem:true, skin:'#e0aa82', hair:'#6a3a1e', top:'#efe4cc', robe:'#d9a54a', belt:'#8a5a2a', legs:'#e0aa82', shoe:'#6b4a2b', hairStyle:'longW', veil:'#efe4cc' } }
+];
+function questUpdate(hx, hy, back) {
+  const q = quest; if (!q || q.done) return; const M = MISSIONS[q.m];
+  if (!q.follow && Math.abs(hx - q.ix) < 30 && Math.abs(hy - q.iy) < 42) { q.follow = true; sfx('heart'); say(q.ix, q.iy - 60, 'Trouvé ! Rapporte-le à son propriétaire.', '#bfffd0', true); }
+  if (q.follow) { q.ix += (hx - back * 30 - q.ix) * .12; q.iy += (hy - q.iy) * .12; }
+  if (q.follow && Math.abs(hx - q.vx) < 50 && Math.abs(hy - q.vy) < 50) {
+    q.done = true; q.follow = false; q.ix = q.vx + 26; q.iy = q.vy; score += 300; sfx('bless'); flash = .3;
+    say(q.vx, q.vy - 100, M.thanks, '#ffe27a', true);
+    for (let i = 0; i < 5 && angels.length < MAX_ANGELS; i++) angels.push({ x:q.vx, y:q.vy - 40 });
+  }
+}
+function drawItem(k, X, Y, t, glow) {
+  if (glow) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y - 14, 2, 30, [[0, 'rgba(255,240,170,.5)'], [1, 'rgba(255,220,120,0)']]); ctx.fillRect(X - 30, Y - 44, 60, 60); ctx.restore(); label('?', X, Y - 36 + Math.sin(t / 250) * 3, 18, '#ffd84a'); }
+  gEll(ctx, X, Y, 14, 4, 'rgba(0,0,0,.25)');
+  if (k === 'sheep') {
+    ctx.fillStyle = '#3a3030'; for (const dx of [-7, -2, 4, 8]) ctx.fillRect(X + dx, Y - 7, 2.5, 7);
+    gEll(ctx, X, Y - 13, 13, 8, '#ece6d8'); for (const [dx, dy] of [[-8, -17], [-1, -20], [6, -18], [-5, -9], [4, -9]]) gEll(ctx, X + dx, Y + dy, 5, 4.5, '#f8f4ea');
+    gEll(ctx, X + 13, Y - 16, 5, 4, '#3a3030'); gEll(ctx, X + 12, Y - 20, 2.5, 1.5, '#3a3030'); gEll(ctx, X + 15, Y - 17, 1, 1, '#fff');
+  } else if (k === 'jar') {
+    gEll(ctx, X, Y - 10, 10, 11, '#a0622a'); gEll(ctx, X - 3, Y - 13, 4, 6, '#c8844a'); ctx.fillStyle = '#8a5222'; ctx.fillRect(X - 4, Y - 26, 8, 7); gEll(ctx, X, Y - 26, 6, 2.5, '#5a3212');
+  } else if (k === 'net') {
+    gEll(ctx, X, Y - 9, 15, 9, 'rgba(200,180,130,.35)'); ctx.strokeStyle = '#c8b482'; ctx.lineWidth = 1.2; ctx.beginPath();
+    for (let i = -12; i <= 12; i += 6) { ctx.moveTo(X + i - 4, Y - 17); ctx.lineTo(X + i + 4, Y - 1); ctx.moveTo(X + i + 4, Y - 17); ctx.lineTo(X + i - 4, Y - 1); } ctx.stroke();
+    for (const dx of [-12, 0, 12]) gEll(ctx, X + dx, Y - 1, 2.5, 2.5, '#e8e0c8');
+  } else {
+    for (const [dx, dy] of [[-7, -5], [6, -5], [0, -12]]) { gEll(ctx, X + dx, Y + dy, 9, 6, '#c8862e'); gEll(ctx, X + dx - 2, Y + dy - 2, 5, 3, '#e8b05a'); }
+  }
+}
+function drawQuest() {
+  const q = quest; if (!q) return; const M = MISSIONS[q.m], t = Date.now();
+  const hx = state === 'tdplay' ? td.h.x : p.x + p.w / 2, X = q.vx - cam;
+  if (X > -80 && X < 880) {
+    gEll(ctx, X, q.vy, 14, 4, 'rgba(0,0,0,.25)');
+    drawHeroP(M.look, q.vx - 18, q.vy - 60, hx < q.vx ? -1 : 1, { k:-1, air:false, v:0 }, false);
+    label(M.who, X, q.vy - 70, 12, '#fff3a0');
+    if (!q.done && Math.abs(hx - q.vx) < 420) { // la bulle de demande
+      ctx.font = 'bold 11px Trebuchet MS, sans-serif'; const L = wrapText(tr(q.follow ? 'Tu l’as trouvé ? Apporte-le-moi !' : M.ask), 170), h = 10 + L.length * 14, by = q.vy - 84 - h;
+      rrPath(ctx, X - 95, by, 190, h, 8); ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill(); ctx.strokeStyle = '#5a3a1a'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.beginPath(); ctx.moveTo(X - 6, by + h); ctx.lineTo(X + 6, by + h); ctx.lineTo(X, by + h + 8); ctx.fill();
+      ctx.fillStyle = '#3a2408'; ctx.textAlign = 'center'; L.forEach((l, i) => ctx.fillText(l, X, by + 15 + i * 14));
+    }
+  }
+  if (!q.done || q.follow || true) drawItem(M.item, q.ix - cam, q.iy, t, !q.follow && !q.done);
+}
+function updateLot3(boss, hand) { updateGiantPow(boss); updateSecrets(hand); questUpdate(p.x + p.w / 2, p.y + p.h, p.face); }
+function buildLot3(n) { // appelé à la fin de buildLevel : rocher secret et mission du niveau
+  gfx = null; const r4 = rng(n * 71 + 5);
+  const rk = blocks.filter(b => b.rock && b.x > 900 && b.x < arenaX - 300);
+  let sb = rk[Math.floor(r4() * rk.length)];
+  if (!sb) { const gb = blocks.filter(b => !b.rock && b.x > 700 && b.x < arenaX - 500 && b.w >= 560)[0]; if (gb) { sb = { x:gb.x + Math.floor(gb.w * .55), y:gb.y - 56, w:70, h:56, rock:true }; blocks.push(sb); } }
+  if (sb) { sb.secret = true; sb.hp = 3; sb.cd = 0; }
+  const mid = plats.filter(q => !q.range && !q.kind && q.x > 1000 && q.x < arenaX - 500), ip = mid[Math.floor(r4() * mid.length)] || plats[0];
+  quest = { m:n % 4, vx:arenaX + 150, vy:FLOOR, ix:ip.x + ip.w * .25, iy:ip.y, follow:false, done:false };
+}
+
+// ----- vue de haut : le jardin fermé (trois lampes à allumer, un rocher à pousser) et le berger -----
+function tdLot3Build() {
+  const T = td, G0 = { x:2000, y:1050, w:300, h:300 };
+  T.garden = G0;
+  T.walls = [{ x:2000, y:1050, w:300, h:14 }, { x:2000, y:1336, w:300, h:14 }, { x:2286, y:1050, w:14, h:300 },
+    { x:2000, y:1050, w:14, h:110 }, { x:2000, y:1240, w:14, h:110 }, { x:2000, y:1160, w:14, h:80, door:true, open:false },
+    { x:2170, y:1064, w:14, h:110 }, { x:2170, y:1226, w:14, h:110 }];
+  T.boulder = { x:2177, y:1200, r:22 };
+  T.chest = { x:2240, y:1300, open:false };
+  T.lamps = [{ x:380, y:300 }, { x:1300, y:420 }, { x:1700, y:1380 }].map(l => Object.assign(l, { lit:false }));
+  quest = { m:0, vx:1000, vy:1150, ix:250, iy:720, follow:false, done:false };
+  const clear = (x, y, d) => { T.trees = T.trees.filter(o => Math.hypot(o.x - x, o.y - y) > d); T.rocks = T.rocks.filter(o => Math.hypot(o.x - x, o.y - y) > d); };
+  for (const l of T.lamps) clear(l.x, l.y, 70); clear(1000, 1150, 70); clear(250, 720, 70);
+  const inG = (x, y) => x > G0.x - 50 && x < G0.x + G0.w + 50 && y > G0.y - 50 && y < G0.y + G0.h + 50;
+  T.trees = T.trees.filter(o => !inG(o.x, o.y)); T.rocks = T.rocks.filter(o => !inG(o.x, o.y));
+  coins = coins.filter(k => !inG(k.x, k.y)); encs = encs.filter(k => !inG(k.x, k.y));
+  for (const f of foes) if (inG(f.fx, f.fy)) { f.fx = f.hx = f.tx = 1700; f.fy = f.hy = f.ty = 1250; f.x = f.fx - f.w / 2; f.y = f.fy - f.h; }
+  for (let i = 0; i < 6; i++) coins.push({ x:2050 + (i % 3) * 40, y:1100 + Math.floor(i / 3) * 190, got:false, kind:pickKind(W_GIANT, rnd()) });
+}
+function tdWallHit(x, y, r, who) {
+  const T = td; if (!T.walls) return false;
+  for (const w of T.walls) if (!w.open && x > w.x - r && x < w.x + w.w + r && y > w.y - r * .5 && y < w.y + w.h + r * .5) return true;
+  if (who !== 'rock' && T.boulder && Math.hypot(x - T.boulder.x, y - T.boulder.y) < r + T.boulder.r) return true;
+  return false;
+}
+function tdPush(H) { // pousser le rocher en marchant contre lui
+  const B = td.boulder; if (!B || Math.hypot(H.vx, H.vy) < .5) return;
+  if (Math.hypot(H.x + H.vx * 3 - B.x, H.y + H.vy * 3 - B.y) < 11 + B.r + 2) {
+    const dx = H.vx * .7, dy = H.vy * .7;
+    if (!tdBlocked(B.x + dx, B.y, B.r, 'rock')) B.x += dx; if (!tdBlocked(B.x, B.y + dy, B.r, 'rock')) B.y += dy;
+    if (!td.pushHint) { td.pushHint = true; say(B.x, B.y - 60, 'Pousse le rocher !', '#ffe0a0', true); }
+  }
+}
+function tdLot3Update(H) {
+  const T = td; if (!T.lamps) return;
+  for (const l of T.lamps) if (!l.lit && Math.hypot(H.x - l.x, H.y - l.y) < 32) {
+    l.lit = true; sfx('blip'); flash = Math.max(flash, .2); spawnFire(l.x, l.y - 44, 14, true);
+    const n = T.lamps.filter(q => q.lit).length;
+    if (n < 3) say(l.x, l.y - 80, 'Une lampe s’allume… (' + n + ' / 3)', '#ffe27a', true);
+    else { T.walls.find(w => w.door).open = true; sfx('bless'); say(l.x, l.y - 80, 'Les trois lampes brillent : la porte du jardin s’ouvre !', '#ffe27a', true); }
+  }
+  const door = T.walls.find(w => w.door);
+  if (!door.open && !T.doorHint && Math.hypot(H.x - 1985, H.y - 1200) < 90) { T.doorHint = true; say(H.x, H.y - 80, 'Allume les trois lampes pour ouvrir la porte', '#ffe0a0', true); }
+  const C = T.chest;
+  if (!C.open && Math.hypot(H.x - C.x, H.y - C.y) < 32) {
+    C.open = true; score += 300; lives = Math.min(9, lives + 1); sfx('bless'); flash = .4;
+    for (let i = 0; i < 8; i++) coins.push({ x:C.x - 70 + (i % 4) * 22, y:C.y - 60 + Math.floor(i / 4) * 26, got:false, kind:pickKind(W_GIANT, rnd()) });
+    say(C.x, C.y - 80, 'Un coffre rempli de trésors ! +1 vie', '#ffe27a', true);
+  }
+  questUpdate(H.x, H.y, H.dx >= 0 ? 1 : -1);
+}
+function tdLot3Draw(E, vis, t) {
+  const T = td; if (!T.walls) return;
+  for (const w of T.walls) if (vis(w.x + w.w / 2, w.y + w.h, 200)) E.push([w.y + w.h, () => {
+    const X = w.x - cam;
+    if (w.door) { if (w.open) { ctx.fillStyle = '#6a4424'; ctx.fillRect(X - 30, w.y, 30, 8); ctx.fillRect(X - 30, w.y + w.h - 8, 30, 8); return; }
+      ctx.fillStyle = '#7a4a22'; ctx.fillRect(X - 3, w.y - 30, w.w + 6, w.h + 30); ctx.fillStyle = '#5a3412'; for (let y = w.y - 26; y < w.y + w.h; y += 12) ctx.fillRect(X - 3, y, w.w + 6, 3);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X + 7, w.y + 20, 1, 18, [[0, 'rgba(255,220,120,.7)'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 12, w.y, 38, 40); ctx.restore(); return; }
+    ctx.fillStyle = '#2f6a2a'; rrPath(ctx, X - 2, w.y - 26, w.w + 4, w.h + 26, 6); ctx.fill();
+    ctx.fillStyle = '#4a8a3a'; rrPath(ctx, X - 2, w.y - 26, w.w + 4, 12, 6); ctx.fill();
+    ctx.fillStyle = 'rgba(120,200,90,.5)'; for (let i = 0; i < Math.max(w.w, w.h); i += 9) gEll(ctx, X + (w.w > w.h ? i : w.w / 2), w.y - 20 + (w.w > w.h ? 0 : i), 3, 2, 'rgba(140,210,100,.6)');
+  }]);
+  const B = T.boulder; if (vis(B.x, B.y, 40)) E.push([B.y, () => { const X = B.x - cam; gEll(ctx, X + 4, B.y + 2, B.r * 1.1, B.r * .4, 'rgba(0,0,0,.28)'); gEll(ctx, X, B.y - B.r * .6, B.r, B.r * .85, '#8a8478'); gEll(ctx, X - B.r * .3, B.y - B.r * .9, B.r * .45, B.r * .3, '#b8b2a4'); }]);
+  const C = T.chest; if (vis(C.x, C.y, 40)) E.push([C.y, () => { const X = C.x - cam; gEll(ctx, X, C.y, 20, 5, 'rgba(0,0,0,.25)'); ctx.fillStyle = '#7a4a1e'; ctx.fillRect(X - 18, C.y - 22, 36, 22); ctx.fillStyle = '#c9a227'; ctx.fillRect(X - 18, C.y - 14, 36, 3); ctx.fillRect(X - 3, C.y - 16, 6, 7);
+    if (C.open) { ctx.fillStyle = '#5a3412'; ctx.fillRect(X - 18, C.y - 34, 36, 10); } else { ctx.fillStyle = '#8a5a26'; rrPath(ctx, X - 18, C.y - 32, 36, 12, 5); ctx.fill(); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, C.y - 20, 1, 30, [[0, 'rgba(255,230,140,' + (.25 + .2 * Math.sin(t / 300)).toFixed(2) + ')'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 30, C.y - 50, 60, 60); ctx.restore(); } }]);
+  for (const l of T.lamps) if (vis(l.x, l.y, 40)) E.push([l.y, () => { const X = l.x - cam; gEll(ctx, X + 3, l.y + 1, 12, 4, 'rgba(0,0,0,.25)'); ctx.fillStyle = '#9a9284'; ctx.fillRect(X - 6, l.y - 36, 12, 36); ctx.fillStyle = '#c8c0b0'; ctx.fillRect(X - 10, l.y - 40, 20, 6);
+    if (l.lit) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, l.y - 48, 1, 34, [[0, 'rgba(255,240,180,.9)'], [.4, 'rgba(255,170,60,.5)'], [1, 'rgba(255,120,20,0)']]); ctx.fillRect(X - 34, l.y - 82, 68, 68); ctx.restore(); gEll(ctx, X, l.y - 47, 4, 7 + Math.sin(t / 90), '#fff2b0'); }
+    else label('💡', X, l.y - 48 + Math.sin(t / 300) * 2, 14, '#fff'); }]);
+  if (quest && vis(quest.vx, quest.vy, 120)) E.push([quest.vy, () => drawQuest()]);
+  else if (quest && vis(quest.ix, quest.iy, 40)) E.push([quest.iy, () => drawItem(MISSIONS[quest.m].item, quest.ix - cam, quest.iy, t, !quest.follow && !quest.done)]);
 }
 
 function loop() {
