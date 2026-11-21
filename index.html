@@ -441,6 +441,799 @@ for (const r of [
   ["Cana", "Cana", "Caná", "Cana", "Caná", "Kana", "Kana", "قانا"],
   ["Magdala", "Magdala", "Magdala", "Magdala", "Magdala", "Magadala", "Magdala", "المجدل"]
 ]) { if (!TR_ROWS.some(q => q[0] === r[0])) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; } }
+// Super Jesus - batch 6 data (fr, en, es, it, pt, ln, sw, ar)
+
+const QZ = [
+  // L0
+  [
+    ["Que faisait Jésus en parcourant la Galilée ?|Il guérissait les malades|Il construisait des maisons|Il pêchait tout seul",
+     "What did Jesus do as he went through Galilee?|He healed the sick|He built houses|He fished all alone",
+     "¿Qué hacía Jesús al recorrer Galilea?|Sanaba a los enfermos|Construía casas|Pescaba solo",
+     "Che cosa faceva Gesù percorrendo la Galilea?|Guariva i malati|Costruiva case|Pescava da solo",
+     "O que Jesus fazia ao percorrer a Galileia?|Curava os doentes|Construía casas|Pescava sozinho",
+     "Yesu azalaki kosala nini na Galile?|Azalaki kobikisa bato ya maladi|Azalaki kotonga bandako|Azalaki kokanga mbisi ye moko",
+     "Yesu alifanya nini alipozunguka Galilaya?|Aliponya wagonjwa|Alijenga nyumba|Alivua samaki peke yake",
+     "ماذا كان يفعل يسوع وهو يجول في الجليل؟|كان يشفي المرضى|كان يبني بيوتًا|كان يصطاد وحده"],
+    ["Comment appelle-t-on les douze amis choisis par Jésus ?|Les apôtres|Les pharaons|Les soldats",
+     "What do we call the twelve friends Jesus chose?|The apostles|The pharaohs|The soldiers",
+     "¿Cómo se llaman los doce amigos que eligió Jesús?|Los apóstoles|Los faraones|Los soldados",
+     "Come si chiamano i dodici amici scelti da Gesù?|Gli apostoli|I faraoni|I soldati",
+     "Como se chamam os doze amigos escolhidos por Jesus?|Os apóstolos|Os faraós|Os soldados",
+     "Baninga zomi na mibale oyo Yesu aponaki babengami nini?|Bantoma|Ba-farao|Basoda",
+     "Marafiki kumi na wawili aliowachagua Yesu wanaitwaje?|Mitume|Mafarao|Askari",
+     "ماذا نسمّي الأصدقاء الاثني عشر الذين اختارهم يسوع؟|الرسل|الفراعنة|الجنود"]
+  ],
+  // L1
+  [
+    ["Dans quel village Jésus a-t-il grandi ?|Nazareth|Rome|Babylone",
+     "In which village did Jesus grow up?|Nazareth|Rome|Babylon",
+     "¿En qué pueblo creció Jesús?|Nazaret|Roma|Babilonia",
+     "In quale villaggio è cresciuto Gesù?|Nazaret|Roma|Babilonia",
+     "Em que aldeia Jesus cresceu?|Nazaré|Roma|Babilônia",
+     "Yesu akolaki na mboka nini?|Nazarete|Roma|Babilona",
+     "Yesu alikulia katika kijiji gani?|Nazareti|Roma|Babeli",
+     "في أي قرية نشأ يسوع؟|الناصرة|روما|بابل"],
+    ["Quel livre Jésus lit-il à la synagogue de Nazareth ?|Le livre d'Ésaïe|Le livre de Jonas|Un journal",
+     "Which book does Jesus read in the synagogue at Nazareth?|The book of Isaiah|The book of Jonah|A newspaper",
+     "¿Qué libro lee Jesús en la sinagoga de Nazaret?|El libro de Isaías|El libro de Jonás|Un periódico",
+     "Quale libro legge Gesù nella sinagoga di Nazaret?|Il libro di Isaia|Il libro di Giona|Un giornale",
+     "Que livro Jesus lê na sinagoga de Nazaré?|O livro de Isaías|O livro de Jonas|Um jornal",
+     "Yesu atangi buku nini na sinagoga ya Nazarete?|Buku ya Yisaya|Buku ya Yona|Zulunalo",
+     "Yesu anasoma kitabu gani katika sinagogi la Nazareti?|Kitabu cha Isaya|Kitabu cha Yona|Gazeti",
+     "أي كتاب قرأ يسوع في مجمع الناصرة؟|سفر إشعياء|سفر يونان|جريدة"]
+  ],
+  // L2
+  [
+    ["Qui baptise Jésus dans le Jourdain ?|Jean-Baptiste|Pierre|Paul",
+     "Who baptizes Jesus in the Jordan?|John the Baptist|Peter|Paul",
+     "¿Quién bautiza a Jesús en el Jordán?|Juan el Bautista|Pedro|Pablo",
+     "Chi battezza Gesù nel Giordano?|Giovanni Battista|Pietro|Paolo",
+     "Quem batiza Jesus no Jordão?|João Batista|Pedro|Paulo",
+     "Nani abatisi Yesu na Yordani?|Yoane Mobatisi|Petelo|Paulo",
+     "Nani anambatiza Yesu katika Yordani?|Yohana Mbatizaji|Petro|Paulo",
+     "من عمّد يسوع في نهر الأردن؟|يوحنا المعمدان|بطرس|بولس"],
+    ["Qu'est-ce qui descend sur Jésus comme une colombe ?|Le Saint-Esprit|Un aigle|Une étoile",
+     "What comes down on Jesus like a dove?|The Holy Spirit|An eagle|A star",
+     "¿Qué desciende sobre Jesús como una paloma?|El Espíritu Santo|Un águila|Una estrella",
+     "Che cosa scende su Gesù come una colomba?|Lo Spirito Santo|Un'aquila|Una stella",
+     "O que desce sobre Jesus como uma pomba?|O Espírito Santo|Uma águia|Uma estrela",
+     "Nini ekiti likolo ya Yesu lokola ebenga?|Molimo Mosantu|Mpongo|Monzoto",
+     "Ni nini kinachomshukia Yesu kama hua?|Roho Mtakatifu|Tai|Nyota",
+     "ما الذي نزل على يسوع مثل حمامة؟|الروح القدس|نسر|نجمة"]
+  ],
+  // L3
+  [
+    ["Combien de pains Jésus partage-t-il pour nourrir la foule ?|Cinq|Cent|Un seul",
+     "How many loaves does Jesus share to feed the crowd?|Five|A hundred|Only one",
+     "¿Cuántos panes reparte Jesús para alimentar a la multitud?|Cinco|Cien|Uno solo",
+     "Quanti pani divide Gesù per sfamare la folla?|Cinque|Cento|Uno solo",
+     "Quantos pães Jesus reparte para alimentar a multidão?|Cinco|Cem|Um só",
+     "Yesu akaboli mapa boni mpo na koleisa ebele ya bato?|Mitano|Nkama moko|Moko kaka",
+     "Yesu anagawa mikate mingapi kulisha umati?|Mitano|Mia moja|Mmoja tu",
+     "كم رغيفًا قسم يسوع ليُطعم الجموع؟|خمسة|مئة|رغيف واحد"],
+    ["Que dit Jésus de lui-même ?|Je suis le pain de vie|Je suis un boulanger|Je suis un roi riche",
+     "What does Jesus say about himself?|I am the bread of life|I am a baker|I am a rich king",
+     "¿Qué dice Jesús de sí mismo?|Yo soy el pan de vida|Soy panadero|Soy un rey rico",
+     "Che cosa dice Gesù di sé stesso?|Io sono il pane della vita|Sono un fornaio|Sono un re ricco",
+     "O que Jesus diz de si mesmo?|Eu sou o pão da vida|Sou um padeiro|Sou um rei rico",
+     "Yesu alobi nini mpo na ye moko?|Ngai nazali limpa ya bomoi|Nazali mosali mapa|Nazali mokonzi mozwi",
+     "Yesu anasema nini kuhusu yeye mwenyewe?|Mimi ndimi mkate wa uzima|Mimi ni mwokaji|Mimi ni mfalme tajiri",
+     "ماذا قال يسوع عن نفسه؟|أنا هو خبز الحياة|أنا خبّاز|أنا ملك غني"]
+  ],
+  // L4
+  [
+    ["Pourquoi Zachée monte-t-il dans un arbre ?|Pour voir Jésus|Pour cueillir des fruits|Pour se cacher",
+     "Why does Zacchaeus climb a tree?|To see Jesus|To pick fruit|To hide",
+     "¿Por qué Zaqueo sube a un árbol?|Para ver a Jesús|Para coger frutas|Para esconderse",
+     "Perché Zaccheo sale su un albero?|Per vedere Gesù|Per cogliere frutti|Per nascondersi",
+     "Por que Zaqueu sobe numa árvore?|Para ver Jesus|Para colher frutas|Para se esconder",
+     "Mpo na nini Zakayo amati na nzete?|Mpo na komona Yesu|Mpo na kobuka mbuma|Mpo na kobombana",
+     "Kwa nini Zakayo anapanda mti?|Ili amwone Yesu|Ili achume matunda|Ili ajifiche",
+     "لماذا صعد زكا إلى الشجرة؟|ليرى يسوع|ليقطف الثمار|ليختبئ"],
+    ["Chez qui Jésus va-t-il manger ce jour-là ?|Chez Zachée|Chez le roi|Chez Pilate",
+     "At whose house does Jesus eat that day?|At Zacchaeus's house|At the king's house|At Pilate's house",
+     "¿En casa de quién come Jesús ese día?|En casa de Zaqueo|En casa del rey|En casa de Pilato",
+     "A casa di chi mangia Gesù quel giorno?|A casa di Zaccheo|A casa del re|A casa di Pilato",
+     "Na casa de quem Jesus come naquele dia?|Na casa de Zaqueu|Na casa do rei|Na casa de Pilatos",
+     "Yesu akei kolia epai ya nani mokolo wana?|Epai ya Zakayo|Epai ya mokonzi|Epai ya Pilato",
+     "Yesu anakula nyumbani kwa nani siku hiyo?|Kwa Zakayo|Kwa mfalme|Kwa Pilato",
+     "عند من أكل يسوع في ذلك اليوم؟|عند زكا|عند الملك|عند بيلاطس"]
+  ],
+  // L5
+  [
+    ["Par où les quatre amis font-ils descendre le paralysé ?|Par le toit|Par la fenêtre|Par la cave",
+     "How do the four friends lower the paralyzed man?|Through the roof|Through the window|Through the cellar",
+     "¿Por dónde bajan los cuatro amigos al paralítico?|Por el techo|Por la ventana|Por el sótano",
+     "Da dove i quattro amici calano il paralitico?|Dal tetto|Dalla finestra|Dalla cantina",
+     "Por onde os quatro amigos descem o paralítico?|Pelo telhado|Pela janela|Pelo porão",
+     "Baninga minei bakitisi moto ya bolema na wapi?|Na motondo ya ndako|Na lininisa|Na libulu ya nse",
+     "Marafiki wanne wanamshusha aliyepooza kupitia wapi?|Kupitia paa|Kupitia dirisha|Kupitia pishi",
+     "من أين أنزل الأصدقاء الأربعة المفلوج؟|من السقف|من النافذة|من القبو"],
+    ["Que dit Jésus au paralysé ?|Lève-toi et marche !|Reste couché !|Va-t'en !",
+     "What does Jesus say to the paralyzed man?|Get up and walk!|Stay in bed!|Go away!",
+     "¿Qué le dice Jesús al paralítico?|¡Levántate y anda!|¡Quédate acostado!|¡Vete!",
+     "Che cosa dice Gesù al paralitico?|Alzati e cammina!|Resta sdraiato!|Vattene!",
+     "O que Jesus diz ao paralítico?|Levanta-te e anda!|Fica deitado!|Vai-te embora!",
+     "Yesu alobi nini na moto ya bolema?|Telema mpe tambola!|Lala kaka!|Kende!",
+     "Yesu anamwambia nini aliyepooza?|Simama, utembee!|Endelea kulala!|Ondoka!",
+     "ماذا قال يسوع للمفلوج؟|قم وامشِ!|ابقَ نائمًا!|اذهب بعيدًا!"]
+  ],
+  // L6
+  [
+    ["Quel ami Jésus ramène-t-il à la vie ?|Lazare|Zachée|Judas",
+     "Which friend does Jesus bring back to life?|Lazarus|Zacchaeus|Judas",
+     "¿A qué amigo devuelve Jesús la vida?|Lázaro|Zaqueo|Judas",
+     "Quale amico Gesù riporta in vita?|Lazzaro|Zaccheo|Giuda",
+     "Que amigo Jesus traz de volta à vida?|Lázaro|Zaqueu|Judas",
+     "Moninga nini Yesu asekwisi?|Lazalo|Zakayo|Yudasi",
+     "Ni rafiki yupi Yesu anamfufua?|Lazaro|Zakayo|Yuda",
+     "أي صديق أعاده يسوع إلى الحياة؟|لعازر|زكا|يهوذا"],
+    ["Que crie Jésus devant le tombeau ?|Lazare, sors !|Réveille-toi, Pierre !|Ouvrez la porte !",
+     "What does Jesus cry out in front of the tomb?|Lazarus, come forth!|Wake up, Peter!|Open the door!",
+     "¿Qué grita Jesús ante el sepulcro?|¡Lázaro, ven fuera!|¡Despierta, Pedro!|¡Abrid la puerta!",
+     "Che cosa grida Gesù davanti alla tomba?|Lazzaro, vieni fuori!|Svegliati, Pietro!|Aprite la porta!",
+     "O que Jesus clama diante do túmulo?|Lázaro, sai para fora!|Acorda, Pedro!|Abram a porta!",
+     "Yesu agangi nini liboso ya lilita?|Lazalo, bima!|Lamuka, Petelo!|Bofungola ekuke!",
+     "Yesu analia nini mbele ya kaburi?|Lazaro, njoo nje!|Amka, Petro!|Fungueni mlango!",
+     "بماذا صرخ يسوع أمام القبر؟|لعازر، هلمّ خارجًا!|استيقظ يا بطرس!|افتحوا الباب!"]
+  ],
+  // L7
+  [
+    ["Sur quel animal Jésus entre-t-il à Jérusalem ?|Un ânon|Un cheval|Un chameau",
+     "On which animal does Jesus enter Jerusalem?|A young donkey|A horse|A camel",
+     "¿En qué animal entra Jesús en Jerusalén?|Un pollino|Un caballo|Un camello",
+     "Su quale animale Gesù entra a Gerusalemme?|Un puledro d'asina|Un cavallo|Un cammello",
+     "Em que animal Jesus entra em Jerusalém?|Um jumentinho|Um cavalo|Um camelo",
+     "Yesu akoti na Yelusaleme likolo ya nyama nini?|Mwana ya mpunda|Falasi|Kamela",
+     "Yesu anaingia Yerusalemu juu ya mnyama gani?|Mwana-punda|Farasi|Ngamia",
+     "على أي حيوان دخل يسوع أورشليم؟|جحش صغير|حصان|جمل"],
+    ["Que crie la foule ?|Hosanna !|Au secours !|Bonne nuit !",
+     "What does the crowd shout?|Hosanna!|Help!|Good night!",
+     "¿Qué grita la multitud?|¡Hosanna!|¡Socorro!|¡Buenas noches!",
+     "Che cosa grida la folla?|Osanna!|Aiuto!|Buonanotte!",
+     "O que a multidão grita?|Hosana!|Socorro!|Boa noite!",
+     "Ebele ya bato bagangi nini?|Hosana!|Bosalisa!|Butu malamu!",
+     "Umati unapiga kelele gani?|Hosana!|Msaada!|Usiku mwema!",
+     "بماذا هتفت الجموع؟|أوصنّا!|النجدة!|تصبحون على خير!"]
+  ],
+  // L8
+  [
+    ["Que faisaient Pierre et André quand Jésus les a appelés ?|Ils pêchaient|Ils dormaient|Ils chantaient",
+     "What were Peter and Andrew doing when Jesus called them?|They were fishing|They were sleeping|They were singing",
+     "¿Qué hacían Pedro y Andrés cuando Jesús los llamó?|Pescaban|Dormían|Cantaban",
+     "Che cosa facevano Pietro e Andrea quando Gesù li chiamò?|Pescavano|Dormivano|Cantavano",
+     "O que Pedro e André faziam quando Jesus os chamou?|Pescavam|Dormiam|Cantavam",
+     "Petelo na Andele bazalaki kosala nini tango Yesu abengaki bango?|Bazalaki kokanga mbisi|Bazalaki kolala|Bazalaki koyemba",
+     "Petro na Andrea walikuwa wakifanya nini Yesu alipowaita?|Walikuwa wakivua samaki|Walikuwa wamelala|Walikuwa wakiimba",
+     "ماذا كان يفعل بطرس وأندراوس حين دعاهما يسوع؟|كانا يصطادان السمك|كانا نائمين|كانا يغنيان"],
+    ["Jésus dit : « Je vous ferai pêcheurs… »|d'hommes|de baleines|de pierres",
+     "Jesus says: “I will make you fishers…”|of men|of whales|of stones",
+     "Jesús dice: “Os haré pescadores…”|de hombres|de ballenas|de piedras",
+     "Gesù dice: “Vi farò pescatori…”|di uomini|di balene|di pietre",
+     "Jesus diz: “Eu vos farei pescadores…”|de homens|de baleias|de pedras",
+     "Yesu alobi: “Nakokomisa bino bakangi…”|ya bato|ya mbalene|ya mabanga",
+     "Yesu anasema: “Nitawafanya kuwa wavuvi…”|wa watu|wa nyangumi|wa mawe",
+     "قال يسوع: «أجعلكما صيّادي…»|الناس|الحيتان|الحجارة"]
+  ],
+  // L9
+  [
+    ["Qui marche sur l'eau vers Jésus ?|Pierre|Jean-Baptiste|Lazare",
+     "Who walks on the water toward Jesus?|Peter|John the Baptist|Lazarus",
+     "¿Quién camina sobre el agua hacia Jesús?|Pedro|Juan el Bautista|Lázaro",
+     "Chi cammina sull'acqua verso Gesù?|Pietro|Giovanni Battista|Lazzaro",
+     "Quem anda sobre as águas em direção a Jesus?|Pedro|João Batista|Lázaro",
+     "Nani atamboli likolo ya mai epai ya Yesu?|Petelo|Yoane Mobatisi|Lazalo",
+     "Nani anatembea juu ya maji kumwendea Yesu?|Petro|Yohana Mbatizaji|Lazaro",
+     "من مشى على الماء نحو يسوع؟|بطرس|يوحنا المعمدان|لعازر"],
+    ["Pourquoi Pierre commence-t-il à couler ?|Il a peur du vent|Il est trop lourd|Il a faim",
+     "Why does Peter begin to sink?|He is afraid of the wind|He is too heavy|He is hungry",
+     "¿Por qué Pedro empieza a hundirse?|Tiene miedo del viento|Pesa demasiado|Tiene hambre",
+     "Perché Pietro comincia ad affondare?|Ha paura del vento|È troppo pesante|Ha fame",
+     "Por que Pedro começa a afundar?|Tem medo do vento|É pesado demais|Está com fome",
+     "Mpo na nini Petelo abandi kozinda?|Abangi mopepe|Azali kilo mingi|Azali na nzala",
+     "Kwa nini Petro anaanza kuzama?|Anaogopa upepo|Ni mzito sana|Ana njaa",
+     "لماذا بدأ بطرس يغرق؟|خاف من الريح|لأنه ثقيل جدًا|لأنه جائع"]
+  ],
+  // L10
+  [
+    ["Que fait Jésus au début de la tempête ?|Il dort dans la barque|Il nage|Il rame très fort",
+     "What is Jesus doing when the storm begins?|He is asleep in the boat|He is swimming|He is rowing hard",
+     "¿Qué hace Jesús al comenzar la tempestad?|Duerme en la barca|Nada|Rema muy fuerte",
+     "Che cosa fa Gesù all'inizio della tempesta?|Dorme nella barca|Nuota|Rema fortissimo",
+     "O que Jesus faz no início da tempestade?|Dorme no barco|Nada|Rema com muita força",
+     "Yesu azali kosala nini tango mopepe makasi ebandi?|Alali na bwato|Azali kobeta mai|Azali kobeta nkai makasi",
+     "Yesu anafanya nini dhoruba inapoanza?|Amelala ndani ya mashua|Anaogelea|Anapiga makasia kwa nguvu",
+     "ماذا كان يفعل يسوع في بداية العاصفة؟|كان نائمًا في القارب|كان يسبح|كان يجذف بقوة"],
+    ["Que dit Jésus à la tempête ?|Silence ! Tais-toi !|Plus fort !|Va-t'en, Pierre !",
+     "What does Jesus say to the storm?|Peace, be still!|Louder!|Go away, Peter!",
+     "¿Qué le dice Jesús a la tempestad?|¡Calla, enmudece!|¡Más fuerte!|¡Vete, Pedro!",
+     "Che cosa dice Gesù alla tempesta?|Taci, calmati!|Più forte!|Vattene, Pietro!",
+     "O que Jesus diz à tempestade?|Cala-te, aquieta-te!|Mais forte!|Vai-te, Pedro!",
+     "Yesu alobi nini na mopepe makasi?|Kimia! Fanda nye!|Makasi koleka!|Kende, Petelo!",
+     "Yesu anaiambia nini dhoruba?|Nyamaza, utulie!|Zaidi!|Ondoka, Petro!",
+     "ماذا قال يسوع للعاصفة؟|اسكت! ابكم!|أقوى!|اذهب يا بطرس!"]
+  ],
+  // L11
+  [
+    ["Selon Paul, que fait Dieu quand nous sommes éprouvés ?|Il prépare le moyen d'en sortir|Il nous laisse seuls|Il se fâche",
+     "According to Paul, what does God do when we are tested?|He makes a way to escape|He leaves us alone|He gets angry",
+     "Según Pablo, ¿qué hace Dios cuando somos probados?|Prepara la salida|Nos deja solos|Se enoja",
+     "Secondo Paolo, che cosa fa Dio quando siamo messi alla prova?|Prepara la via d'uscita|Ci lascia soli|Si arrabbia",
+     "Segundo Paulo, o que Deus faz quando somos provados?|Prepara o escape|Nos deixa sozinhos|Fica zangado",
+     "Engebene Paulo, Nzambe asalaka nini tango tozali komekama?|Abongisaka nzela ya kobima|Atikaka biso biso moko|Asilikaka",
+     "Kwa mujibu wa Paulo, Mungu hufanya nini tunapojaribiwa?|Hufanya njia ya kutokea|Hutuacha peke yetu|Hukasirika",
+     "بحسب بولس، ماذا يفعل الله حين نُجرَّب؟|يجعل لنا المنفذ|يتركنا وحدنا|يغضب"],
+    ["À qui Paul écrit-il cette lettre ?|Aux Corinthiens|Aux pharaons|Aux poissons",
+     "To whom does Paul write this letter?|To the Corinthians|To the pharaohs|To the fish",
+     "¿A quién escribe Pablo esta carta?|A los corintios|A los faraones|A los peces",
+     "A chi scrive Paolo questa lettera?|Ai Corinzi|Ai faraoni|Ai pesci",
+     "Para quem Paulo escreve esta carta?|Aos coríntios|Aos faraós|Aos peixes",
+     "Paulo akomeli nani mokanda oyo?|Bakolinti|Ba-farao|Mbisi",
+     "Paulo anawaandikia nani barua hii?|Wakorintho|Mafarao|Samaki",
+     "إلى من كتب بولس هذه الرسالة؟|إلى أهل كورنثوس|إلى الفراعنة|إلى الأسماك"]
+  ],
+  // L12
+  [
+    ["Sur la montagne, comment brille le visage de Jésus ?|Comme le soleil|Comme une bougie|Il ne brille pas",
+     "On the mountain, how does Jesus' face shine?|Like the sun|Like a candle|It does not shine",
+     "En el monte, ¿cómo resplandece el rostro de Jesús?|Como el sol|Como una vela|No resplandece",
+     "Sul monte, come risplende il volto di Gesù?|Come il sole|Come una candela|Non risplende",
+     "No monte, como brilha o rosto de Jesus?|Como o sol|Como uma vela|Não brilha",
+     "Na ngomba, elongi ya Yesu engengi ndenge nini?|Lokola moi|Lokola buzi|Engengi te",
+     "Mlimani, uso wa Yesu unang'aa namna gani?|Kama jua|Kama mshumaa|Haung'ai",
+     "على الجبل، كيف أضاء وجه يسوع؟|كالشمس|كشمعة|لم يُضِئ"],
+    ["Qui apparaît et parle avec Jésus ?|Moïse et Élie|David et Goliath|Adam et Ève",
+     "Who appears and talks with Jesus?|Moses and Elijah|David and Goliath|Adam and Eve",
+     "¿Quiénes aparecen y hablan con Jesús?|Moisés y Elías|David y Goliat|Adán y Eva",
+     "Chi appare e parla con Gesù?|Mosè ed Elia|Davide e Golia|Adamo ed Eva",
+     "Quem aparece e fala com Jesus?|Moisés e Elias|Davi e Golias|Adão e Eva",
+     "Nani babimi mpe basololi na Yesu?|Mose na Eliya|Davidi na Goliati|Adamu na Eva",
+     "Nani wanatokea na kuzungumza na Yesu?|Musa na Eliya|Daudi na Goliathi|Adamu na Hawa",
+     "من ظهر وتكلّم مع يسوع؟|موسى وإيليا|داود وجليات|آدم وحواء"]
+  ],
+  // L13
+  [
+    ["À Éphèse, que brûlent ceux qui croient en Jésus ?|Leurs livres de magie|Leurs maisons|Leurs bateaux",
+     "In Ephesus, what do those who believe in Jesus burn?|Their magic books|Their houses|Their boats",
+     "En Éfeso, ¿qué queman los que creen en Jesús?|Sus libros de magia|Sus casas|Sus barcos",
+     "A Efeso, che cosa bruciano quelli che credono in Gesù?|I loro libri di magia|Le loro case|Le loro barche",
+     "Em Éfeso, o que queimam os que creem em Jesus?|Seus livros de magia|Suas casas|Seus barcos",
+     "Na Efese, bato oyo bandimi Yesu bazikisi nini?|Babuku na bango ya ndoki|Bandako na bango|Bamaswa na bango",
+     "Huko Efeso, wanaomwamini Yesu wanachoma nini?|Vitabu vyao vya uchawi|Nyumba zao|Mashua zao",
+     "في أفسس، ماذا أحرق المؤمنون بيسوع؟|كتب السحر|بيوتهم|قواربهم"],
+    ["Que dit Jean dans sa lettre aux petits enfants ?|Gardez-vous des idoles|Mangez des bonbons|Ne priez jamais",
+     "What does John say in his letter to little children?|Keep yourselves from idols|Eat sweets|Never pray",
+     "¿Qué dice Juan en su carta a los hijitos?|Guardaos de los ídolos|Comed dulces|No oréis nunca",
+     "Che cosa dice Giovanni nella lettera ai figlioletti?|Guardatevi dagli idoli|Mangiate caramelle|Non pregate mai",
+     "O que João diz em sua carta aos filhinhos?|Guardai-vos dos ídolos|Comei doces|Nunca oreis",
+     "Yoane alobi nini na mokanda na ye epai ya bana mike?|Bomibatela na bikeko|Bolia bonbon|Bobondela ata moke te",
+     "Yohana anasema nini katika barua yake kwa watoto wadogo?|Jilindeni na sanamu|Kuleni pipi|Msiombe kamwe",
+     "ماذا قال يوحنا في رسالته إلى الأولاد؟|احفظوا أنفسكم من الأصنام|كلوا الحلوى|لا تصلّوا أبدًا"]
+  ],
+  // L14
+  [
+    ["Où Jésus monte-t-il devant ses apôtres ?|Au ciel|Sur un bateau|En haut d'un arbre",
+     "Where does Jesus go up before his apostles?|Into heaven|Onto a boat|Up a tree",
+     "¿Adónde sube Jesús delante de sus apóstoles?|Al cielo|A un barco|A lo alto de un árbol",
+     "Dove sale Gesù davanti ai suoi apostoli?|In cielo|Su una barca|In cima a un albero",
+     "Para onde Jesus sobe diante de seus apóstolos?|Ao céu|Para um barco|Ao alto de uma árvore",
+     "Yesu amati wapi liboso ya bantoma na ye?|Na likolo|Na bwato|Na songe ya nzete",
+     "Yesu anapanda wapi mbele ya mitume wake?|Mbinguni|Kwenye mashua|Juu ya mti",
+     "إلى أين صعد يسوع أمام رسله؟|إلى السماء|إلى قارب|إلى أعلى شجرة"],
+    ["Que promettent les anges ?|Jésus reviendra|Jésus restera caché|Il faut tout oublier",
+     "What do the angels promise?|Jesus will come back|Jesus will stay hidden|Forget everything",
+     "¿Qué prometen los ángeles?|Jesús volverá|Jesús se quedará escondido|Hay que olvidarlo todo",
+     "Che cosa promettono gli angeli?|Gesù tornerà|Gesù resterà nascosto|Bisogna dimenticare tutto",
+     "O que os anjos prometem?|Jesus voltará|Jesus ficará escondido|É preciso esquecer tudo",
+     "Banzelu balaki nini?|Yesu akozonga|Yesu akobombama|Bobosana nyonso",
+     "Malaika wanaahidi nini?|Yesu atarudi|Yesu atabaki amejificha|Sahauni kila kitu",
+     "بماذا وعد الملاكان؟|يسوع سيعود|يسوع سيبقى مختبئًا|يجب أن ننسى كل شيء"]
+  ],
+  // L15
+  [
+    ["Quel animal mord Paul près du feu, à Malte ?|Une vipère|Un lion|Un chien",
+     "What animal bites Paul by the fire on Malta?|A viper|A lion|A dog",
+     "¿Qué animal muerde a Pablo junto al fuego, en Malta?|Una víbora|Un león|Un perro",
+     "Quale animale morde Paolo vicino al fuoco, a Malta?|Una vipera|Un leone|Un cane",
+     "Que animal morde Paulo perto do fogo, em Malta?|Uma víbora|Um leão|Um cachorro",
+     "Nyama nini eswi Paulo pembeni ya moto, na Malta?|Nyoka|Nkosi|Mbwa",
+     "Mnyama gani anamuuma Paulo karibu na moto, huko Malta?|Nyoka|Simba|Mbwa",
+     "أي حيوان لدغ بولس قرب النار في مالطة؟|أفعى|أسد|كلب"],
+    ["Que fait Paul pour les malades de l'île ?|Il prie et ils sont guéris|Il s'enfuit|Il les ignore",
+     "What does Paul do for the sick on the island?|He prays and they are healed|He runs away|He ignores them",
+     "¿Qué hace Pablo por los enfermos de la isla?|Ora y son sanados|Huye|Los ignora",
+     "Che cosa fa Paolo per i malati dell'isola?|Prega e vengono guariti|Scappa via|Li ignora",
+     "O que Paulo faz pelos doentes da ilha?|Ora e eles são curados|Foge|Ignora-os",
+     "Paulo asali nini mpo na bato ya maladi ya esanga?|Abondeli mpe babiki|Akimi|Atiki bango",
+     "Paulo anawafanyia nini wagonjwa wa kisiwa?|Anaomba nao wanaponywa|Anakimbia|Anawapuuza",
+     "ماذا فعل بولس لمرضى الجزيرة؟|صلّى فشُفوا|هرب|تجاهلهم"]
+  ],
+  // L16
+  [
+    ["À qui Paul écrit-il : « J'ai été délivré de la gueule du lion » ?|À Timothée|À Pharaon|À Hérode",
+     "To whom does Paul write: “I was delivered out of the mouth of the lion”?|To Timothy|To Pharaoh|To Herod",
+     "¿A quién escribe Pablo: “Fui librado de la boca del león”?|A Timoteo|A Faraón|A Herodes",
+     "A chi scrive Paolo: “Fui liberato dalla gola del leone”?|A Timoteo|Al faraone|A Erode",
+     "A quem Paulo escreve: “Fui livrado da boca do leão”?|A Timóteo|A Faraó|A Herodes",
+     "Paulo akomeli nani: “Nabikisamaki na monoko ya nkosi”?|Timote|Farao|Erode",
+     "Paulo anamwandikia nani: “Niliokolewa katika kinywa cha simba”?|Timotheo|Farao|Herode",
+     "لمن كتب بولس: «أُنقذتُ من فم الأسد»؟|إلى تيموثاوس|إلى فرعون|إلى هيرودس"],
+    ["Qui a fortifié Paul en prison ?|Le Seigneur|Un soldat romain|Personne",
+     "Who strengthened Paul in prison?|The Lord|A Roman soldier|Nobody",
+     "¿Quién fortaleció a Pablo en la cárcel?|El Señor|Un soldado romano|Nadie",
+     "Chi ha fortificato Paolo in prigione?|Il Signore|Un soldato romano|Nessuno",
+     "Quem fortaleceu Paulo na prisão?|O Senhor|Um soldado romano|Ninguém",
+     "Nani apesaki Paulo makasi na boloko?|Nkolo|Soda moko ya Roma|Moto moko te",
+     "Nani alimtia Paulo nguvu gerezani?|Bwana|Askari wa Kirumi|Hakuna mtu",
+     "من قوّى بولس في السجن؟|الرب|جندي روماني|لا أحد"]
+  ],
+  // L17
+  [
+    ["Que fait Jésus dans le jardin de Gethsémani ?|Il prie son Père|Il plante des arbres|Il dort",
+     "What does Jesus do in the garden of Gethsemane?|He prays to his Father|He plants trees|He sleeps",
+     "¿Qué hace Jesús en el huerto de Getsemaní?|Ora a su Padre|Planta árboles|Duerme",
+     "Che cosa fa Gesù nel giardino del Getsemani?|Prega il Padre|Pianta alberi|Dorme",
+     "O que Jesus faz no jardim do Getsêmani?|Ora ao seu Pai|Planta árvores|Dorme",
+     "Yesu asali nini na elanga ya Getesemane?|Abondeli Tata na ye|Aloni banzete|Alali",
+     "Yesu anafanya nini katika bustani ya Gethsemane?|Anamwomba Baba yake|Anapanda miti|Analala",
+     "ماذا فعل يسوع في بستان جثسيماني؟|صلّى إلى أبيه|زرع أشجارًا|نام"],
+    ["Que dit Jésus à son Père ?|Que ta volonté soit faite|Je m'en vais|Laisse-moi tranquille",
+     "What does Jesus say to his Father?|Thy will be done|I am leaving|Leave me alone",
+     "¿Qué le dice Jesús a su Padre?|Hágase tu voluntad|Me voy|Déjame tranquilo",
+     "Che cosa dice Gesù al Padre?|Sia fatta la tua volontà|Me ne vado|Lasciami in pace",
+     "O que Jesus diz ao seu Pai?|Seja feita a tua vontade|Vou-me embora|Deixa-me em paz",
+     "Yesu alobi nini na Tata na ye?|Mokano na yo esalema|Nakei|Tika ngai na kimia",
+     "Yesu anamwambia nini Baba yake?|Mapenzi yako yatendeke|Ninaondoka|Niache peke yangu",
+     "ماذا قال يسوع لأبيه؟|لتكن مشيئتك|أنا ذاهب|اتركني وشأني"]
+  ],
+  // L18
+  [
+    ["Que demande Jésus à ses amis sur le mont des Oliviers ?|Veillez et priez|Dormez bien|Partez vite",
+     "What does Jesus ask his friends on the Mount of Olives?|Watch and pray|Sleep well|Leave quickly",
+     "¿Qué pide Jesús a sus amigos en el monte de los Olivos?|Velad y orad|Dormid bien|Marchaos rápido",
+     "Che cosa chiede Gesù agli amici sul monte degli Ulivi?|Vegliate e pregate|Dormite bene|Andate via presto",
+     "O que Jesus pede aos amigos no monte das Oliveiras?|Vigiai e orai|Durmam bem|Vão embora depressa",
+     "Yesu asengi nini na baninga na ye na ngomba ya Olive?|Bokengela mpe bobondela|Bolala malamu|Bokende noki",
+     "Yesu anawaomba nini rafiki zake mlimani pa Mizeituni?|Kesheni mkaombe|Laleni salama|Ondokeni haraka",
+     "ماذا طلب يسوع من أصدقائه على جبل الزيتون؟|اسهروا وصلّوا|ناموا جيدًا|اذهبوا بسرعة"],
+    ["Que font les apôtres pendant ce temps ?|Ils s'endorment|Ils chantent|Ils pêchent",
+     "What do the apostles do meanwhile?|They fall asleep|They sing|They go fishing",
+     "¿Qué hacen los apóstoles mientras tanto?|Se duermen|Cantan|Pescan",
+     "Che cosa fanno intanto gli apostoli?|Si addormentano|Cantano|Pescano",
+     "O que os apóstolos fazem enquanto isso?|Adormecem|Cantam|Pescam",
+     "Bantoma basali nini na tango wana?|Balali mpongi|Bayembi|Bakangi mbisi",
+     "Mitume wanafanya nini wakati huo?|Wanalala usingizi|Wanaimba|Wanavua samaki",
+     "ماذا فعل الرسل في تلك الأثناء؟|ناموا|غنّوا|اصطادوا السمك"]
+  ],
+  // L19
+  [
+    ["Qu'est-ce qui se pose sur les disciples à la Pentecôte ?|Des langues de feu|Des oiseaux|De la neige",
+     "What rests on the disciples at Pentecost?|Tongues of fire|Birds|Snow",
+     "¿Qué se posa sobre los discípulos en Pentecostés?|Lenguas de fuego|Pájaros|Nieve",
+     "Che cosa si posa sui discepoli a Pentecoste?|Lingue di fuoco|Uccelli|Neve",
+     "O que pousa sobre os discípulos no Pentecostes?|Línguas de fogo|Pássaros|Neve",
+     "Nini ekiti likolo ya bayekoli na Pantekote?|Minoko ya moto|Bandeke|Mbula ya mpembe",
+     "Ni nini kinachowakalia wanafunzi siku ya Pentekoste?|Ndimi za moto|Ndege|Theluji",
+     "ماذا استقرّ على التلاميذ يوم الخمسين؟|ألسنة من نار|طيور|ثلج"],
+    ["Qui est donné aux disciples ce jour-là ?|Le Saint-Esprit|Un trésor|Une couronne",
+     "Who is given to the disciples that day?|The Holy Spirit|A treasure|A crown",
+     "¿Quién es dado a los discípulos ese día?|El Espíritu Santo|Un tesoro|Una corona",
+     "Chi viene donato ai discepoli quel giorno?|Lo Spirito Santo|Un tesoro|Una corona",
+     "Quem é dado aos discípulos nesse dia?|O Espírito Santo|Um tesouro|Uma coroa",
+     "Nani apesami na bayekoli mokolo wana?|Molimo Mosantu|Bomengo|Motole",
+     "Nani anapewa wanafunzi siku hiyo?|Roho Mtakatifu|Hazina|Taji",
+     "من أُعطي للتلاميذ في ذلك اليوم؟|الروح القدس|كنز|تاج"]
+  ],
+  // L20
+  [
+    ["Combien de jours Jésus jeûne-t-il au désert ?|Quarante|Trois|Mille",
+     "How many days does Jesus fast in the desert?|Forty|Three|A thousand",
+     "¿Cuántos días ayuna Jesús en el desierto?|Cuarenta|Tres|Mil",
+     "Quanti giorni digiuna Gesù nel deserto?|Quaranta|Tre|Mille",
+     "Quantos dias Jesus jejua no deserto?|Quarenta|Três|Mil",
+     "Yesu akilaki bilei mikolo boni na esobe?|Ntuku minei|Misato|Nkoto moko",
+     "Yesu anafunga siku ngapi jangwani?|Arobaini|Tatu|Elfu moja",
+     "كم يومًا صام يسوع في البرية؟|أربعين|ثلاثة|ألفًا"],
+    ["Avec quoi Jésus répond-il au tentateur ?|La Parole de Dieu|Une épée|Des cris",
+     "With what does Jesus answer the tempter?|The Word of God|A sword|Shouting",
+     "¿Con qué responde Jesús al tentador?|Con la Palabra de Dios|Con una espada|Con gritos",
+     "Con che cosa Gesù risponde al tentatore?|Con la Parola di Dio|Con una spada|Con urla",
+     "Com que Jesus responde ao tentador?|Com a Palavra de Deus|Com uma espada|Com gritos",
+     "Yesu azongiseli momekisi na nini?|Liloba ya Nzambe|Mopanga|Koganga",
+     "Yesu anamjibu mjaribu kwa nini?|Neno la Mungu|Upanga|Kelele",
+     "بماذا أجاب يسوع المجرّب؟|بكلمة الله|بسيف|بالصراخ"]
+  ],
+  // L21
+  [
+    ["Jésus dit : « Je suis la lumière… »|du monde|de la maison|du soir",
+     "Jesus says: “I am the light…”|of the world|of the house|of the evening",
+     "Jesús dice: “Yo soy la luz…”|del mundo|de la casa|de la tarde",
+     "Gesù dice: “Io sono la luce…”|del mondo|della casa|della sera",
+     "Jesus diz: “Eu sou a luz…”|do mundo|da casa|da noite",
+     "Yesu alobi: “Ngai nazali pole…”|ya mokili|ya ndako|ya mpokwa",
+     "Yesu anasema: “Mimi ndimi nuru…”|ya ulimwengu|ya nyumba|ya jioni",
+     "قال يسوع: «أنا هو نور…»|العالم|البيت|المساء"],
+    ["Celui qui suit Jésus…|ne marche pas dans les ténèbres|se perd en chemin|a toujours peur",
+     "Whoever follows Jesus…|shall not walk in darkness|gets lost on the way|is always afraid",
+     "El que sigue a Jesús…|no andará en tinieblas|se pierde en el camino|siempre tiene miedo",
+     "Chi segue Gesù…|non camminerà nelle tenebre|si perde per strada|ha sempre paura",
+     "Quem segue Jesus…|não andará em trevas|se perde no caminho|tem sempre medo",
+     "Moto oyo alandi Yesu…|akotambola na molili te|abungi nzela|azali kobanga ntango nyonso",
+     "Anayemfuata Yesu…|hatatembea gizani|anapotea njiani|anaogopa kila wakati",
+     "من يتبع يسوع…|لا يمشي في الظلمة|يضلّ الطريق|يخاف دائمًا"]
+  ],
+  // L22
+  [
+    ["Que se passe-t-il le troisième jour ?|Jésus ressuscite|Jésus part en voyage|Rien du tout",
+     "What happens on the third day?|Jesus rises again|Jesus goes on a trip|Nothing at all",
+     "¿Qué pasa al tercer día?|Jesús resucita|Jesús se va de viaje|Nada de nada",
+     "Che cosa succede il terzo giorno?|Gesù risorge|Gesù parte per un viaggio|Proprio niente",
+     "O que acontece no terceiro dia?|Jesus ressuscita|Jesus sai de viagem|Nada mesmo",
+     "Nini esalemi na mokolo ya misato?|Yesu asekwi|Yesu akei mobembo|Eloko moko te",
+     "Nini kinatokea siku ya tatu?|Yesu anafufuka|Yesu anasafiri|Hakuna kitu",
+     "ماذا حدث في اليوم الثالث؟|قام يسوع من الموت|سافر يسوع|لا شيء"],
+    ["Pourquoi Jésus a-t-il donné sa vie ?|Dieu a tant aimé le monde|Il était fatigué|Par hasard",
+     "Why did Jesus give his life?|God so loved the world|He was tired|By chance",
+     "¿Por qué dio Jesús su vida?|De tal manera amó Dios al mundo|Estaba cansado|Por casualidad",
+     "Perché Gesù ha dato la sua vita?|Dio ha tanto amato il mondo|Era stanco|Per caso",
+     "Por que Jesus deu sua vida?|Deus amou tanto o mundo|Estava cansado|Por acaso",
+     "Mpo na nini Yesu apesaki bomoi na ye?|Nzambe alingaki mokili mingi|Alembaki|Na libaku",
+     "Kwa nini Yesu alitoa uhai wake?|Mungu aliupenda ulimwengu sana|Alikuwa amechoka|Kwa bahati",
+     "لماذا بذل يسوع حياته؟|لأن الله أحبّ العالم|لأنه كان متعبًا|بالصدفة"]
+  ]
+];
+
+const NEW_STORIES = {
+  3: ["Au désert, Jésus nourrit cinq mille personnes avec cinq pains et deux poissons.",
+      "In the desert, Jesus feeds five thousand people with five loaves and two fish.",
+      "En el desierto, Jesús alimenta a cinco mil personas con cinco panes y dos peces.",
+      "Nel deserto, Gesù sfama cinquemila persone con cinque pani e due pesci.",
+      "No deserto, Jesus alimenta cinco mil pessoas com cinco pães e dois peixes.",
+      "Na esobe, Yesu aleisi bato nkoto mitano na mapa mitano mpe mbisi mibale.",
+      "Jangwani, Yesu analisha watu elfu tano kwa mikate mitano na samaki wawili.",
+      "في البرية، أطعم يسوع خمسة آلاف شخص بخمسة أرغفة وسمكتين."],
+  11: ["Paul écrit aux Corinthiens : comme pour la mer ouverte, Dieu prépare toujours un passage.",
+       "Paul writes to the Corinthians: just like the parted sea, God always makes a way through.",
+       "Pablo escribe a los corintios: como en el mar abierto, Dios siempre prepara un paso.",
+       "Paolo scrive ai Corinzi: come per il mare aperto, Dio prepara sempre un passaggio.",
+       "Paulo escreve aos coríntios: como no mar aberto, Deus sempre prepara uma passagem.",
+       "Paulo akomeli Bakolinti: lokola na ebale efungwamaki, Nzambe abongisaka ntango nyonso nzela.",
+       "Paulo anawaandikia Wakorintho: kama bahari ilivyogawanyika, Mungu huandaa njia kila wakati.",
+       "كتب بولس إلى أهل كورنثوس: كما انشقّ البحر، يُعِدّ الله دائمًا طريقًا للعبور."],
+  12: ["Sur la montagne, Jésus brille comme le soleil ; Moïse et Élie parlent avec lui.",
+       "On the mountain, Jesus shines like the sun; Moses and Elijah talk with him.",
+       "En el monte, Jesús brilla como el sol; Moisés y Elías hablan con él.",
+       "Sul monte, Gesù risplende come il sole; Mosè ed Elia parlano con lui.",
+       "No monte, Jesus brilha como o sol; Moisés e Elias falam com ele.",
+       "Na ngomba, Yesu angengi lokola moi; Mose na Eliya basololi na ye.",
+       "Mlimani, Yesu anang'aa kama jua; Musa na Eliya wanazungumza naye.",
+       "على الجبل، أضاء يسوع كالشمس، وتكلّم معه موسى وإيليا."],
+  13: ["À Éphèse, Paul annonce Jésus : on brûle les livres de magie, et la Parole grandit.",
+       "In Ephesus, Paul preaches Jesus: the magic books are burned, and the Word grows.",
+       "En Éfeso, Pablo anuncia a Jesús: queman los libros de magia y la Palabra crece.",
+       "A Efeso, Paolo annuncia Gesù: si bruciano i libri di magia e la Parola cresce.",
+       "Em Éfeso, Paulo anuncia Jesus: queimam os livros de magia, e a Palavra cresce.",
+       "Na Efese, Paulo asakoli Yesu: bazikisi babuku ya ndoki, mpe Liloba ekoli.",
+       "Huko Efeso, Paulo anamhubiri Yesu: vitabu vya uchawi vinachomwa, na Neno linakua.",
+       "في أفسس، بشّر بولس بيسوع: فأُحرقت كتب السحر، ونمت الكلمة."],
+  14: ["Quarante jours après Pâques, Jésus monte au ciel devant ses apôtres. Il reviendra !",
+       "Forty days after Easter, Jesus goes up to heaven before his apostles. He will come back!",
+       "Cuarenta días después de Pascua, Jesús sube al cielo ante sus apóstoles. ¡Volverá!",
+       "Quaranta giorni dopo Pasqua, Gesù sale al cielo davanti agli apostoli. Tornerà!",
+       "Quarenta dias depois da Páscoa, Jesus sobe ao céu diante dos apóstolos. Ele voltará!",
+       "Mikolo ntuku minei sima ya Pasika, Yesu amati na likolo liboso ya bantoma. Akozonga!",
+       "Siku arobaini baada ya Pasaka, Yesu anapaa mbinguni mbele ya mitume. Atarudi!",
+       "بعد أربعين يومًا من القيامة، صعد يسوع إلى السماء أمام رسله. وسيعود!"],
+  15: ["À Malte, une vipère mord Paul près du feu… il n'a aucun mal, et il guérit les malades de l'île.",
+       "On Malta, a viper bites Paul by the fire… he is not hurt, and he heals the sick of the island.",
+       "En Malta, una víbora muerde a Pablo junto al fuego… no sufre daño, y sana a los enfermos de la isla.",
+       "A Malta, una vipera morde Paolo vicino al fuoco… non subisce alcun male, e guarisce i malati dell'isola.",
+       "Em Malta, uma víbora morde Paulo perto do fogo… ele não sofre nada, e cura os doentes da ilha.",
+       "Na Malta, nyoka eswi Paulo pembeni ya moto… asali mpasi te, mpe abikisi bato ya maladi ya esanga.",
+       "Huko Malta, nyoka anamuuma Paulo karibu na moto… hadhuriki, naye anawaponya wagonjwa wa kisiwa.",
+       "في مالطة، لدغت أفعى بولس قرب النار… فلم يُصِبه أذى، وشفى مرضى الجزيرة."],
+  16: ["En prison, Paul écrit à Timothée : « Le Seigneur m'a délivré de la gueule du lion. »",
+       "In prison, Paul writes to Timothy: “The Lord delivered me out of the mouth of the lion.”",
+       "En la cárcel, Pablo escribe a Timoteo: “El Señor me libró de la boca del león.”",
+       "In prigione, Paolo scrive a Timoteo: “Il Signore mi ha liberato dalla gola del leone.”",
+       "Na prisão, Paulo escreve a Timóteo: “O Senhor me livrou da boca do leão.”",
+       "Na boloko, Paulo akomeli Timote: “Nkolo abikisaki ngai na monoko ya nkosi.”",
+       "Gerezani, Paulo anamwandikia Timotheo: “Bwana aliniokoa katika kinywa cha simba.”",
+       "في السجن، كتب بولس إلى تيموثاوس: «الرب أنقذني من فم الأسد.»"],
+  21: ["Jésus dit : « Je suis la lumière du monde. » Avec lui, les ténèbres reculent.",
+       "Jesus says: “I am the light of the world.” With him, the darkness flees.",
+       "Jesús dice: “Yo soy la luz del mundo.” Con él, las tinieblas retroceden.",
+       "Gesù dice: “Io sono la luce del mondo.” Con lui, le tenebre indietreggiano.",
+       "Jesus diz: “Eu sou a luz do mundo.” Com ele, as trevas recuam.",
+       "Yesu alobi: “Ngai nazali pole ya mokili.” Elongo na ye, molili ezongi sima.",
+       "Yesu anasema: “Mimi ndimi nuru ya ulimwengu.” Pamoja naye, giza linakimbia.",
+       "قال يسوع: «أنا هو نور العالم.» ومعه تنحسر الظلمة."]
+};
+
+const NEW_VERSES = {
+  3: ["Jn", "6:35", [
+    "Je suis le pain de vie. Celui qui vient à moi n'aura jamais faim.",
+    "I am the bread of life: he that cometh to me shall never hunger.",
+    "Yo soy el pan de vida: el que a mí viene, nunca tendrá hambre.",
+    "Io son il pan della vita; chi viene a me non avrà fame.",
+    "Eu sou o pão da vida; aquele que vem a mim não terá fome.",
+    "Ngai nazali limpa ya bomoi. Moto oyo ayei epai na ngai akoyoka nzala ata moke te.",
+    "Mimi ndimi mkate wa uzima; yeye ajaye kwangu hataona njaa kamwe.",
+    "أنا هو خبز الحياة. من يُقبل إليّ فلا يجوع أبدًا."]],
+  11: ["1Co", "10:13", [
+    "Dieu est fidèle : il ne permettra pas que vous soyez tentés au-delà de vos forces ; avec la tentation, il préparera aussi le moyen d'en sortir.",
+    "God is faithful, who will not suffer you to be tempted above that ye are able; but will with the temptation also make a way to escape.",
+    "Fiel es Dios, que no os dejará ser tentados más de lo que podéis llevar; antes dará también juntamente con la tentación la salida.",
+    "Dio è fedele e non permetterà che siate tentati al di là delle vostre forze; ma con la tentazione vi darà anche la via d'uscirne.",
+    "Fiel é Deus, que não vos deixará tentar acima do que podeis; antes, com a tentação dará também o escape.",
+    "Nzambe azali sembo: akotika te ete bomekama koleka makasi na bino; elongo na komekama, akobongisa mpe nzela ya kobima.",
+    "Mungu ni mwaminifu; hatawaacha mjaribiwe kupita mwezavyo; lakini pamoja na jaribu atafanya na mlango wa kutokea.",
+    "الله أمين، فلا يدعكم تُجرَّبون فوق ما تستطيعون، بل سيجعل مع التجربة أيضًا المنفذ."]],
+  12: ["Mt", "17:2", [
+    "Son visage resplendit comme le soleil, et ses vêtements devinrent blancs comme la lumière.",
+    "His face did shine as the sun, and his raiment was white as the light.",
+    "Resplandeció su rostro como el sol, y sus vestidos fueron blancos como la luz.",
+    "La sua faccia risplendé come il sole, e i suoi vestiti divennero candidi come la luce.",
+    "O seu rosto resplandeceu como o sol, e as suas vestes se tornaram brancas como a luz.",
+    "Elongi na ye engengaki lokola moi, mpe bilamba na ye ekomaki pembe lokola pole.",
+    "Uso wake ukang'aa kama jua, mavazi yake yakawa meupe kama nuru.",
+    "وأضاء وجهه كالشمس، وصارت ثيابه بيضاء كالنور."]],
+  13: ["1Jn", "5:21", [
+    "Petits enfants, gardez-vous des idoles.",
+    "Little children, keep yourselves from idols.",
+    "Hijitos, guardaos de los ídolos.",
+    "Figlioletti, guardatevi dagl'idoli.",
+    "Filhinhos, guardai-vos dos ídolos.",
+    "Bana mike, bomibatela na bikeko.",
+    "Watoto wadogo, jilindeni nafsi zenu na sanamu.",
+    "أيها الأولاد، احفظوا أنفسكم من الأصنام."]],
+  14: ["Ac", "1:11", [
+    "Ce Jésus, qui a été enlevé au ciel du milieu de vous, viendra de la même manière que vous l'avez vu allant au ciel.",
+    "This same Jesus, which is taken up from you into heaven, shall so come in like manner as ye have seen him go into heaven.",
+    "Este mismo Jesús que ha sido tomado desde vosotros arriba en el cielo, así vendrá como le habéis visto ir al cielo.",
+    "Questo Gesù che è stato tolto da voi ed assunto in cielo, verrà nella medesima maniera che l'avete veduto andare in cielo.",
+    "Esse Jesus, que dentre vós foi recebido em cima no céu, há de vir assim como para o céu o vistes ir.",
+    "Yesu oyo, oyo amatisami na likolo longwa na kati na bino, akoya ndenge moko lokola bomoni ye kokende na likolo.",
+    "Huyu Yesu aliyechukuliwa kutoka kwenu kwenda mbinguni, atakuja jinsi iyo hiyo mlivyomwona akienda zake mbinguni.",
+    "إن يسوع هذا الذي ارتفع عنكم إلى السماء سيأتي هكذا كما رأيتموه منطلقًا إلى السماء."]],
+  15: ["Rm", "8:31", [
+    "Si Dieu est pour nous, qui sera contre nous ?",
+    "If God be for us, who can be against us?",
+    "Si Dios por nosotros, ¿quién contra nosotros?",
+    "Se Dio è per noi, chi sarà contro di noi?",
+    "Se Deus é por nós, quem será contra nós?",
+    "Soki Nzambe azali mpo na biso, nani akoki kotelemela biso?",
+    "Mungu akiwa upande wetu, ni nani aliye juu yetu?",
+    "إن كان الله معنا، فمن علينا؟"]],
+  16: ["2Tm", "4:17", [
+    "C'est le Seigneur qui m'a assisté et qui m'a fortifié… et j'ai été délivré de la gueule du lion.",
+    "The Lord stood with me, and strengthened me… and I was delivered out of the mouth of the lion.",
+    "El Señor me ayudó, y me esforzó… y fui librado de la boca del león.",
+    "Il Signore mi assistette e mi fortificò… e fui liberato dalla gola del leone.",
+    "O Senhor assistiu-me e fortaleceu-me… e fiquei livre da boca do leão.",
+    "Ezali Nkolo nde asalisaki ngai mpe apesaki ngai makasi… mpe nabikisamaki na monoko ya nkosi.",
+    "Bwana alisimama pamoja nami, akanitia nguvu… nami nikaokolewa katika kinywa cha simba.",
+    "الرب وقف معي وقوّاني… فأُنقذتُ من فم الأسد."]],
+  21: ["Jn", "8:12", [
+    "Je suis la lumière du monde ; celui qui me suit ne marchera pas dans les ténèbres, mais il aura la lumière de la vie.",
+    "I am the light of the world: he that followeth me shall not walk in darkness, but shall have the light of life.",
+    "Yo soy la luz del mundo: el que me sigue, no andará en tinieblas, mas tendrá la lumbre de la vida.",
+    "Io son la luce del mondo; chi mi seguita non camminerà nelle tenebre, ma avrà la luce della vita.",
+    "Eu sou a luz do mundo; quem me segue não andará em trevas, mas terá a luz da vida.",
+    "Ngai nazali pole ya mokili; moto oyo alandi ngai akotambola na molili te, kasi akozala na pole ya bomoi.",
+    "Mimi ndimi nuru ya ulimwengu; yeye anifuataye hatakwenda gizani kamwe, bali atakuwa na nuru ya uzima.",
+    "أنا هو نور العالم. من يتبعني فلا يمشي في الظلمة، بل يكون له نور الحياة."]],
+  23: ["Mt", "28:20", [
+    "Et voici, je suis avec vous tous les jours, jusqu'à la fin du monde.",
+    "And, lo, I am with you alway, even unto the end of the world.",
+    "Y he aquí, yo estoy con vosotros todos los días, hasta el fin del mundo.",
+    "Ed ecco, io sono con voi tutti i giorni, sino alla fine del mondo.",
+    "E eis que eu estou convosco todos os dias, até à consumação dos séculos.",
+    "Mpe tala, ngai nazali elongo na bino mikolo nyonso, kino na nsuka ya mokili.",
+    "Na tazama, mimi nipo pamoja nanyi siku zote, hata ukamilifu wa dahari.",
+    "وها أنا معكم كل الأيام إلى انقضاء الدهر."]]
+};
+
+const NEW_BOOKS = {
+  "1Co": ["1 Corinthiens", "1 Corinthians", "1 Corintios", "1 Corinzi", "1 Coríntios", "1 Bakolinti", "1 Wakorintho", "كورنثوس الأولى"],
+  "1Jn": ["1 Jean", "1 John", "1 Juan", "1 Giovanni", "1 João", "1 Yoane", "1 Yohana", "يوحنا الأولى"],
+  "Rm": ["Romains", "Romans", "Romanos", "Romani", "Romanos", "Baloma", "Warumi", "رومية"],
+  "2Tm": ["2 Timothée", "2 Timothy", "2 Timoteo", "2 Timoteo", "2 Timóteo", "2 Timote", "2 Timotheo", "تيموثاوس الثانية"]
+};
+
+const CINE_TXT = {
+  intro: [
+    ["Il y a longtemps, à Bethléem, un enfant est né : Jésus, le Sauveur.",
+     "Long ago, in Bethlehem, a child was born: Jesus, the Savior.",
+     "Hace mucho tiempo, en Belén, nació un niño: Jesús, el Salvador.",
+     "Tanto tempo fa, a Betlemme, è nato un bambino: Gesù, il Salvatore.",
+     "Há muito tempo, em Belém, nasceu um menino: Jesus, o Salvador.",
+     "Kala mingi, na Betelehema, mwana moko abotamaki: Yesu, Mobikisi.",
+     "Zamani sana, huko Bethlehemu, mtoto alizaliwa: Yesu, Mwokozi.",
+     "منذ زمن بعيد، في بيت لحم، وُلد طفل: يسوع المخلّص."],
+    ["Jésus a guéri les malades et appelé ses apôtres : « Suivez-moi ! »",
+     "Jesus healed the sick and called his apostles: “Follow me!”",
+     "Jesús sanó a los enfermos y llamó a sus apóstoles: “¡Seguidme!”",
+     "Gesù ha guarito i malati e chiamato i suoi apostoli: “Seguitemi!”",
+     "Jesus curou os doentes e chamou seus apóstolos: “Segui-me!”",
+     "Yesu abikisaki bato ya maladi mpe abengaki bantoma na ye: “Bolanda ngai!”",
+     "Yesu aliwaponya wagonjwa na kuwaita mitume wake: “Nifuateni!”",
+     "شفى يسوع المرضى ودعا رسله: «اتبعوني!»"],
+    ["Mais le Père du mensonge garde encore des captifs enchaînés.",
+     "But the Father of lies still keeps captives in chains.",
+     "Pero el Padre de la mentira aún tiene cautivos encadenados.",
+     "Ma il Padre della menzogna tiene ancora dei prigionieri in catene.",
+     "Mas o Pai da mentira ainda mantém cativos acorrentados.",
+     "Kasi Tata ya lokuta azali kaka kosimba bakangami na minyololo.",
+     "Lakini Baba wa uongo bado anawashika mateka kwa minyororo.",
+     "لكن أبا الكذب ما زال يحتفظ بأسرى مقيّدين بالسلاسل."],
+    ["À ton tour : suis Jésus, guéris, libère les captifs… Il est avec toi !",
+     "Your turn: follow Jesus, heal, set the captives free… He is with you!",
+     "Te toca a ti: sigue a Jesús, sana, libera a los cautivos… ¡Él está contigo!",
+     "Tocca a te: segui Gesù, guarisci, libera i prigionieri… Lui è con te!",
+     "Agora é sua vez: siga Jesus, cure, liberte os cativos… Ele está com você!",
+     "Ekoki na yo: landa Yesu, bikisa, kangola bakangami… Azali elongo na yo!",
+     "Sasa ni zamu yako: mfuate Yesu, ponya, waweke huru mateka… Yuko pamoja nawe!",
+     "حان دورك: اتبع يسوع، اشفِ، حرّر الأسرى… إنه معك!"]
+  ],
+  end: [
+    ["Au Golgotha, Jésus a donné sa vie par amour pour nous.",
+     "At Golgotha, Jesus gave his life out of love for us.",
+     "En el Gólgota, Jesús dio su vida por amor a nosotros.",
+     "Al Golgota, Gesù ha dato la sua vita per amore nostro.",
+     "No Gólgota, Jesus deu sua vida por amor a nós.",
+     "Na Golgota, Yesu apesaki bomoi na ye mpo na bolingo na biso.",
+     "Huko Golgotha, Yesu alitoa uhai wake kwa sababu ya upendo kwetu.",
+     "في الجلجثة، بذل يسوع حياته حبًّا لنا."],
+    ["Le troisième jour, le tombeau est vide : Jésus est ressuscité !",
+     "On the third day, the tomb is empty: Jesus is risen!",
+     "Al tercer día, el sepulcro está vacío: ¡Jesús ha resucitado!",
+     "Il terzo giorno, la tomba è vuota: Gesù è risorto!",
+     "No terceiro dia, o túmulo está vazio: Jesus ressuscitou!",
+     "Na mokolo ya misato, lilita ezali mpamba: Yesu asekwi!",
+     "Siku ya tatu, kaburi ni tupu: Yesu amefufuka!",
+     "في اليوم الثالث، القبر فارغ: يسوع قام!"],
+    ["Grâce à toi, tous les captifs sont libres !",
+     "Thanks to you, all the captives are free!",
+     "¡Gracias a ti, todos los cautivos son libres!",
+     "Grazie a te, tutti i prigionieri sono liberi!",
+     "Graças a você, todos os cativos estão livres!",
+     "Na lisalisi na yo, bakangami nyonso bazali na bonsomi!",
+     "Kwa sababu yako, mateka wote wako huru!",
+     "بفضلك، صار كل الأسرى أحرارًا!"],
+    ["« Allez par tout le monde, et annoncez la bonne nouvelle. » (Marc 16:15)",
+     "“Go ye into all the world, and preach the gospel.” (Mark 16:15)",
+     "“Id por todo el mundo; predicad el evangelio.” (Marcos 16:15)",
+     "“Andate per tutto il mondo e predicate l'evangelo.” (Marco 16:15)",
+     "“Ide por todo o mundo, pregai o evangelho.” (Marcos 16:15)",
+     "“Bokende na mokili mobimba, bosakola nsango malamu.” (Malako 16:15)",
+     "“Enendeni ulimwenguni mwote, mkaihubiri Injili.” (Marko 16:15)",
+     "«اذهبوا إلى العالم أجمع، واكرزوا بالإنجيل.» (مرقس 16:15)"]
+  ]
+};
+
+const PARA_TXT = {
+  sheep: {
+    help: ["Il fait nuit. Une brebis s'est perdue : cherche-la dans les buissons, puis ramène-la à l'enclos.",
+           "It is night. A sheep is lost: look for it in the bushes, then bring it back to the fold.",
+           "Es de noche. Una oveja se ha perdido: búscala entre los arbustos y llévala de vuelta al redil.",
+           "È notte. Una pecora si è smarrita: cercala tra i cespugli, poi riportala all'ovile.",
+           "É noite. Uma ovelha se perdeu: procure-a nos arbustos e leve-a de volta ao curral.",
+           "Ezali butu. Mpate moko ebungi: luka yango na matiti, sima zongisa yango na lopango.",
+           "Ni usiku. Kondoo mmoja amepotea: mtafute vichakani, kisha mrudishe zizini.",
+           "إنه الليل. ضلّت نعجة: ابحث عنها بين الشجيرات، ثم أعِدها إلى الحظيرة."],
+    verse: ["Il y aura plus de joie dans le ciel pour un seul pécheur qui se repent.",
+            "Joy shall be in heaven over one sinner that repenteth.",
+            "Habrá más gozo en el cielo de un pecador que se arrepiente.",
+            "Vi sarà più allegrezza in cielo per un solo peccatore che si ravvede.",
+            "Haverá mais alegria no céu por um pecador que se arrepende.",
+            "Esengo ekozala mingi na likolo mpo na mosumuki moko oyo abongoli motema.",
+            "Kutakuwa na furaha zaidi mbinguni kwa mwenye dhambi mmoja atubuye.",
+            "يكون فرح في السماء بخاطئ واحد يتوب."]
+  },
+  sower: {
+    help: ["Lance tes graines sur la bonne terre. Sur le chemin, les oiseaux les mangent ; dans les pierres et les épines, elles meurent.",
+           "Throw your seeds on the good soil. On the path, the birds eat them; among stones and thorns, they die.",
+           "Lanza tus semillas en la buena tierra. En el camino, los pájaros se las comen; entre piedras y espinos, mueren.",
+           "Lancia i tuoi semi sulla terra buona. Sulla strada, gli uccelli li mangiano; tra sassi e spine, muoiono.",
+           "Lance suas sementes na boa terra. No caminho, os pássaros as comem; nas pedras e nos espinhos, elas morrem.",
+           "Bwaka mboto na yo na mabele malamu. Na nzela, bandeke balie yango; na mabanga mpe na nzube, ekufaka.",
+           "Tupa mbegu zako kwenye udongo mzuri. Njiani, ndege huzila; kwenye mawe na miiba, hufa.",
+           "ارمِ بذورك على الأرض الجيدة. على الطريق تأكلها الطيور، وبين الحجارة والأشواك تموت."],
+    verse: ["Celui qui a reçu la semence dans la bonne terre, c'est celui qui entend la parole et la comprend ; il porte du fruit.",
+            "He that received seed into the good ground is he that heareth the word, and understandeth it; which also beareth fruit.",
+            "El que fue sembrado en buena tierra, éste es el que oye y entiende la palabra, y el que lleva fruto.",
+            "Quello che ha ricevuto la semenza in buona terra è colui che ode la Parola e l'intende; e porta del frutto.",
+            "O que foi semeado em boa terra é o que ouve e compreende a palavra; e dá fruto.",
+            "Moto oyo ayambaki mboto na mabele malamu, ye nde ayokaka liloba mpe asosolaka yango; abotaka mbuma.",
+            "Aliyepandwa penye udongo mzuri, huyo ndiye alisikiaye neno na kulielewa; naye huzaa matunda.",
+            "المزروع على الأرض الجيدة هو الذي يسمع الكلمة ويفهمها، فيأتي بثمر."]
+  },
+  son: {
+    help: ["Ton fils revient de loin. Prends la robe, l'anneau et les sandales, puis cours vers lui pendant qu'il est encore loin !",
+           "Your son is coming home from far away. Take the robe, the ring and the sandals, then run to him while he is still far off!",
+           "Tu hijo vuelve de lejos. Toma el vestido, el anillo y las sandalias, ¡y corre hacia él mientras aún está lejos!",
+           "Tuo figlio torna da lontano. Prendi la veste, l'anello e i sandali, poi corrigli incontro mentre è ancora lontano!",
+           "Seu filho volta de longe. Pegue a túnica, o anel e as sandálias, e corra até ele enquanto ainda está longe!",
+           "Mwana na yo azali kozonga longwa mosika. Zwa elamba, lopete mpe basapato, sima kima epai na ye ntango azali naino mosika!",
+           "Mwanao anarudi kutoka mbali. Chukua joho, pete na viatu, kisha mkimbilie angali bado mbali!",
+           "ابنك عائد من بعيد. خذ الحُلّة والخاتم والحذاء، ثم اركض نحوه وهو لا يزال بعيدًا!"],
+    verse: ["Mon fils que voici était mort, et il est revenu à la vie ; il était perdu, et il est retrouvé.",
+            "This my son was dead, and is alive again; he was lost, and is found.",
+            "Este mi hijo muerto era, y ha revivido; habíase perdido, y es hallado.",
+            "Questo mio figliuolo era morto, ed è tornato a vita; era perduto, ed è stato ritrovato.",
+            "Este meu filho estava morto, e reviveu; tinha-se perdido, e foi achado.",
+            "Mwana na ngai oyo akufaki, mpe azongi na bomoi; abungaki, mpe amonani.",
+            "Huyu mwanangu alikuwa amekufa, naye amefufuka; alikuwa amepotea, naye ameonekana.",
+            "ابني هذا كان ميتًا فعاش، وكان ضالًّا فوُجد."]
+  }
+};
+
+const UI_ROWS = [
+  ["Le passage de la mer", "Crossing the sea", "El paso del mar", "Il passaggio del mare", "A travessia do mar", "Kokatisa ebale monene", "Kuvuka bahari", "عبور البحر"],
+  ["La Transfiguration", "The Transfiguration", "La Transfiguración", "La Trasfigurazione", "A Transfiguração", "Kobongwana ya Yesu", "Kugeuka sura", "التجلّي"],
+  ["Jésus brille comme le soleil : prends le char de feu !", "Jesus shines like the sun: take the chariot of fire!", "Jesús brilla como el sol: ¡toma el carro de fuego!", "Gesù risplende come il sole: prendi il carro di fuoco!", "Jesus brilha como o sol: pegue o carro de fogo!", "Yesu angengi lokola moi: zwa likalo ya moto!", "Yesu anang'aa kama jua: panda gari la moto!", "يسوع يضيء كالشمس: اركب مركبة النار!"],
+  ["Éphèse", "Ephesus", "Éfeso", "Efeso", "Éfeso", "Efese", "Efeso", "أفسس"],
+  ["Les livres de magie brûlent : chasse les démons !", "The magic books are burning: drive out the demons!", "Los libros de magia arden: ¡expulsa a los demonios!", "I libri di magia bruciano: scaccia i demoni!", "Os livros de magia queimam: expulse os demônios!", "Babuku ya ndoki ezali kozika: bengana bademo!", "Vitabu vya uchawi vinaungua: fukuza mapepo!", "كتب السحر تحترق: اطرد الشياطين!"],
+  ["L'Ascension", "The Ascension", "La Ascensión", "L'Ascensione", "A Ascensão", "Komata na likolo", "Kupaa mbinguni", "الصعود"],
+  ["Jésus monte au ciel : file vers le ciel sur le char de feu !", "Jesus goes up to heaven: fly to the sky on the chariot of fire!", "Jesús sube al cielo: ¡vuela al cielo en el carro de fuego!", "Gesù sale al cielo: vola verso il cielo sul carro di fuoco!", "Jesus sobe ao céu: voe para o céu no carro de fogo!", "Yesu amati na likolo: pumbwa na likolo na likalo ya moto!", "Yesu anapaa mbinguni: ruka angani kwa gari la moto!", "يسوع يصعد إلى السماء: انطلق نحو السماء على مركبة النار!"],
+  ["L'île de Malte", "The island of Malta", "La isla de Malta", "L'isola di Malta", "A ilha de Malta", "Esanga ya Malta", "Kisiwa cha Malta", "جزيرة مالطة"],
+  ["La gueule du lion", "The mouth of the lion", "La boca del león", "La gola del leone", "A boca do leão", "Monoko ya nkosi", "Kinywa cha simba", "فم الأسد"],
+  ["La lumière dans les ténèbres", "Light in the darkness", "La luz en las tinieblas", "La luce nelle tenebre", "A luz nas trevas", "Pole na kati ya molili", "Nuru gizani", "النور في الظلمة"],
+  ["Course", "Time trial", "Contrarreloj", "Corsa", "Corrida", "Mbangu", "Mbio", "سباق"],
+  ["Bats ton record sur chaque niveau", "Beat your record on every level", "Supera tu récord en cada nivel", "Batti il tuo record in ogni livello", "Bata seu recorde em cada nível", "Leka likambo na yo ya liboso na eteni nyonso", "Vunja rekodi yako katika kila ngazi", "حطّم رقمك القياسي في كل مستوى"],
+  ["Paraboles", "Parables", "Parábolas", "Parabole", "Parábolas", "Masese", "Mifano", "الأمثال"],
+  ["3 mini-jeux tirés des paraboles", "3 mini-games from the parables", "3 minijuegos de las parábolas", "3 minigiochi tratti dalle parabole", "3 minijogos das parábolas", "Masano mike 3 ya masese", "Michezo midogo 3 ya mifano", "3 ألعاب صغيرة من الأمثال"],
+  ["↑ ↓ : difficulté · L : versets · 2 : deux joueurs · V : voix · N : Nouveau Jeu+", "↑ ↓: difficulty · L: verses · 2: two players · V: voice · N: New Game+", "↑ ↓: dificultad · L: versículos · 2: dos jugadores · V: voz · N: Nuevo Juego+", "↑ ↓: difficoltà · L: versetti · 2: due giocatori · V: voce · N: Nuovo Gioco+", "↑ ↓: dificuldade · L: versículos · 2: dois jogadores · V: voz · N: Novo Jogo+", "↑ ↓: mpasi · L: mikapo · 2: basani mibale · V: mongongo · N: Lisano ya sika+", "↑ ↓: ugumu · L: mistari · 2: wachezaji wawili · V: sauti · N: Mchezo Mpya+", "↑ ↓: الصعوبة · L: الآيات · 2: لاعبان · V: الصوت · N: لعبة جديدة+"],
+  ["QUIZ BIBLIQUE", "BIBLE QUIZ", "QUIZ BÍBLICO", "QUIZ BIBLICO", "QUIZ BÍBLICO", "MITUNA YA BIBLIA", "MASWALI YA BIBLIA", "مسابقة الكتاب المقدس"],
+  ["Bravo ! +5 anges", "Well done! +5 angels", "¡Bravo! +5 ángeles", "Bravo! +5 angeli", "Parabéns! +5 anjos", "Malamu mingi! +5 banzelu", "Hongera! +5 malaika", "أحسنت! +5 ملائكة"],
+  ["Pas tout à fait… La bonne réponse :", "Not quite… The right answer:", "No del todo… La respuesta correcta:", "Non proprio… La risposta giusta:", "Não exatamente… A resposta certa:", "Te mpenza… Eyano ya solo:", "Si kabisa… Jibu sahihi:", "ليس تمامًا… الإجابة الصحيحة:"],
+  ["Touche une réponse, ou appuie sur 1, 2 ou 3", "Tap an answer, or press 1, 2 or 3", "Toca una respuesta, o pulsa 1, 2 o 3", "Tocca una risposta, o premi 1, 2 o 3", "Toque uma resposta, ou aperte 1, 2 ou 3", "Simba eyano, to finda 1, 2 to 3", "Gusa jibu, au bonyeza 1, 2 au 3", "المس إجابة، أو اضغط 1 أو 2 أو 3"],
+  ["Touche pour continuer", "Tap to continue", "Toca para continuar", "Tocca per continuare", "Toque para continuar", "Simba mpo na kokoba", "Gusa ili kuendelea", "المس للمتابعة"],
+  ["COURSE CONTRE LA MONTRE", "TIME TRIAL", "CONTRARRELOJ", "CORSA CONTRO IL TEMPO", "CORRIDA CONTRA O RELÓGIO", "MBANGU NA NTANGO", "MBIO DHIDI YA SAA", "سباق ضد الساعة"],
+  ["Flèches pour choisir, Entrée pour courir — Échap : retour", "Arrows to choose, Enter to run — Esc: back", "Flechas para elegir, Intro para correr — Esc: volver", "Frecce per scegliere, Invio per correre — Esc: indietro", "Setas para escolher, Enter para correr — Esc: voltar", "Bafleshi mpo na kopona, Entrée mpo na kopota mbangu — Échap: kozonga", "Mishale kuchagua, Enter kukimbia — Esc: rudi", "الأسهم للاختيار، Enter للجري — Esc: رجوع"],
+  ["Record", "Record", "Récord", "Record", "Recorde", "Likambo ya liboso", "Rekodi", "الرقم القياسي"],
+  ["Temps", "Time", "Tiempo", "Tempo", "Tempo", "Ntango", "Muda", "الوقت"],
+  ["ARRIVÉE !", "FINISH!", "¡LLEGADA!", "ARRIVO!", "CHEGADA!", "OKOMI!", "UMEFIKA!", "الوصول!"],
+  ["NOUVEAU RECORD !", "NEW RECORD!", "¡NUEVO RÉCORD!", "NUOVO RECORD!", "NOVO RECORDE!", "LIKAMBO YA SIKA!", "REKODI MPYA!", "رقم قياسي جديد!"],
+  ["Touche pour choisir un autre niveau", "Tap to choose another level", "Toca para elegir otro nivel", "Tocca per scegliere un altro livello", "Toque para escolher outro nível", "Simba mpo na kopona eteni mosusu", "Gusa kuchagua ngazi nyingine", "المس لاختيار مستوى آخر"],
+  ["Niveau pas encore atteint", "Level not reached yet", "Nivel aún no alcanzado", "Livello non ancora raggiunto", "Nível ainda não alcançado", "Okomi naino na eteni oyo te", "Bado hujafikia ngazi hii", "لم تصل إلى هذا المستوى بعد"],
+  ["Touche pour continuer · Échap pour passer", "Tap to continue · Esc to skip", "Toca para continuar · Esc para saltar", "Tocca per continuare · Esc per saltare", "Toque para continuar · Esc para pular", "Simba mpo na kokoba · Échap mpo na koleka", "Gusa kuendelea · Esc kuruka", "المس للمتابعة · Esc للتخطي"],
+  ["LES PARABOLES DE JÉSUS", "THE PARABLES OF JESUS", "LAS PARÁBOLAS DE JESÚS", "LE PARABOLE DI GESÙ", "AS PARÁBOLAS DE JESUS", "MASESE YA YESU", "MIFANO YA YESU", "أمثال يسوع"],
+  ["La brebis perdue", "The lost sheep", "La oveja perdida", "La pecora smarrita", "A ovelha perdida", "Mpate oyo ebungaki", "Kondoo aliyepotea", "الخروف الضال"],
+  ["Le semeur", "The sower", "El sembrador", "Il seminatore", "O semeador", "Mokoni", "Mpanzi", "الزارع"],
+  ["Le fils prodigue", "The prodigal son", "El hijo pródigo", "Il figliol prodigo", "O filho pródigo", "Mwana oyo abungaki", "Mwana mpotevu", "الابن الضال"],
+  ["Pas ici…", "Not here…", "Aquí no…", "Non qui…", "Aqui não…", "Awa te…", "Si hapa…", "ليست هنا…"],
+  ["Trouvée !", "Found!", "¡Encontrada!", "Trovata!", "Achada!", "Emonani!", "Amepatikana!", "وجدتُها!"],
+  ["Bêê…", "Baa…", "Beee…", "Beee…", "Méé…", "Mee…", "Mee…", "ماااء…"],
+  ["Graines", "Seeds", "Semillas", "Semi", "Sementes", "Mboto", "Mbegu", "البذور"],
+  ["Bonne terre", "Good soil", "Buena tierra", "Terra buona", "Boa terra", "Mabele malamu", "Udongo mzuri", "أرض جيدة"],
+  ["Chemin", "Path", "Camino", "Strada", "Caminho", "Nzela", "Njia", "الطريق"],
+  ["Pierres", "Stones", "Piedras", "Sassi", "Pedras", "Mabanga", "Mawe", "الحجارة"],
+  ["Épines", "Thorns", "Espinos", "Spine", "Espinhos", "Nzube", "Miiba", "الأشواك"],
+  ["Robe", "Robe", "Vestido", "Veste", "Túnica", "Elamba", "Joho", "الحُلّة"],
+  ["Anneau", "Ring", "Anillo", "Anello", "Anel", "Lopete", "Pete", "الخاتم"],
+  ["Sandales", "Sandals", "Sandalias", "Sandali", "Sandálias", "Basapato", "Viatu", "الحذاء"],
+  ["Cours vers ton fils !", "Run to your son!", "¡Corre hacia tu hijo!", "Corri da tuo figlio!", "Corra até seu filho!", "Kima epai ya mwana na yo!", "Mkimbilie mwanao!", "اركض نحو ابنك!"],
+  ["Mon fils est revenu !", "My son has come back!", "¡Mi hijo ha vuelto!", "Mio figlio è tornato!", "Meu filho voltou!", "Mwana na ngai azongi!", "Mwanangu amerudi!", "ابني عاد!"],
+  ["BRAVO !", "WELL DONE!", "¡BRAVO!", "BRAVO!", "PARABÉNS!", "MALAMU MINGI!", "HONGERA!", "أحسنت!"],
+  ["Touche pour revenir aux paraboles", "Tap to go back to the parables", "Toca para volver a las parábolas", "Tocca per tornare alle parabole", "Toque para voltar às parábolas", "Simba mpo na kozonga na masese", "Gusa kurudi kwenye mifano", "المس للعودة إلى الأمثال"],
+  ["Flèches ou touche l'écran pour bouger · Espace ou ✋ pour agir", "Arrows or touch the screen to move · Space or ✋ to act", "Flechas o toca la pantalla para moverte · Espacio o ✋ para actuar", "Frecce o tocca lo schermo per muoverti · Spazio o ✋ per agire", "Setas ou toque na tela para mover · Espaço ou ✋ para agir", "Bafleshi to simba ekran mpo na koningana · Espace to ✋ mpo na kosala", "Mishale au gusa skrini kusogea · Nafasi au ✋ kutenda", "الأسهم أو المس الشاشة للتحرك · المسافة أو ✋ للتصرّف"],
+  ["Saute haut + double saut", "High jump + double jump", "Salto alto + doble salto", "Salto alto + doppio salto", "Pulo alto + pulo duplo", "Pumbwa likolo + kopumbwa mbala mibale", "Ruka juu + ruka mara mbili", "قفز عالٍ + قفزة مزدوجة"],
+  ["Soldat : fort et rapide", "Soldier: strong and fast", "Soldado: fuerte y rápido", "Soldato: forte e veloce", "Soldado: forte e rápido", "Soda: makasi mpe mbangu", "Askari: hodari na mwepesi", "جندي: قوي وسريع"],
+  ["Nouveau Jeu+", "New Game+", "Nuevo Juego+", "Nuovo Gioco+", "Novo Jogo+", "Lisano ya sika+", "Mchezo Mpya+", "لعبة جديدة+"]
+];
+
+const UI_TPL = [
+  ["^Tu as gagné (\\d+) anges !$", ["You earned {1} angels!", "¡Has ganado {1} ángeles!", "Hai guadagnato {1} angeli!", "Você ganhou {1} anjos!", "Ozwi banzelu {1}!", "Umepata malaika {1}!", "لقد ربحت {1} ملاكًا!"]],
+  ["^🗣 Voix : (.+)$", ["🗣 Voice: {t1}", "🗣 Voz: {t1}", "🗣 Voce: {t1}", "🗣 Voz: {t1}", "🗣 Mongongo: {t1}", "🗣 Sauti: {t1}", "🗣 الصوت: {t1}"]],
+  ["^★ Nouveau Jeu\\+ : (.+)$", ["★ New Game+: {t1}", "★ Nuevo Juego+: {t1}", "★ Nuovo Gioco+: {t1}", "★ Novo Jogo+: {t1}", "★ Lisano ya sika+: {t1}", "★ Mchezo Mpya+: {t1}", "★ لعبة جديدة+: {t1}"]],
+  ["^Bonne terre : (\\d+)$", ["Good soil: {1}", "Buena tierra: {1}", "Terra buona: {1}", "Boa terra: {1}", "Mabele malamu: {1}", "Udongo mzuri: {1}", "الأرض الجيدة: {1}"]]
+];
+
+// textes du lot 6
+for (const r of UI_ROWS) { if (!TR_ROWS.some(q => q[0] === r[0])) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; } }
+for (const [src, m] of UI_TPL) TR_TPL.push([new RegExp(src), m]);
 // la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
 const VICTORY = {
   en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
@@ -499,6 +1292,8 @@ const CHARS = [
   { name:'Ruth',    fem:true, skin:'#c99068', hair:'#3a2414', top:'#b5652e', robe:'#d9a54a', belt:'#6a3a1a', legs:'#c99068', shoe:'#6b4a2b', veil:'#efe4cc', wheat:true, angels2:true, desc:'Chaque pierre : 2 anges' },
   { name:'Ève',     fem:true, skin:'#e0aa82', hair:'#8a3a1a', top:'#4f8a3c', robe:'#4f8a3c', leaves:true, legs:'#e0aa82', shoe:'#8a6a42', hairStyle:'longW', flower:true, lifeLvl:true, desc:'+1 vie à chaque niveau' },
   { name:'Sista',   fem:true, skin:'#6e4228', hair:'#140c08', top:'#17171c', hoodie:true, print:'Com1vent', printSz:2.9, pants:'#17171c', shoe:'#fff', kicks:'#17171c', hairStyle:'braids', beanie:'#17171c', hoops:true, book:true, bible:true, spd:5.6, dbl:true, desc:'Rapide + double saut' },
+  { name:'Bro',     skin:'#5c3920', hair:'#0c0806', top:'#141418', baggy:true, pants:'#141418', shoe:'#f4f4f4', kicks:'#e2e2e8', beanie:'#0f0f12', beard:'short', beardSolid:'#0b0806', jump:16, dbl:true, desc:'Saute haut + double saut' },
+  { name:'MC',      skin:'#a87048', hair:'#1a120c', top:'#5a6a3a', camo:true, pants:'#5a6a3a', shoe:'#2a2016', boots:true, hat:'helmet', dogtag:true, dmg:2, spd:5.4, desc:'Soldat : fort et rapide' },
 ];
 const N = CHARS.length;
 const MAX_ANGELS = 1000; // nombre maximum de petits anges autour du héros
@@ -980,6 +1775,7 @@ function menuInput(k) {
   if (state === 'book') { if (k === 'ArrowLeft' || k === 'a') { bookPage = (bookPage + 3) % 4; sfx('blip'); } else if (k === 'ArrowRight' || k === 'd') { bookPage = (bookPage + 1) % 4; sfx('blip'); } else if (stT > 10) go(bookBack); return; }
   if (state === 'cont') { if (['ArrowLeft', 'a', 'ArrowRight', 'd'].includes(k)) { contSel = 1 - contSel; sfx('blip'); } else if ([' ', 'Enter', 'x', 'z'].includes(k)) { if (contSel === 0) resumeGame(); else start(true); } return; }
   if ((k === 'l' || k === 'L') && (state === 'title' || state === 'mode')) { bookBack = state; bookPage = 0; go('book'); return; }
+  if (newMenu(k)) return;
   if (state === 'mode') { // choisir entre plateforme et vue de haut
     if (['ArrowLeft', 'a', 'ArrowRight', 'd'].includes(k)) { modeSel = 1 - modeSel; sfx('blip'); }
     else if (k === '2') setTwoP(!twoP);
@@ -1014,6 +1810,7 @@ cv.addEventListener('pointerdown', e => {
   ensureAudio();
   if (state === 'play') return;
   if (state === 'tdplay') { tdPointer(e); return; }
+  if (newPointer(e)) return;
   if (state === 'mode') { const r = cv.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height * 400;
     if (fy > 326 && fy < 360) { const si = Math.floor((fx * 800 - 40) / 245); if (si <= 0) setDiff(diff + 1); else if (si === 1) { bookBack = 'mode'; bookPage = 0; go('book'); } else setTwoP(!twoP); return; }
     const i = fx < .5 ? 0 : 1; if (i === modeSel) menuInput('Enter'); else { modeSel = i; sfx('blip'); } return; }
@@ -1376,7 +2173,7 @@ function update() {
   flash *= .9;
   for (const t of texts) { t.y -= 0.7; t.life--; }
   texts = texts.filter(t => t.life > 0);
-  if (p.x > LEVEL_W - 120 && (!boss || boss.dead)) { go(level < LEVELS.length - 1 ? 'next' : 'win'); return; }
+  if (p.x > LEVEL_W - 120 && (!boss || boss.dead)) { levelDone(); return; }
   const tc = Math.max(0, Math.min(LEVEL_W - 800, p.x - 300 + p.face * (p.ride > 0 ? 130 : 40)));
   cam += (tc - cam) * .1;
 }
@@ -1731,13 +2528,14 @@ function miniAngel() { // petit ange peint une seule fois, puis recopié (rapide
   g.strokeStyle = '#ffd23a'; g.lineWidth = .7; g.beginPath(); g.ellipse(8, 4.2, 1.9, .7, 0, 0, 7); g.stroke();
   return k;
 }
+const overHero = a => p && a.x > p.x - 12 && a.x < p.x + (p.w || 36) + 12 && a.y > p.y - 10 && a.y < p.y + (p.h || 60) + 8;
 function drawAngels() {
   if (angels.length > BIG_ANGELS) {
     if (!MINI) MINI = miniAngel();
-    ctx.globalAlpha = .82; for (let i = BIG_ANGELS; i < angels.length; i++) { const a = angels[i], X = a.x - cam, b = Math.sin(levelT * .2 + i) * .8; if (X > -10 && X < 810) { ctx.drawImage(MINI, X - 6.5, a.y - 6.5 + b, 13, 13); if (a.gold) { ctx.fillStyle = 'rgba(255,200,40,.7)'; ctx.fillRect(X - 1.5, a.y - 1 + b, 3, 4); } } }
+    ctx.globalAlpha = .82; for (let i = BIG_ANGELS; i < angels.length; i++) { const a = angels[i], X = a.x - cam, b = Math.sin(levelT * .2 + i) * .8; if (X > -10 && X < 810) { ctx.globalAlpha = overHero(a) ? .25 : .82; ctx.drawImage(MINI, X - 6.5, a.y - 6.5 + b, 13, 13); if (a.gold) { ctx.fillStyle = 'rgba(255,200,40,.7)'; ctx.fillRect(X - 1.5, a.y - 1 + b, 3, 4); } } }
     ctx.globalAlpha = 1;
   }
-  for (let i = 0; i < Math.min(angels.length, BIG_ANGELS); i++) drawAngel(angels[i], i);
+  for (let i = 0; i < Math.min(angels.length, BIG_ANGELS); i++) { if (overHero(angels[i])) ctx.globalAlpha = .3; drawAngel(angels[i], i); ctx.globalAlpha = 1; }
 }
 function drawBalls() {
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
@@ -1766,8 +2564,8 @@ function updateAngels() {
   angels.forEach((a, i) => {
     let tx, ty;
     if (i < BIG_ANGELS) { // trois cercles de grands anges
-      const ang = levelT * .035 + i * Math.PI * 2 / n, rad = 42 + (i % 3) * 14;
-      tx = cx0 + Math.cos(ang) * rad; ty = p.y + 6 + Math.sin(ang) * rad * .45 + Math.sin(levelT * .1 + i) * 3;
+      const ang = Math.PI * (1.04 + .92 * (i + .5) / n) + Math.sin(levelT * .025 + i) * .04, rad = 50 + (i % 3) * 13;
+      tx = cx0 + Math.cos(ang) * rad * 1.15; ty = p.y + 2 + Math.sin(ang) * rad * .8 + Math.sin(levelT * .1 + i) * 2;
     } else { // la nuée : une spirale de petits anges qui tourne lentement (angle d'or)
       const j = i - BIG_ANGELS, ang = j * 2.39996 + levelT * (.01 + (j % 7) * .0008), rad = 96 + Math.sqrt(j) * 5.6, sn = Math.sin(ang);
       tx = cx0 + Math.cos(ang) * rad; ty = p.y - 46 + sn * rad * (sn > 0 ? .1 : .34) + Math.sin(levelT * .08 + j) * 2;
@@ -2062,6 +2860,7 @@ function draw() {
     }
     if (f.lion) drawLion(f); else if (f.giant) drawGiant(f); else if (f.boss) drawSatan(f); else if (f.kind === 'mal') drawSickness(f); else drawDemon(f);
   }
+  drawCritters();
   drawQuest();
   drawLies();
   drawMounts();
@@ -2073,6 +2872,7 @@ function draw() {
   drawAngels(); drawBalls(); drawWords(); drawStorm();
   drawFireParticles();
   drawAmbient(T);
+  drawWeather(WEATHER[level]);
   drawForeground(T, L.theme);
   drawBloom(L);
   drawVignette();
@@ -2195,13 +2995,13 @@ function drawHeroP(c, x, y, f, a, punch) {
   const arm = (sx, sy, a1, a2, front) => {
     const ex = sx + Math.cos(a1) * 8, ey = sy + Math.sin(a1) * 8, wx = ex + Math.cos(a2) * 7.5, wy = ey + Math.sin(a2) * 7.5;
     const sl = front ? (c.jacket || TOP) : dark(c.jacket || TOP, .25), sk = front ? SK : dark(SK, .22);
-    g.strokeStyle = OL; g.lineWidth = 6.3; g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.lineTo(wx, wy); g.stroke();
+    g.strokeStyle = OL; g.lineWidth = c.baggy ? 7.8 : 6.3; g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.lineTo(wx, wy); g.stroke();
     if (c.short) {
       const mx = sx + Math.cos(a1) * 4.5, my = sy + Math.sin(a1) * 4.5;
       g.strokeStyle = sk; g.lineWidth = 3.9; g.beginPath(); g.moveTo(mx, my); g.lineTo(ex, ey); g.lineTo(wx, wy); g.stroke();
       g.strokeStyle = sl; g.lineWidth = 5; g.beginPath(); g.moveTo(sx, sy); g.lineTo(mx, my); g.stroke();
     } else {
-      g.strokeStyle = sl; g.lineWidth = 4.8; g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.lineTo(wx, wy); g.stroke();
+      g.strokeStyle = sl; g.lineWidth = c.baggy ? 6.4 : 4.8; g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.lineTo(wx, wy); g.stroke();
       if (front) { g.strokeStyle = 'rgba(255,255,255,.22)'; g.lineWidth = 1.1; g.beginPath(); g.moveTo(sx + .8, sy - .8); g.lineTo(ex + .8, ey - .8); g.stroke(); }
     }
     const hX = wx + Math.cos(a2) * 1.8, hY = wy + Math.sin(a2) * 1.8;
@@ -2223,9 +3023,10 @@ function drawHeroP(c, x, y, f, a, punch) {
   let bF = [-4, 0], fF = [4, 0];
   if (walking) { bF = [-1.5 - sw * 7, -Math.max(0, -Math.cos(ph)) * 3.5]; fF = [1.5 + sw * 7, -Math.max(0, Math.cos(ph)) * 3.5]; }
   if (air) { bF = [-6, -4]; fF = [7, -9]; }
-  const leg = (h0, F, col) => { const kx = (h0 + F[0]) / 2 + 3, ky = (hipY + F[1]) / 2 - (air ? 2 : 0); g.strokeStyle = OL; g.lineWidth = PANTS ? 6.6 : 5.6; g.beginPath(); g.moveTo(h0, hipY); g.quadraticCurveTo(kx, ky, F[0], F[1] - 2); g.stroke(); g.strokeStyle = col; g.lineWidth = PANTS ? 5 : 4; g.stroke();
+  const leg = (h0, F, col) => { const kx = (h0 + F[0]) / 2 + 3, ky = (hipY + F[1]) / 2 - (air ? 2 : 0); g.strokeStyle = OL; g.lineWidth = PANTS ? (c.baggy ? 8.8 : 6.6) : 5.6; g.beginPath(); g.moveTo(h0, hipY); g.quadraticCurveTo(kx, ky, F[0], F[1] - 2); g.stroke(); g.strokeStyle = col; g.lineWidth = PANTS ? (c.baggy ? 7.2 : 5) : 4; g.stroke();
+    if (c.camo) for (let q = 1; q < 5; q++) { const u = q / 5, lx = (1 - u) * (1 - u) * h0 + 2 * (1 - u) * u * kx + u * u * F[0], ly = (1 - u) * (1 - u) * hipY + 2 * (1 - u) * u * ky + u * u * (F[1] - 2); g.fillStyle = q % 2 ? '#3c4824' : '#8a7e4c'; g.beginPath(); g.ellipse(lx + (q % 2 ? -1 : 1), ly, 1.6, 1.1, q, 0, 7); g.fill(); }
     if (c.legStripe) { g.strokeStyle = col === legCol ? c.legStripe : dark(c.legStripe, .3); g.lineWidth = .8; g.beginPath(); g.moveTo(h0 + 2, hipY); g.quadraticCurveTo(kx + 2.2, ky, F[0] + 2, F[1] - 2.5); g.stroke(); } };
-  const shoe = (F, back) => { const col = back ? dark(c.shoe, .25) : c.shoe; g.fillStyle = gLG(g, 0, F[1] - 3.5, 0, F[1] + .5, [[0, lite(col, .25)], [1, dark(col, .3)]]); g.beginPath(); g.ellipse(F[0] + 1.8, F[1] - 1.6, c.kicks ? 4.3 : 3.8, c.kicks ? 2.3 : 1.9, 0, 0, 7); g.fill(); g.strokeStyle = OL; g.lineWidth = .7; g.stroke();
+  const shoe = (F, back) => { if (c.boots) { g.fillStyle = back ? '#16110c' : '#2a2016'; rrPath(g, F[0] - 2.4, F[1] - 8, 6.6, 7.5, 1.4); g.fill(); } const col = back ? dark(c.shoe, .25) : c.shoe; g.fillStyle = gLG(g, 0, F[1] - 3.5, 0, F[1] + .5, [[0, lite(col, .25)], [1, dark(col, .3)]]); g.beginPath(); g.ellipse(F[0] + 1.8, F[1] - 1.6, c.kicks ? 4.3 : 3.8, c.kicks ? 2.3 : 1.9, 0, 0, 7); g.fill(); g.strokeStyle = OL; g.lineWidth = .7; g.stroke();
     if (c.kicks) { g.fillStyle = '#e8e8ee'; g.fillRect(F[0] - 2.3, F[1] - 1, 8.4, 1.2); g.strokeStyle = back ? dark(c.kicks, .25) : c.kicks; g.lineWidth = .9; g.beginPath(); g.moveTo(F[0] - .5, F[1] - 1.8); g.quadraticCurveTo(F[0] + 2.5, F[1] - 1.4, F[0] + 4.5, F[1] - 3.2); g.stroke(); }
     else if (c.shoe === '#fff') { g.fillStyle = '#d62020'; g.fillRect(F[0] + .5, F[1] - 2.2, 2.6, .8); } };
   leg(-2.5, bF, dark(legCol, .2)); shoe(bF, true);
@@ -2257,14 +3058,16 @@ function drawHeroP(c, x, y, f, a, punch) {
     if (c.trim) { g.strokeStyle = c.trim; g.lineWidth = 1.1; g.beginPath(); g.moveTo(-11 - sH * .4 - lift * .5, hem - lift - .7); g.quadraticCurveTo(-1, hem + 1.1 - lift, 11 + sH - lift * .2, hem - lift * 1.3 - .7); g.stroke(); }
   }
   // buste
-  const wy = PANTS ? (c.jacket && !c.jacketOpen ? -19.5 : -21) : -25.5, tp = new Path2D();
-  tp.moveTo(-7.5, -42 + yb); tp.quadraticCurveTo(0, -44.6 + yb, 7.5, -42 + yb); tp.quadraticCurveTo(fem ? 7.2 : 8.4, -34 + yb, fem ? 6.4 : 7.2, wy + yb);
-  tp.lineTo(fem ? -6.4 : -7.2, wy + yb); tp.quadraticCurveTo(fem ? -7.6 : -8.6, -34 + yb, -7.5, -42 + yb); tp.closePath();
+  const wy = c.baggy ? -16 : PANTS ? (c.jacket && !c.jacketOpen ? -19.5 : -21) : -25.5, tp = new Path2D();
+  tp.moveTo(-7.5, -42 + yb); tp.quadraticCurveTo(0, -44.6 + yb, 7.5, -42 + yb); tp.quadraticCurveTo(fem ? 7.2 : c.baggy ? 9.8 : 8.4, -34 + yb, fem ? 6.4 : c.baggy ? 9.4 : 7.2, wy + yb);
+  tp.lineTo(fem ? -6.4 : c.baggy ? -9.4 : -7.2, wy + yb); tp.quadraticCurveTo(fem ? -7.6 : c.baggy ? -9.8 : -8.6, -34 + yb, -7.5, -42 + yb); tp.closePath();
   g.fillStyle = shadeH(TOP, -8.5, 8.5); g.fill(tp);
   g.save(); g.clip(tp);
   if (c.stripes) { g.fillStyle = c.stripes; for (let k = 0; k < 4; k++) g.fillRect(-9, -40 + k * 4 + yb, 18, 1.3); }
   if (c.wax) waxPattern(g, -9, -45, 18, 24);
   if (c.leaves) leafPattern(g, -9, -45, 18, 24);
+  if (c.camo) camoPattern(g, -11, -46 + yb, 22, 32);
+  if (c.baggy) { g.strokeStyle = 'rgba(255,255,255,.13)'; g.lineWidth = .8; g.beginPath(); g.moveTo(-5, -38 + yb); g.quadraticCurveTo(-3, -28 + yb, -6, -17 + yb); g.moveTo(4, -36 + yb); g.quadraticCurveTo(5.5, -26 + yb, 3, -17 + yb); g.stroke(); }
   g.fillStyle = gLG(g, 0, -32 + yb, 0, wy + yb, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,.2)']]); g.fillRect(-10, -32 + yb, 20, 12);
   g.restore(); outline(tp);
   g.strokeStyle = 'rgba(255,236,200,.55)'; g.lineWidth = .8; g.beginPath(); g.moveTo(7.3, -41.5 + yb); g.quadraticCurveTo(8.2, -34 + yb, 7, wy + 1 + yb); g.stroke();
@@ -2319,6 +3122,7 @@ function drawHeroP(c, x, y, f, a, punch) {
     for (let k = 0; k < 5; k++) { const ky = -35 + k * 2.6 + yb; gEll(g, 2.3, ky, 1.5, .55, '#ffe27a'); gEll(g, 2.3, ky, .45, .45, '#9a6a10'); }
     g.lineWidth = .45; g.strokeStyle = 'rgba(212,165,42,.8)'; for (const sx of [-5, 5.5]) { g.beginPath(); g.arc(sx, -34 + yb, 1.4, 0, 7); g.moveTo(sx - 1.4, -30.5 + yb); g.lineTo(sx + 1.4, -30.5 + yb); g.stroke(); }
   }
+  if (c.dogtag) { g.strokeStyle = '#c8c8d0'; g.lineWidth = .5; g.beginPath(); g.moveTo(-.5, -43 + yb); g.lineTo(2, -37 + yb); g.lineTo(4, -43 + yb); g.stroke(); rrPath(g, .9, -37.6 + yb, 2.4, 3.2, .6); g.fillStyle = '#d8d8e0'; g.fill(); }
   if (c.print) { g.save(); g.translate(c.printSz ? -1.6 : -.5, -32.8 + yb); g.scale(f, 1); g.fillStyle = '#fff'; g.font = 'bold ' + (c.printSz || 4.2) + 'px Trebuchet MS, sans-serif'; g.textAlign = 'center'; g.fillText(c.print, 0, 0); g.restore(); }
   if (c.cross) { g.fillStyle = '#ffc83d'; g.fillRect(1, -37 + yb, 1.2, 4.5); g.fillRect(-.2, -35.8 + yb, 3.6, 1.1); }
   if (c.chain) { g.strokeStyle = '#f2c94a'; g.lineWidth = .6; g.beginPath(); g.moveTo(-1.4, -42.6 + yb); g.quadraticCurveTo(1.6, -35.5 + yb, 4.8, -42.6 + yb); g.stroke(); gEll(g, 1.6, -37.4 + yb, .9, 1.1, '#ffe27a'); }
@@ -2357,7 +3161,7 @@ function drawHeroP(c, x, y, f, a, punch) {
     g.fillStyle = hairFill; g.fill(hp); outline(hp, .5);
     g.save(); g.globalCompositeOperation = 'lighter'; gEll(g, hx + 1.2, hy - 5.2, 2.6, 1.1, 'rgba(255,240,220,.35)', -.3); g.restore();
   }
-  if (!c.veil && c.hat !== 'turban' && !c.headwrap && !c.beanie && !c.kufi && HS !== 'bald') {
+  if (!c.veil && c.hat !== 'turban' && !c.headwrap && !c.beanie && !c.kufi && c.hat !== 'helmet' && HS !== 'bald') {
     const hp = new Path2D();
     if (HS === 'curly') for (const [dx, dy] of [[-4.5, -5], [-2, -6.8], [1, -7.2], [3.8, -6], [-5.6, -2], [-5.8, 1.5], [-4.4, 3.5], [5, -4]]) { hp.moveTo(hx + dx + 2.3, hy + dy); hp.arc(hx + dx, hy + dy, 2.3, 0, 7); }
     else { hp.moveTo(hx + 5.4, hy - 2.2); hp.quadraticCurveTo(hx + 4.8, hy - 7.6, hx - .3, hy - 7.5); hp.quadraticCurveTo(hx - 6.3, hy - 7, hx - 5.9, hy + .5); hp.quadraticCurveTo(hx - 5.7, hy + 4.2, hx - 3.6, hy + 5.2);
@@ -2368,7 +3172,7 @@ function drawHeroP(c, x, y, f, a, punch) {
   if (c.beard) {
     const lg = c.beard === 'long', bp = new Path2D(); bp.moveTo(hx - 2.8, hy + .2); bp.quadraticCurveTo(hx - 3.2, hy + (lg ? 10 : 5.8), hx + (lg ? 1.5 : .8), hy + (lg ? 15 : 8));
     bp.quadraticCurveTo(hx + 5.6, hy + (lg ? 10 : 7.2), hx + 5.8, hy + 2.2); bp.quadraticCurveTo(hx + 4, hy + 4.4, hx + 2.2, hy + 3.7); bp.quadraticCurveTo(hx + .2, hy + 3.2, hx - .8, hy + .3); bp.closePath();
-    g.fillStyle = hairFill; g.fill(bp); outline(bp, .6);
+    g.fillStyle = c.beardSolid || hairFill; g.fill(bp); outline(bp, .6);
     g.strokeStyle = 'rgba(60,25,15,.9)'; g.lineWidth = .6; g.beginPath(); g.moveTo(hx + 2.4, hy + 3.5); g.lineTo(hx + 4.6, hy + 3.3); g.stroke();
     g.strokeStyle = rgbaC(lite(HR, .4), .5); g.lineWidth = .4; for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(hx + i * 1.5, hy + 4.5); g.lineTo(hx + .6 + i * 1.3, hy + (lg ? 13 : 7)); g.stroke(); }
   }
@@ -2385,6 +3189,12 @@ function drawHeroP(c, x, y, f, a, punch) {
     g.fillStyle = gLG(g, hx - 7, 0, hx + 7, 0, [[0, dark(c.beanie, .4)], [.6, c.beanie], [1, lite(c.beanie, .3)]]); g.fill(bn); outline(bn, .7);
     g.strokeStyle = rgbaC(dark(c.beanie, .45), .7); g.lineWidth = .45; for (let i = -2; i <= 3; i++) { g.beginPath(); g.moveTo(hx + i * 1.8, hy - 4.6); g.lineTo(hx + i * 1.5, hy - 10); g.stroke(); }
     g.strokeStyle = dark(c.beanie, .15); g.lineWidth = 2.2; g.beginPath(); g.moveTo(hx - 6, hy - 2.4); g.quadraticCurveTo(hx, hy - 5.4, hx + 5.9, hy - 3.4); g.stroke();
+  }
+  if (c.hat === 'helmet') { // casque militaire camouflé
+    const hm = new Path2D(); hm.moveTo(hx - 7.6, hy - .4); hm.quadraticCurveTo(hx - 8.4, hy - 12.6, hx, hy - 12.4); hm.quadraticCurveTo(hx + 8, hy - 12, hx + 7.6, hy - 1.6); hm.quadraticCurveTo(hx, hy - 3.6, hx - 7.6, hy - .4); hm.closePath();
+    g.fillStyle = gLG(g, hx - 8, 0, hx + 8, 0, [[0, '#2e3818'], [.6, '#5a6a34'], [1, '#7a8a4a']]); g.fill(hm); g.save(); g.clip(hm); camoPattern(g, hx - 9, hy - 13, 18, 12); g.restore(); outline(hm, .7);
+    g.strokeStyle = '#2a2a1a'; g.lineWidth = 1.6; g.beginPath(); g.moveTo(hx - 8.2, hy - .6); g.quadraticCurveTo(hx, hy - 3.4, hx + 8.4, hy - 1.8); g.stroke();
+    g.strokeStyle = '#3a3020'; g.lineWidth = .6; g.beginPath(); g.moveTo(hx - 5.5, hy - 1); g.quadraticCurveTo(hx - 3, hy + 7, hx + 3, hy + 7.5); g.stroke();
   }
   if (c.kufi) { // kufi : petit bonnet rond, brodé d'or
     const kp = new Path2D(); kp.moveTo(hx - 5.8, hy - 3); kp.lineTo(hx - 5.6, hy - 9); kp.quadraticCurveTo(hx, hy - 10.6, hx + 5.6, hy - 9); kp.lineTo(hx + 5.6, hy - 3.4); kp.quadraticCurveTo(hx, hy - 5, hx - 5.8, hy - 3); kp.closePath();
@@ -2488,7 +3298,7 @@ function sprite(x, y, W, flip, parts, det) {
 
 // ---------- Petits anges ----------
 function drawAngel(a, i) {
-  const x = a.x - cam, y = a.y + 2, t = Date.now() + (i || 0) * 170, s = a.gold ? 1.2 : 1.05, g = ctx, flap = Math.sin(t / 85) * .35, G = a.gold;
+  const x = a.x - cam, y = a.y + 2, t = Date.now() + (i || 0) * 170, s = a.gold ? 1.02 : .88, g = ctx, flap = Math.sin(t / 85) * .35, G = a.gold;
   g.save(); g.globalCompositeOperation = 'lighter'; g.fillStyle = gRG(g, x, y, 0, (G ? 30 : 24) * s, [[0, G ? 'rgba(255,205,60,.75)' : 'rgba(255,235,170,.5)'], [1, 'rgba(255,220,140,0)']]); g.fillRect(x - 30 * s, y - 30 * s, 60 * s, 60 * s); g.restore();
   for (const side of [-1, 1]) { g.save(); g.translate(x + side * 1.5 * s, y - 3 * s); g.rotate(side * (-.5 + flap)); g.scale(side, 1);
     for (let k = 0; k < 5; k++) { g.fillStyle = gLG(g, 0, 0, 14 * s, 0, G ? [[0, 'rgba(255,250,220,.97)'], [1, 'rgba(240,' + (190 - k * 8) + ',60,.92)']] : [[0, 'rgba(255,255,255,.97)'], [1, 'rgba(' + (200 - k * 10) + ',' + (222 - k * 5) + ',255,.9)']]); g.beginPath(); g.ellipse(5 * s + k * 1.6 * s, -2 * s + k * 2.2 * s, (9 - k) * s, 2.4 * s, -.35 + k * .18, 0, 7); g.fill(); }
@@ -2836,7 +3646,7 @@ function drawGrade(L, T) {
 }
 
 // ---------- Écran de choix : 12 héros sur deux rangées ----------
-const SEL_COLS = 6, SEL_Y = 58, SEL_H = 160;
+const SEL_COLS = 7, SEL_Y = 58, SEL_H = 160;
 function drawSelect() {
   cam = 0; const CW = 800 / SEL_COLS, t = Date.now();
   ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#1a1036'], [.6, '#2e1d55'], [1, '#3a2466']]); ctx.fillRect(0, 0, 800, 400);
@@ -2851,7 +3661,7 @@ function drawSelect() {
     if (!unlocked(i)) ctx.globalAlpha = .28; drawHeroP(c, 0, 0, 1, on ? { k:0, air:false, v:2 } : { k:-1, air:false, v:0 }, false); ctx.restore(); ctx.globalAlpha = 1;
     if (!unlocked(i)) label('🔒', cx, y0 + 66, 26, '#fff');
     ctx.textAlign = 'center'; ctx.fillStyle = on ? '#fff' : '#cfc6e8'; ctx.font = 'bold 16px Trebuchet MS, sans-serif'; ctx.fillText(c.name, cx, y0 + 126);
-    ctx.fillStyle = on ? '#ffc83d' : '#9a8cc0'; ctx.font = 'bold 10px Trebuchet MS, sans-serif'; ctx.fillText(unlocked(i) ? c.desc : 'Libère ' + unlockNeed(i) + ' captifs', cx, y0 + 143, 116); // texte resserré s'il est trop long (certaines langues)
+    ctx.fillStyle = on ? '#ffc83d' : '#9a8cc0'; ctx.font = 'bold 10px Trebuchet MS, sans-serif'; ctx.fillText(unlocked(i) ? c.desc : 'Libère ' + unlockNeed(i) + ' captifs', cx, y0 + 143, 100); // texte resserré s'il est trop long (certaines langues)
   });
   ctx.fillStyle = '#fff'; ctx.font = '14px Trebuchet MS, sans-serif'; ctx.fillText('Flèches pour choisir, Espace ou Entrée pour jouer — ou touche un serviteur, puis touche-le encore', 400, 392);
 }
@@ -3024,7 +3834,7 @@ const TOUCH = matchMedia('(pointer:coarse)').matches;
 function heroAt(c, X, Y, s, f, a, punch) { const oc = cam; cam = 0; ctx.save(); ctx.translate(X, Y); ctx.scale(s, s); drawHeroP(c, -18, -60, f, a, punch); ctx.restore(); cam = oc; }
 
 // ----- l'écran de choix du mode -----
-function drawMode() {
+function drawModeOld() {
   const t = Date.now();
   ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#2a1b4a'], [1, '#140c26']]); ctx.fillRect(0, 0, 800, 400);
   label('CHOISIS TON MODE DE JEU', 400, 50, 30, '#ffc83d');
@@ -3171,7 +3981,7 @@ function tdUpdate() {
   for (const k of coins) if (!k.got && Math.abs(k.x - H.x) < 20 && Math.abs(k.y - (H.y - 14)) < 24) pickGem(k, c);
   for (const e of encs) if (!e.got && Math.abs(e.x - H.x) < 50 && Math.abs(e.y - (H.y - 30)) < 30) pickEnc(e);
   // les anges suivent le héros en nuée
-  angels.forEach((a, i) => { const ring = 22 + Math.sqrt(i) * 7, an = i * 2.4 + levelT * .02, tx = H.x + Math.cos(an) * ring - H.dx * 26, ty = H.y - 46 + Math.sin(an) * ring * .5; a.x += (tx - a.x) * .08; a.y += (ty - a.y) * .08; });
+  { const nb = Math.min(angels.length, BIG_ANGELS); angels.forEach((a, i) => { let tx, ty; if (i < BIG_ANGELS) { const an = Math.PI * (1.04 + .92 * (i + .5) / nb), rad = 48 + (i % 3) * 13; tx = H.x + Math.cos(an) * rad * 1.15; ty = H.y - 58 + Math.sin(an) * rad * .8; } else { const j = i - BIG_ANGELS, an = j * 2.39996 + levelT * .01, rad = 90 + Math.sqrt(j) * 5; tx = H.x + Math.cos(an) * rad; ty = H.y - 112 - Math.abs(Math.sin(an)) * rad * .3; } a.x += (tx - a.x) * .08; a.y += (ty - a.y) * .08; }); }
   p.x = H.x - 18; p.y = H.y - 60; // la pluie de foudre (V) place ses messages au-dessus du héros
   updateStorm();
   // victoire sur le géant : la horde s'enfuit (géré par damageFoe), la cage s'ouvre, un passage de lumière apparaît
@@ -3267,7 +4077,7 @@ function tdDraw() {
   if (cage && vis(cage.x + cage.w / 2, cage.y, 160)) E.push([cage.y, () => drawCaptives()]);
   if (vscroll && !vscroll.got && vis(vscroll.x, vscroll.y, 30)) E.push([vscroll.y, () => { tdShadow(vscroll.x, vscroll.y, 11); drawScrollItem(vscroll.x - cam, vscroll.y - 24, t); }]);
   tdLot3Draw(E, vis, t);
-  tdP2Draw(E, vis);
+  tdP2Draw(E, vis); tdCritDraw(E, vis);
   for (const sg of T.signs || []) if (vis(sg.x, sg.y, 80)) E.push([sg.y, () => tdDrawSign(sg)]);
   E.push([H.y, () => { tdShadow(H.x, H.y, 14); if (!(H.inv > 0 && Math.floor(H.inv / 5) % 2)) { if (Math.abs(H.dy) > Math.abs(H.dx) * 1.2 && H.punch <= 0) drawHeroFB(hero(), H.x - 18, H.y - 60, H.dy < 0, levelT * .28, Math.hypot(H.vx, H.vy) > .4); else drawHeroP(hero(), H.x - 18, H.y - 60, H.face, { air:false, k:Math.hypot(H.vx, H.vy) > .4 ? 0 : -1, v:Math.hypot(H.vx, H.vy) * 1.6, fast:false }, H.punch > 0); } }]);
   if (T.portal) E.push([T.portal.y, () => { const X = T.portal.x - cam, Y = T.portal.y; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y - 40, 4, 70, [[0, 'rgba(255,255,230,.9)'], [.4, 'rgba(255,230,140,.45)'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 70, Y - 120, 140, 140); ctx.fillStyle = LG(X - 16, 0, X + 16, 0, [[0, 'rgba(255,240,180,0)'], [.5, 'rgba(255,250,220,.8)'], [1, 'rgba(255,240,180,0)']]); ctx.fillRect(X - 16, Y - 160 + Math.sin(t / 200) * 4, 32, 160); ctx.restore(); }]);
@@ -3286,6 +4096,7 @@ function tdDraw() {
   for (const x of texts) { ctx.globalAlpha = Math.min(1, x.life / 25); label(x.t, Math.max(90, Math.min(710, x.x - cam)), x.y, x.big ? 26 : 16, x.col); ctx.globalAlpha = 1; }
   ctx.restore();
   if (flash > .02) { ctx.fillStyle = 'rgba(235,235,255,' + (flash * .6).toFixed(2) + ')'; ctx.fillRect(0, 0, 800, 400); }
+  tdSky();
   tdDarkness();
   tdHUD();
   tdMiniMap();
@@ -3768,6 +4579,7 @@ function drawHeroFB(c, x, y, back, ph, moving) {
   if (c.hat === 'cap') { gEll(ctx, X, y + 5, 8.5, 4.5, c.jacket || '#4a74b8'); if (!back) gEll(ctx, X, y + 7.5, 7, 2, dark(c.jacket || '#4a74b8', .25)); }
   if (c.kufi) gEll(ctx, X, y + 4, 7.5, 4, c.kufi);
   if (c.beanie) gEll(ctx, X, y + 4.5, 8.5, 5, c.beanie);
+  if (c.hat === 'helmet') { gEll(ctx, X, y + 5, 9.5, 6, '#4a5a2a'); ctx.fillStyle = '#2a2a1a'; ctx.fillRect(X - 9.5, y + 7, 19, 2); }
   if (c.band) { ctx.fillStyle = '#d62020'; ctx.fillRect(X - 8, y + 6, 16, 2.4); }
   if (c.crown) { ctx.fillStyle = '#ffd23a'; ctx.beginPath(); ctx.moveTo(X - 7, y + 4); for (let i = 0; i <= 4; i++) ctx.lineTo(X - 7 + i * 3.5, y + (i % 2 ? 3.5 : -1)); ctx.lineTo(X + 7, y + 4); ctx.fill(); }
   if (c.halo && !back) { ctx.strokeStyle = 'rgba(255,215,90,.95)'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.ellipse(X, y - 1, 10, 3.5, 0, Math.PI, 0); ctx.stroke(); }
@@ -4032,8 +4844,9 @@ function tdBegin(mode, lv, sc, fa) {
 function tdRetry() { tdBegin(tdMode, tdLv, td.startScore, faith); }
 function tdPortal() {
   score += 200; sfx('ok');
-  if (tdMode === 'levels' && tdLv < LEVELS.length - 1) { saveJ('sj-save-td', { level:tdLv + 1, score, faith }); go('tdnext'); }
-  else { if (tdMode === 'levels') saveJ('sj-save-td', null); go('tdwin'); }
+  if (tdMode === 'levels' && tdLv < LEVELS.length - 1) { saveJ('sj-save-td', { level:tdLv + 1, score, faith }); quizGo(tdLv, () => go('tdnext')); }
+  else if (tdMode === 'levels') { saveJ('sj-save-td', null); quizGo(tdLv, () => cineGo('end', () => go('tdwin'))); }
+  else go('tdwin');
 }
 function tdNextLevel() {
   if (hero().lifeLvl) lives = Math.min(9, lives + 1);
@@ -4065,17 +4878,776 @@ function drawTdPick() {
   ctx.fillText('Flèches pour choisir, Espace ou Entrée pour valider — ou touche une carte', 400, 360, 760);
 }
 
+// ===================== Lot 6 : Nouveau Testament, voix, quiz, cinématiques, course, Nouveau Jeu+, météo, jour et nuit, animaux, paraboles =====================
+const LIX = () => Math.max(0, LANGS.indexOf(LANG));
+const L8 = a => a ? (a[LIX()] || a[0]) : '';
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const fmtT = f => { const s = f / 60, m = Math.floor(s / 60), r = s - m * 60; return m + ':' + (r < 10 ? '0' : '') + r.toFixed(1); };
+function camoPattern(g, x, y, w, h) { const C = ['#3c4824', '#8a7e4c', '#26261a', '#556a32']; for (let i = 0; i < 18; i++) { g.fillStyle = C[i % 4]; g.beginPath(); g.ellipse(x + hsh(i * 7 + 1) * w, y + hsh(i * 13 + 5) * h, 1.6 + hsh(i) * 2.4, 1 + hsh(i + 9) * 1.5, hsh(i + 4) * 3, 0, 7); g.fill(); } }
+SFX.baa = () => { tone(560, .34, 'sawtooth', .03, 0, 470); tone(566, .34, 'triangle', .04, 0, 480); };
+
+// ----- les récits recentrés sur Jésus, les Évangiles et les Épîtres -----
+Object.assign(BOOKS, NEW_BOOKS);
+for (const k in NEW_VERSES) VERSES[k] = NEW_VERSES[k];
+for (const k in NEW_STORIES) STORIES[k] = NEW_STORIES[k];
+LEVELS[11].name = 'Le passage de la mer';
+Object.assign(LEVELS[12], { name:'La Transfiguration', sub:'Jésus brille comme le soleil : prends le char de feu !' });
+Object.assign(LEVELS[13], { name:'Éphèse', sub:'Les livres de magie brûlent : chasse les démons !' });
+Object.assign(LEVELS[14], { name:"L'Ascension", sub:'Jésus monte au ciel : file vers le ciel sur le char de feu !' });
+LEVELS[15].name = "L'île de Malte";
+LEVELS[16].name = 'La gueule du lion';
+LEVELS[21].name = 'La lumière dans les ténèbres';
+
+// ----- 11. la voix qui lit les récits, les versets et le quiz -----
+let voiceOn = loadJ('sj-voice', true);
+const VOICE_LANG = { fr:'fr-FR', en:'en-US', es:'es-ES', it:'it-IT', pt:'pt-BR', ln:'fr-FR', sw:'sw-KE', ar:'ar-SA' };
+function setVoice(on) { voiceOn = on; saveJ('sj-voice', on); sfx('blip'); if (!on) hush(); }
+function hush() { try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} }
+function speak(txt) {
+  if (!voiceOn || muted || !txt || !window.speechSynthesis) return;
+  try {
+    const u = new SpeechSynthesisUtterance(String(txt).replace(/[«»“”"|]/g, ' ').replace(/…/g, '...'));
+    const lg = VOICE_LANG[LANG] || 'fr-FR', vs = speechSynthesis.getVoices();
+    u.lang = lg; u.rate = .95; u.pitch = 1.05;
+    const v = vs.find(x => x.lang === lg) || vs.find(x => x.lang && x.lang.slice(0, 2) === lg.slice(0, 2)); if (v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch (e) {}
+}
+{ const g0 = gotScroll; gotScroll = function () { g0(); if (verseShow) speak(verseText(verseShow.i)); }; }
+
+// ----- 4. Nouveau Jeu+ -----
+let ngCount = loadJ('sj-ng', 0), ngOn = loadJ('sj-ngon', true), race = false;
+const ngActive = () => ngOn && ngCount > 0 && !race;
+{ const h0 = hardenFoes; hardenFoes = function (hd) {
+  h0(hd); if (!ngActive()) return;
+  const k = 1 + .5 * Math.min(3, ngCount);
+  for (const f of foes) if (!f.lion && !f.ngd && f.hp) { f.hp = Math.max(1, Math.round(f.hp * k)); if (f.hpMax) f.hpMax = f.hp; f.ngd = 1; }
+  if (hd) hd.pool = Math.round(hd.pool * (1 + .25 * Math.min(3, ngCount)));
+}; }
+
+// chaque changement d'écran : la voix, les victoires
+{ const go0 = go; go = function (s) { go0(s); onState(s); }; }
+function onState(s) {
+  if (s === 'next' || s === 'tdnext') speak(storyText(Math.min(LEVELS.length - 1, level + 1)));
+  if (s === 'win' || (s === 'tdwin' && tdMode === 'levels')) { ngCount++; saveJ('sj-ng', ngCount); saveJ('sj-ngang', Math.min(300, angels.length)); }
+  if (s === 'paraend' && para) speak(L8(PARA_TXT[para.k].verse));
+  if (s === 'mode' || s === 'title' || s === 'select') hush();
+}
+
+// une nouvelle partie : les anges gardés (Nouveau Jeu+) puis la cinématique du début
+function newGameExtras(then) {
+  if (ngActive()) { const n = loadJ('sj-ngang', 0); for (let i = 0; i < n && angels.length < MAX_ANGELS; i++) angels.push({ x:p.x + 18, y:p.y }); }
+  cineGo('intro', then);
+}
+{ const s0 = start; start = function (fresh) {
+  if (race) { if (!unlocked(sel)) { sfx('hurt'); return; } sfx('ok'); go('racepick'); return; }
+  s0(fresh);
+  if (state === 'play' && level === 0 && score === 0) newGameExtras(() => go('play'));
+}; }
+{ const b0 = tdBegin; tdBegin = function (mode, lv, sc, fa) { b0(mode, lv, sc, fa); if (mode === 'levels' && lv === 0 && !sc) newGameExtras(() => go('tdplay')); }; }
+
+// la fin d'un niveau : quiz, puis carte (ou cinématique de fin)
+function levelDone() {
+  if (race) { raceFinish(); return; }
+  if (level < LEVELS.length - 1) quizGo(level, () => go('next'));
+  else quizGo(level, () => cineGo('end', () => go('win')));
+}
+
+// ----- 9. le quiz biblique -----
+let quiz = null;
+function quizGo(lv, then) { const Q = QZ[lv]; if (!Q) { then(); return; } quiz = { qs:Q, qi:0, then, got:0 }; quizSetup(); go('quiz'); }
+function quizSetup() {
+  const q = quiz; q.order = shuffle([1, 2, 3]); q.sel = 0; q.done = false; q.t = 0; q.parts = L8(q.qs[q.qi]).split('|');
+  speak(q.parts[0] + ' ' + q.order.map((k, i) => (i + 1) + '. ' + q.parts[k] + '.').join(' '));
+}
+function quizAnswer(i) {
+  const q = quiz; if (!q || q.done) return; q.sel = i; q.done = true; q.t = 0; q.right = q.order[i] === 1;
+  if (q.right) { q.got++; score += 100; sfx('heal'); for (let k = 0; k < 5 && angels.length < MAX_ANGELS; k++) angels.push({ x:p.x + 18 + (rnd() - .5) * 60, y:p.y - 30 }); speak(tr('Bravo ! +5 anges')); }
+  else { sfx('hurt'); speak(q.parts[1]); }
+}
+function quizNext() {
+  const q = quiz; if (!q || !q.done || q.t < 30) return;
+  if (++q.qi >= q.qs.length) { quiz = null; hush(); q.then(); } else quizSetup();
+}
+function quizKey(k) {
+  const q = quiz; if (!q) return;
+  if (q.done) { quizNext(); return; }
+  if (k === '1' || k === '2' || k === '3') quizAnswer(+k - 1);
+  else if (['ArrowUp', 'w', 'W', 'ArrowLeft', 'a'].includes(k)) { q.sel = (q.sel + 2) % 3; sfx('blip'); }
+  else if (['ArrowDown', 's', 'S', 'ArrowRight', 'd'].includes(k)) { q.sel = (q.sel + 1) % 3; sfx('blip'); }
+  else if ([' ', 'Enter', 'x', 'z'].includes(k)) quizAnswer(q.sel);
+}
+function quizPointer(X, Y) { const q = quiz; if (!q) return; if (q.done) { quizNext(); return; } for (let i = 0; i < 3; i++) if (Y > 166 + i * 54 && Y < 214 + i * 54 && X > 70 && X < 730) { quizAnswer(i); return; } }
+function drawQuiz() {
+  const q = quiz; if (!q) return; q.t++; const oc = cam, t = Date.now(); cam = 0;
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#2a1a3e'], [1, '#120a1e']]); ctx.fillRect(0, 0, 800, 400);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(400, 30, 0, 380, [[0, 'rgba(255,215,120,.22)'], [1, 'rgba(255,215,120,0)']]); ctx.fillRect(0, 0, 800, 400); ctx.restore();
+  label('QUIZ BIBLIQUE', 400, 34, 26, '#ffc83d');
+  ctx.textAlign = 'center'; ctx.fillStyle = '#cfc6e8'; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.fillText(LEVELS[Math.min(level, LEVELS.length - 1)].name, 400, 54);
+  ctx.textAlign = 'right'; ctx.fillText((q.qi + 1) + ' / ' + q.qs.length, 770, 30); ctx.textAlign = 'center';
+  rrPath(ctx, 60, 64, 680, 92, 14); ctx.fillStyle = LG(0, 64, 0, 156, [[0, '#f4e4bc'], [1, '#dcc48e']]); ctx.fill(); ctx.strokeStyle = '#8a5a2a'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = '#3a2408'; ctx.font = 'bold 19px Georgia, serif';
+  const ql = wrapText(q.parts[0], 640).slice(0, 3); ql.forEach((l, i) => ctx.fillText(l, 400, 112 + (i - (ql.length - 1) / 2) * 23));
+  for (let i = 0; i < 3; i++) {
+    const y = 166 + i * 54, k = q.order[i], ok = k === 1, on = q.sel === i;
+    let fill = 'rgba(255,255,255,.08)', stroke = 'rgba(255,255,255,.25)';
+    if (!q.done && on) { fill = 'rgba(110,70,190,.85)'; stroke = '#ffc83d'; }
+    if (q.done && ok) { fill = 'rgba(46,138,62,.9)'; stroke = '#9ae89a'; }
+    if (q.done && on && !ok) { fill = 'rgba(168,50,50,.9)'; stroke = '#ff9a8a'; }
+    rrPath(ctx, 80, y, 640, 46, 12); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.lineWidth = on || (q.done && ok) ? 3 : 1.5; ctx.stroke();
+    gEll(ctx, 106, y + 23, 15, 15, 'rgba(255,215,120,.9)'); ctx.fillStyle = '#3a2408'; ctx.font = 'bold 17px Trebuchet MS, sans-serif'; ctx.fillText(String(i + 1), 106, y + 29);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 18px Trebuchet MS, sans-serif'; ctx.fillText(q.parts[k], 420, y + 29, 560);
+  }
+  if (q.done) {
+    if (q.right) { label('Bravo ! +5 anges', 400, 352, 22, '#ffe27a'); [110, 190, 610, 690].forEach((x, i) => drawAngel({ x, y:362 + Math.sin(t / 200 + i) * 4 - Math.min(14, q.t / 2) }, i)); }
+    else { label('Pas tout à fait… La bonne réponse :', 400, 340, 16, '#ffb0a0'); label(q.parts[1], 400, 362, 18, '#fff'); }
+    if (q.t > 30) { ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '13px Trebuchet MS, sans-serif'; ctx.fillText('Touche pour continuer', 400, 392); }
+  } else { ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '13px Trebuchet MS, sans-serif'; ctx.fillText('Touche une réponse, ou appuie sur 1, 2 ou 3', 400, 372); }
+  cam = oc;
+}
+
+// ----- 8. les cinématiques du début et de la fin -----
+let cine = null;
+const APOSTLES = [
+  Object.assign({}, CHARS[0], { name:'a1', halo:false, robe:'#b8a07a', top:'#e8dcc0', sash:'#3a6a9a', trim:null, hair:'#2a1a10', skin:'#b88458', beard:'short' }),
+  Object.assign({}, CHARS[0], { name:'a2', halo:false, robe:'#8a5a3a', top:'#d8c8a8', sash:'#6a8a3a', trim:null, hair:'#5a3a20', skin:'#c8946a' }),
+  Object.assign({}, CHARS[0], { name:'a3', halo:false, robe:'#5a6a8a', top:'#e8e0d0', sash:'#b3122e', trim:null, hair:'#1a120c', skin:'#9a6a44', beard:false }),
+];
+function cineGo(kind, then) { cine = { kind, i:0, t:0, then }; go('cine'); speak(L8(CINE_TXT[kind][0])); }
+function cineNext() { const c = cine; if (!c || c.t < 20) return; c.i++; c.t = 0; if (c.i >= CINE_TXT[c.kind].length) { cine = null; hush(); c.then(); } else speak(L8(CINE_TXT[c.kind][c.i])); }
+function cineSkip() { const c = cine; if (!c) return; cine = null; hush(); c.then(); }
+function cineSky(c0, c1, stars) {
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, c0], [1, c1]]); ctx.fillRect(0, 0, 800, 400);
+  if (stars) for (let i = 0; i < 120; i++) { const tw = .4 + .6 * Math.abs(Math.sin(Date.now() / 700 + i)), s = hsh(i + 9) > .85 ? 2 : 1; ctx.fillStyle = 'rgba(255,255,255,' + (tw * (1 - hsh(i + 5) * .5)).toFixed(2) + ')'; ctx.fillRect(hsh(i) * 800, hsh(i + 50) * 260, s, s); }
+}
+function cineHills(y, col, amp, f, ph) { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(0, 400); for (let x = 0; x <= 800; x += 20) ctx.lineTo(x, y + Math.sin(x / f + ph) * amp + Math.sin(x / (f * .37) + ph * 2) * amp * .35); ctx.lineTo(800, 400); ctx.fill(); }
+const CINE_I = [
+  t => { // Bethléem, la nuit, l'étoile
+    cineSky('#050820', '#1e2c5e', true);
+    const sx = 560, sy = 70, r = 1 + Math.sin(t / 20) * .1;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = RG(sx, sy, 0, 140, [[0, 'rgba(255,245,200,.6)'], [1, 'rgba(255,240,200,0)']]); ctx.fillRect(sx - 140, sy - 140, 280, 280);
+    ctx.fillStyle = LG(0, sy, 0, 262, [[0, 'rgba(255,240,190,.28)'], [1, 'rgba(255,240,190,0)']]); ctx.beginPath(); ctx.moveTo(sx - 6, sy); ctx.lineTo(sx + 6, sy); ctx.lineTo(sx - 4, 262); ctx.lineTo(sx - 76, 262); ctx.fill();
+    ctx.translate(sx, sy); ctx.rotate(t / 300); ctx.fillStyle = '#fffbe8'; for (let i = 0; i < 8; i++) { const L = (i % 2 ? 14 : 30) * r; ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(-2.5, 0); ctx.lineTo(0, -L); ctx.lineTo(2.5, 0); ctx.fill(); }
+    ctx.restore();
+    cineHills(258, '#141a36', 14, 140, 1);
+    for (let i = 0; i < 9; i++) { const x = 30 + i * 46, w = 34 + hsh(i) * 14, h = 24 + hsh(i + 3) * 26, y = 262 - h + Math.sin(i) * 4; ctx.fillStyle = '#1c2244'; ctx.fillRect(x, y, w, h + 40); if (hsh(i + 7) > .5) { ctx.beginPath(); ctx.arc(x + w / 2, y, w * .3, Math.PI, 0); ctx.fill(); } if (hsh(i + 11) > .4) { ctx.fillStyle = 'rgba(255,200,110,.85)'; ctx.fillRect(x + w * .4, y + h * .4, 5, 6); } }
+    cineHills(300, '#0c1028', 8, 200, 3);
+    const bx = 520, by = 290; ctx.fillStyle = '#2a1c14'; ctx.beginPath(); ctx.moveTo(bx - 54, by - 38); ctx.lineTo(bx, by - 68); ctx.lineTo(bx + 54, by - 38); ctx.fill(); ctx.fillRect(bx - 46, by - 40, 6, 42); ctx.fillRect(bx + 40, by - 40, 6, 42);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(bx, by - 10, 0, 74, [[0, 'rgba(255,220,140,.85)'], [1, 'rgba(255,200,100,0)']]); ctx.fillRect(bx - 74, by - 84, 148, 148); ctx.restore();
+    ctx.fillStyle = '#8a5a2a'; ctx.fillRect(bx - 12, by - 7, 24, 8); gEll(ctx, bx, by - 8, 9, 3.5, '#f4e8c8'); gEll(ctx, bx + 5, by - 10, 3, 2.6, '#e8b890');
+    for (const [x, h, col, face] of [[bx - 28, 30, '#3a5a9a', '#dcc4a4'], [bx + 30, 36, '#6a4a2a', '#c09070']]) { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x - 9, by + 2); ctx.lineTo(x - 5, by - h + 8); ctx.lineTo(x + 5, by - h + 8); ctx.lineTo(x + 9, by + 2); ctx.fill(); gEll(ctx, x, by - h + 4, 5, 5.5, face); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, by - h + 2, 6, Math.PI, 0); ctx.fill(); }
+  },
+  t => { // la Galilée : Jésus et ses apôtres
+    cineSky('#5fb4ff', '#d8f0ff'); gEll(ctx, 680, 70, 30, 30, '#fff4c0');
+    cineHills(222, '#8ab87a', 18, 160, 0);
+    ctx.fillStyle = LG(0, 238, 0, 300, [[0, '#4aa0d8'], [1, '#2a78b0']]); ctx.fillRect(470, 238, 330, 62);
+    cineHills(292, '#6aa84a', 6, 120, 2); ctx.fillStyle = '#d8c08a'; ctx.fillRect(0, 302, 800, 98);
+    const x0 = -80 + Math.min(t * 1.3, 380);
+    APOSTLES.forEach((a, i) => heroAt(a, x0 + 96 - i * 50, 318, 1.2, 1, { k:0, v:2 }, false));
+    heroAt(CHARS[0], x0 + 160, 318, 1.3, 1, { k:0, v:2 }, false);
+    const j = Math.abs(Math.sin(t / 14)) * 30, healed = CHARS.find(c => c.name === 'Mayele') || CHARS[1];
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(660, 280 - j, 0, 56, [[0, 'rgba(255,240,180,.5)'], [1, 'rgba(255,240,180,0)']]); ctx.fillRect(600, 220 - j, 120, 120); ctx.restore();
+    heroAt(healed, 660, 318 - j, 1.15, -1, { k:-1, v:0, air:j > 4 }, false);
+  },
+  t => { // les captifs enchaînés
+    cineSky('#120408', '#4a0e12');
+    if (t % 160 < 4) { ctx.fillStyle = 'rgba(255,220,220,.3)'; ctx.fillRect(0, 0, 800, 400); }
+    cineHills(250, '#24080c', 26, 90, 1);
+    const cx = 400, cy = 300; gEll(ctx, cx, cy + 4, 140, 12, 'rgba(0,0,0,.5)');
+    ['Wisdom', 'Mayele', 'Sista', 'Ngolu'].forEach((nm, i) => { const c = CHARS.find(q => q.name === nm) || CHARS[i + 1]; ctx.globalAlpha = .8; heroAt(c, cx - 75 + i * 50, cy, 1.1, i % 2 ? -1 : 1, { k:-1, v:0 }, false); ctx.globalAlpha = 1; });
+    ctx.strokeStyle = '#3a3a44'; ctx.lineWidth = 4; for (let i = 0; i <= 10; i++) { ctx.beginPath(); ctx.moveTo(cx - 120 + i * 24, cy - 96); ctx.lineTo(cx - 120 + i * 24, cy + 2); ctx.stroke(); }
+    ctx.fillStyle = '#2a2a32'; ctx.fillRect(cx - 126, cy - 102, 252, 10); ctx.fillRect(cx - 126, cy, 252, 8);
+    ctx.strokeStyle = '#6a6a74'; ctx.lineWidth = 2; for (const x of [cx - 150, cx + 150]) { const sw = Math.sin(t / 40 + x) * 10; for (let k = 0; k < 11; k++) { ctx.beginPath(); ctx.ellipse(x + sw * k / 10, 50 + k * 10, 3, 5, 0, 0, 7); ctx.stroke(); } }
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 7; i++) { if (Math.sin(t / 30 + i * 2) < -.9) continue; const ex = 50 + hsh(i) * 700, ey = 140 + hsh(i + 4) * 110; gEll(ctx, ex, ey, 4, 2.2, '#ff3a2a'); gEll(ctx, ex + 12, ey, 4, 2.2, '#ff3a2a'); }
+    ctx.restore();
+  },
+  t => { // à ton tour !
+    ctx.fillStyle = RG(400, 230, 10, 460, [[0, '#ffe8a8'], [.5, '#d88a3a'], [1, '#4a1e3a']]); ctx.fillRect(0, 0, 800, 400);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.translate(400, 220); ctx.rotate(t / 500); for (let i = 0; i < 12; i++) { ctx.rotate(Math.PI / 6); ctx.fillStyle = 'rgba(255,240,200,.08)'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-40, -500); ctx.lineTo(40, -500); ctx.fill(); } ctx.restore();
+    const n = 9; for (let i = 0; i < n; i++) { const a = Math.PI * (1.08 + .84 * (i + .5) / n) + Math.sin(t / 50 + i) * .03; drawAngel({ x:400 + Math.cos(a) * 170, y:250 + Math.sin(a) * 140 }, i); }
+    heroAt(hero(), 400, 300, 2.1, 1, { k:-1, v:0 }, false);
+  },
+];
+const CINE_E = [
+  t => { // le Golgotha au coucher du soleil
+    cineSky('#3a1a3a', '#f08a3a'); gEll(ctx, 400, 250, 70, 70, 'rgba(255,200,120,.9)');
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(400, 250, 0, 300, [[0, 'rgba(255,180,90,.45)'], [1, 'rgba(255,160,80,0)']]); ctx.fillRect(0, 0, 800, 400); ctx.restore();
+    ctx.fillStyle = '#1a0c14'; ctx.beginPath(); ctx.moveTo(0, 400); ctx.lineTo(0, 330); ctx.quadraticCurveTo(400, 200, 800, 330); ctx.lineTo(800, 400); ctx.fill();
+    for (const [x, s] of [[320, .75], [400, 1], [480, .75]]) { const y = x === 400 ? 268 : 280; ctx.fillRect(x - 4 * s, y - 120 * s, 8 * s, 124 * s); ctx.fillRect(x - 34 * s, y - 96 * s, 68 * s, 7 * s); }
+  },
+  t => { // le tombeau vide
+    cineSky('#9ac8f0', '#ffe8c8'); cineHills(250, '#7aa86a', 12, 130, 1);
+    ctx.fillStyle = '#8a7e6a'; ctx.beginPath(); ctx.moveTo(250, 332); ctx.quadraticCurveTo(260, 170, 420, 160); ctx.quadraticCurveTo(560, 165, 570, 332); ctx.fill();
+    ctx.fillStyle = '#a89a82'; ctx.beginPath(); ctx.moveTo(280, 332); ctx.quadraticCurveTo(300, 200, 420, 190); ctx.quadraticCurveTo(470, 192, 500, 210); ctx.lineTo(460, 332); ctx.fill();
+    ctx.fillStyle = '#2a2218'; ctx.beginPath(); ctx.ellipse(410, 290, 36, 44, 0, Math.PI, 0); ctx.lineTo(446, 332); ctx.lineTo(374, 332); ctx.fill();
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; const pl = .7 + .3 * Math.sin(t / 25);
+    ctx.fillStyle = RG(410, 300, 0, 170, [[0, 'rgba(255,250,220,' + pl.toFixed(2) + ')'], [1, 'rgba(255,240,200,0)']]); ctx.fillRect(240, 130, 340, 270);
+    for (let i = 0; i < 7; i++) { const a = -Math.PI / 2 + (i - 3) * .3; ctx.fillStyle = 'rgba(255,250,220,.12)'; ctx.beginPath(); ctx.moveTo(410, 300); ctx.lineTo(410 + Math.cos(a - .05) * 320, 300 + Math.sin(a - .05) * 320); ctx.lineTo(410 + Math.cos(a + .05) * 320, 300 + Math.sin(a + .05) * 320); ctx.fill(); }
+    ctx.restore();
+    const rx = 500 + Math.min(44, t * .5); gEll(ctx, rx, 298, 34, 34, '#6a6050'); gEll(ctx, rx - 8, 288, 22, 20, '#7e7462');
+    ctx.fillStyle = '#5a9a3a'; ctx.fillRect(0, 330, 800, 70); for (let i = 0; i < 18; i++) gEll(ctx, hsh(i) * 800, 342 + hsh(i + 3) * 50, 3, 3, ['#f4f0e6', '#ffd23a', '#e86aa0'][i % 3]);
+    drawAngel({ x:320, y:258 + Math.sin(t / 30) * 4 }, 0);
+  },
+  t => { // les captifs libérés dansent
+    cineSky('#5fb4ff', '#fff0d0'); cineHills(280, '#7ab86a', 10, 140, 0); ctx.fillStyle = '#d8c08a'; ctx.fillRect(0, 318, 800, 82);
+    CHARS.slice(1, 12).forEach((c, i) => { const j = Math.abs(Math.sin(t / 12 + i * .9)) * 26; heroAt(c, 52 + i * 69, 332 - j, 1.05, i % 2 ? -1 : 1, { k:0, v:2, air:j > 5 }, false); });
+    for (let i = 0; i < 46; i++) { const x = (hsh(i) * 800 + t * (1 + hsh(i + 2))) % 800, y = (hsh(i + 7) * 400 + t * (1.5 + hsh(i + 1))) % 400; ctx.fillStyle = ['#ffd23a', '#e83a5a', '#3ab8e8', '#7ae86a'][i % 4]; ctx.fillRect(x, y, 4, 2.5); }
+  },
+  t => { // « Allez par tout le monde »
+    ctx.fillStyle = LG(0, 0, 0, 260, [[0, '#f8c890'], [1, '#fff4d8']]); ctx.fillRect(0, 0, 800, 260);
+    gEll(ctx, 400, 232, 50, 50, 'rgba(255,240,190,.95)'); cineHills(242, '#a8b87a', 8, 160, 2);
+    ctx.fillStyle = '#7a9a4a'; ctx.fillRect(0, 252, 800, 148);
+    ctx.fillStyle = '#d8c08a'; ctx.beginPath(); ctx.moveTo(388, 252); ctx.lineTo(412, 252); ctx.lineTo(580, 400); ctx.lineTo(220, 400); ctx.fill();
+    const k = Math.min(1, t / 520), list = [...APOSTLES, hero()];
+    list.forEach((c, i) => { const s = Math.max(.3, 1.7 - k * 1.1 - (3 - i) * .07), x = 400 + (i - 1.5) * 46 * s, y = 392 - k * 118 - (3 - i) * 8; ctx.save(); ctx.translate(x, y); ctx.scale(s, s); drawHeroFB(c, -18, -60, true, t * .25 + i, true); ctx.restore(); });
+  },
+];
+function drawCine() {
+  const c = cine; if (!c) return; c.t++; const oc = cam; cam = 0;
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 800, 400); ctx.save(); ctx.translate(0, -36); (c.kind === 'intro' ? CINE_I : CINE_E)[c.i](c.t); ctx.restore();
+  const a = Math.max(0, 1 - c.t / 30); if (a > 0) { ctx.fillStyle = 'rgba(0,0,0,' + a.toFixed(2) + ')'; ctx.fillRect(0, 0, 800, 400); }
+  rrPath(ctx, 40, 312, 720, 66, 14); ctx.fillStyle = 'rgba(12,8,24,.8)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,215,120,.6)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#fff6dc'; ctx.font = 'bold 18px Georgia, serif'; ctx.textAlign = 'center';
+  const L = wrapText(L8(CINE_TXT[c.kind][c.i]), 680).slice(0, 2); L.forEach((l, i) => ctx.fillText(l, 400, 351 + (i - (L.length - 1) / 2) * 22));
+  for (let i = 0; i < CINE_TXT[c.kind].length; i++) gEll(ctx, 379 + i * 14, 302, 3.5, 3.5, i === c.i ? '#ffc83d' : 'rgba(255,255,255,.4)');
+  ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '12px Trebuchet MS, sans-serif'; ctx.fillText('Touche pour continuer · Échap pour passer', 400, 394);
+  cam = oc;
+  if (c.t > 660) cineNext();
+}
+
+// ----- 3. le mode Course (contre la montre) -----
+let raceT = 0, raceSel = 0, raceRes = null, times = loadJ('sj-times', {});
+const raceUnlocked = i => i < Math.max(1, best.level || 0);
+function raceStart(n) {
+  sfx('ok'); boost = 0; rains = 0; rainMark = 0; lives = 3; score = 0; faith = hero().startFaith || 0; flameLvl = flameFor(faith);
+  level = n; angels = []; balls = []; buildLevel(n); placePlayer(); raceT = 0; go('play');
+}
+function raceFinish() { const tm = raceT, old = times[level], rec = !old || tm < old; if (rec) { times[level] = tm; saveJ('sj-times', times); } raceRes = { tm, old, rec }; sfx(rec ? 'heal' : 'ok'); go('raceend'); }
+function raceKey(k) {
+  if (k === 'Escape') { race = false; go('mode'); return; }
+  const n = LEVELS.length;
+  if (k === 'ArrowLeft' || k === 'a') raceSel = (raceSel + n - 1) % n; else if (k === 'ArrowRight' || k === 'd') raceSel = (raceSel + 1) % n;
+  else if (k === 'ArrowUp' || k === 'w') raceSel = Math.max(0, raceSel - 6); else if (k === 'ArrowDown' || k === 's') raceSel = Math.min(n - 1, raceSel + 6);
+  else if ([' ', 'Enter', 'x', 'z'].includes(k)) { if (raceUnlocked(raceSel)) raceStart(raceSel); else sfx('hurt'); return; }
+  else return;
+  sfx('blip');
+}
+function racePointer(X, Y) {
+  if (Y < 50) { race = false; go('mode'); return; }
+  const col = Math.floor((X - 16) / 130), row = Math.floor((Y - 56) / 76), i = row * 6 + col;
+  if (col < 0 || col > 5 || row < 0 || i >= LEVELS.length) return;
+  if (i === raceSel) { if (raceUnlocked(i)) raceStart(i); else sfx('hurt'); } else { raceSel = i; sfx('blip'); }
+}
+function drawRaceClock() {
+  rrPath(ctx, 336, 40, 128, 26, 9); ctx.fillStyle = 'rgba(20,12,36,.72)'; ctx.fill();
+  ctx.fillStyle = '#ffe27a'; ctx.font = 'bold 17px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('⏱ ' + fmtT(raceT), 400, 59);
+  const b = times[level]; if (b) { ctx.fillStyle = '#e8e0ff'; ctx.font = 'bold 11px Trebuchet MS, sans-serif'; ctx.fillText('★ ' + fmtT(b), 400, 79); }
+}
+function drawRacePick() {
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#1a2a4a'], [1, '#0c1426']]); ctx.fillRect(0, 0, 800, 400);
+  label('COURSE CONTRE LA MONTRE', 400, 36, 26, '#ffc83d');
+  ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = 'bold 14px Trebuchet MS, sans-serif'; ctx.textAlign = 'left'; ctx.fillText('◀', 18, 34);
+  LEVELS.forEach((L, i) => {
+    const col = i % 6, row = Math.floor(i / 6), x = 16 + col * 130, y = 56 + row * 76, w = 122, h = 68, on = i === raceSel, ok = raceUnlocked(i);
+    rrPath(ctx, x, y, w, h, 10); ctx.fillStyle = on ? 'rgba(90,120,200,.85)' : 'rgba(255,255,255,.07)'; ctx.fill(); if (on) { ctx.strokeStyle = '#ffc83d'; ctx.lineWidth = 3; ctx.stroke(); }
+    ctx.globalAlpha = ok ? 1 : .38;
+    label(String(i + 1), x + 18, y + 27, 19, '#ffe27a');
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Trebuchet MS, sans-serif'; ctx.textAlign = 'left'; ctx.fillText(L.name, x + 34, y + 25, w - 40);
+    ctx.textAlign = 'center'; ctx.fillStyle = times[i] ? '#9ae89a' : '#a8a0c8'; ctx.font = 'bold 15px Trebuchet MS, sans-serif'; ctx.fillText(times[i] ? '★ ' + fmtT(times[i]) : ok ? '—' : '🔒', x + w / 2, y + 54);
+    ctx.globalAlpha = 1;
+  });
+  ctx.fillStyle = '#e8e0ff'; ctx.font = '13px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(raceUnlocked(raceSel) ? 'Flèches pour choisir, Entrée pour courir — Échap : retour' : 'Niveau pas encore atteint', 400, 384, 760);
+}
+function drawRaceEnd() {
+  draw(); ctx.fillStyle = 'rgba(16,10,30,.82)'; ctx.fillRect(0, 0, 800, 400);
+  label('ARRIVÉE !', 400, 110, 46, '#ffc83d'); label(LEVELS[level].name, 400, 150, 20, '#fff');
+  label('Temps', 400, 196, 16, '#cfc6e8'); label(fmtT(raceRes.tm), 400, 234, 36, '#ffe27a');
+  if (raceRes.rec) label('NOUVEAU RECORD !', 400, 282, 24, '#9ae89a'); else { label('Record', 400, 274, 14, '#cfc6e8'); label(fmtT(raceRes.old), 400, 298, 18, '#cfc6e8'); }
+  if (stT > 40) label('Touche pour choisir un autre niveau', 400, 350, 16, '#bcd8ff');
+}
+
+// ----- l'écran des modes : 4 cartes et une rangée de réglages -----
+const MODES = [['Plateforme', '23 niveaux : cours, saute, vole'], ['Vue de haut', '23 niveaux et un monde ouvert'], ['Course', 'Bats ton record sur chaque niveau'], ['Paraboles', '3 mini-jeux tirés des paraboles']];
+function modeStrips() { const L = ['diff', 'book', '2p', 'voice']; if (ngCount > 0) L.push('ng'); return L; }
+function stripInfo(s) {
+  if (s === 'diff') return ['◀  Difficulté : ' + DIFF_NAMES[diff] + '  ▶', ['#8fe08a', '#ffd84a', '#ff7a6a'][diff]];
+  if (s === 'book') return ['📜 Livre des versets (' + versesGot.length + ' / ' + VERSES.length + ')', '#ffe0a0'];
+  if (s === '2p') return ['👥 Deux joueurs : ' + (twoP ? 'Oui' : 'Non'), twoP ? '#9ad8ff' : '#b0a8c8'];
+  if (s === 'voice') return ['🗣 Voix : ' + (voiceOn ? 'Oui' : 'Non'), voiceOn ? '#9ae8c0' : '#b0a8c8'];
+  return ['★ Nouveau Jeu+ : ' + (ngOn ? 'Oui' : 'Non'), ngOn ? '#ffd23a' : '#b0a8c8'];
+}
+function stripAct(s) {
+  if (s === 'diff') setDiff(diff + 1);
+  else if (s === 'book') { bookBack = 'mode'; bookPage = 0; go('book'); }
+  else if (s === '2p') setTwoP(!twoP);
+  else if (s === 'voice') setVoice(!voiceOn);
+  else { ngOn = !ngOn; saveJ('sj-ngon', ngOn); sfx('blip'); }
+}
+function modeChoose(i) {
+  if (i === 3) { race = false; sfx('ok'); go('parapick'); return; }
+  race = i === 2; gameMode = i === 1 ? 'td' : 'plat'; sfx('ok'); go('select');
+}
+function modeKey(k) {
+  if (['ArrowLeft', 'a'].includes(k)) { modeSel = (modeSel + 3) % 4; sfx('blip'); }
+  else if (['ArrowRight', 'd'].includes(k)) { modeSel = (modeSel + 1) % 4; sfx('blip'); }
+  else if (k === '2') setTwoP(!twoP);
+  else if (k === 'v' || k === 'V') setVoice(!voiceOn);
+  else if ((k === 'n' || k === 'N') && ngCount > 0) stripAct('ng');
+  else if (['ArrowUp', 'w', 'W'].includes(k)) setDiff(diff + 1); else if (['ArrowDown', 's', 'S'].includes(k)) setDiff(diff - 1);
+  else if ([' ', 'Enter', 'x', 'z'].includes(k)) modeChoose(modeSel);
+}
+function modeClick(fx, fy) {
+  const X = fx * 800, S = modeStrips(), n = S.length, sw = (760 - (n - 1) * 8) / n;
+  if (fy > 316 && fy < 356) { stripAct(S[Math.max(0, Math.min(n - 1, Math.floor((X - 20) / (sw + 8))))]); return; }
+  if (fy > 60 && fy < 316) { const i = Math.max(0, Math.min(3, Math.floor((X - 16) / 194))); if (i === modeSel) modeChoose(i); else { modeSel = i; sfx('blip'); } }
+}
+function drawMode() {
+  const t = Date.now();
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#2a1b4a'], [1, '#140c26']]); ctx.fillRect(0, 0, 800, 400);
+  label('CHOISIS TON MODE DE JEU', 400, 42, 28, '#ffc83d');
+  MODES.forEach(([n, d], i) => {
+    const x = 16 + i * 194, y = 60, w = 182, h = 250, on = modeSel === i;
+    rrPath(ctx, x, y, w, h, 14); ctx.fillStyle = on ? 'rgba(110,70,190,.85)' : 'rgba(255,255,255,.07)'; ctx.fill();
+    if (on) { ctx.strokeStyle = '#ffc83d'; ctx.lineWidth = 4; ctx.stroke(); }
+    const px = x + 10, py = y + 10, pw = w - 20, ph = 140;
+    ctx.save(); rrPath(ctx, px, py, pw, ph, 10); ctx.clip();
+    if (i === 0) {
+      ctx.fillStyle = LG(0, py, 0, py + ph, [[0, '#5fb4ff'], [1, '#d6f0ff']]); ctx.fillRect(px, py, pw, ph);
+      ctx.fillStyle = '#86ab8e'; ctx.beginPath(); ctx.ellipse(px + 50, py + 112, 100, 40, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#55b04a'; ctx.fillRect(px, py + 110, 80, 40); ctx.fillRect(px + 108, py + 90, 60, 60);
+      ctx.fillStyle = '#7a4a26'; ctx.fillRect(px, py + 118, 80, 30); ctx.fillRect(px + 108, py + 98, 60, 50);
+      heroAt(hero(), px + 46, py + 112 - Math.abs(Math.sin(t / 300)) * 26, .85, 1, { k:0, v:3, air:Math.sin(t / 300) > .2 }, false);
+    } else if (i === 1) {
+      ctx.fillStyle = '#5fa648'; ctx.fillRect(px, py, pw, ph);
+      ctx.strokeStyle = '#c9a46a'; ctx.lineWidth = 20; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(px - 10, py + 120); ctx.quadraticCurveTo(px + 80, py + 60, px + pw + 10, py + 40); ctx.stroke();
+      for (const [tx, ty, r] of [[px + 26, py + 40, 16], [px + 132, py + 112, 20], [px + 140, py + 28, 13]]) { gEll(ctx, tx + 4, ty + 10, r, r * .45, 'rgba(0,0,0,.25)'); gEll(ctx, tx, ty - 6, r, r, '#2f7a32'); gEll(ctx, tx - r * .3, ty - 10, r * .55, r * .55, '#4f9a44'); }
+      const hx = px + 78 + Math.sin(t / 700) * 26; gEll(ctx, hx, py + 94, 10, 4, 'rgba(0,0,0,.3)'); heroAt(hero(), hx, py + 94, .65, Math.cos(t / 700) > 0 ? 1 : -1, { k:0, v:2 }, false);
+    } else if (i === 2) {
+      ctx.fillStyle = LG(0, py, 0, py + ph, [[0, '#3a5a9a'], [1, '#9ac0ff']]); ctx.fillRect(px, py, pw, ph);
+      ctx.fillStyle = '#55b04a'; ctx.fillRect(px, py + 112, pw, 30); ctx.fillStyle = '#7a4a26'; ctx.fillRect(px, py + 120, pw, 22);
+      ctx.fillStyle = 'rgba(255,255,255,.55)'; for (let k = 0; k < 7; k++) ctx.fillRect(px + ((((k * 37 - t / 3) % (pw + 40)) + pw + 40) % (pw + 40)) - 20, py + 62 + (k % 3) * 15, 20, 2);
+      const cx = px + pw - 34, cy = py + 40; gEll(ctx, cx, cy, 22, 22, '#f4f0e6'); ctx.strokeStyle = '#3a3a4a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, 22, 0, 7); ctx.stroke(); ctx.fillStyle = '#3a3a4a'; ctx.fillRect(cx - 4, cy - 30, 8, 6);
+      const a = t / 300; ctx.strokeStyle = '#d62020'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * 16, cy + Math.sin(a) * 16); ctx.stroke();
+      heroAt(hero(), px + 50, py + 113, .8, 1, { k:0, v:5, fast:true }, false);
+    } else {
+      ctx.fillStyle = LG(0, py, 0, py + ph, [[0, '#f0b070'], [1, '#fbe0b0']]); ctx.fillRect(px, py, pw, ph);
+      ctx.fillStyle = '#7aa84a'; ctx.fillRect(px, py + 100, pw, 40);
+      for (let k = 0; k < 8; k++) { const wx = px + 98 + k * 7, sw = Math.sin(t / 500 + k) * 2; ctx.strokeStyle = '#c8a030'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(wx, py + 122); ctx.lineTo(wx + sw, py + 86); ctx.stroke(); gEll(ctx, wx + sw, py + 84, 2.2, 5, '#e8c040'); }
+      ctx.save(); ctx.translate(px + 46, py + 120); ctx.scale(1.6, 1.6); drawSheep(0, 0, 1, t / 16, Math.sin(t / 400) > 0); ctx.restore();
+    }
+    ctx.restore();
+    label(n, x + w / 2, y + 178, 20, on ? '#fff' : '#cfc6e8');
+    ctx.fillStyle = on ? '#ffc83d' : '#9a8cc0'; ctx.font = 'bold 12px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+    wrapText(tr(d), w - 16).slice(0, 2).forEach((l, k) => ctx.fillText(l, x + w / 2, y + 204 + k * 16));
+  });
+  const S = modeStrips(), n = S.length, sw = (760 - (n - 1) * 8) / n;
+  S.forEach((s, i) => {
+    const x = 20 + i * (sw + 8), [txt, col] = stripInfo(s);
+    rrPath(ctx, x, 320, sw, 28, 10); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = col; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(txt, x + sw / 2, 339, sw - 12);
+  });
+  ctx.fillStyle = '#e8e0ff'; ctx.font = '12px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Flèches pour choisir, Espace ou Entrée pour valider — ou touche une carte', 400, 370, 760);
+  ctx.fillText('↑ ↓ : difficulté · L : versets · 2 : deux joueurs · V : voix · N : Nouveau Jeu+', 400, 389, 780);
+}
+
+// ----- 5. la météo -----
+const WEATHER = { 0:'leaves', 2:'fog', 3:'sand', 6:'leaves', 8:'drizzle', 9:'fog', 12:'snow', 15:'drizzle', 16:'sand', 17:'fog', 18:'fog', 20:'sand', 21:'fog' };
+let wxP = [], wxKind = null, wxCam = 0, FOGC = null;
+function wxReset() { wxP = []; wxKind = null; }
+function wxInit(k) { wxKind = k; wxP = []; const n = { snow:110, sand:70, drizzle:120, leaves:22 }[k] || 0; for (let i = 0; i < n; i++) wxP.push({ x:rnd() * 800, y:rnd() * 400, s:rnd(), a:rnd() * 6.28 }); }
+function fogCanvas() { const [k, g] = mkCanvas(400, 140); for (let i = 0; i < 26; i++) { const x = hsh(i) * 400, y = 40 + hsh(i + 3) * 60, r = 30 + hsh(i + 8) * 50; g.fillStyle = gRG(g, x, y, 0, r, [[0, 'rgba(235,240,250,.16)'], [1, 'rgba(235,240,250,0)']]); g.fillRect(x - r, y - r, r * 2, r * 2); } return k; }
+function drawWeather(k) {
+  if (!k) return;
+  if (k !== wxKind) wxInit(k);
+  const dc = cam - wxCam, dx = Math.abs(dc) > 200 ? 0 : dc, t = Date.now(); wxCam = cam;
+  ctx.save();
+  if (k === 'snow') { ctx.fillStyle = 'rgba(255,255,255,.85)'; for (const q of wxP) { q.y += .5 + q.s * .9; q.x += Math.sin(t / 900 + q.a) * .4 - dx * (.4 + q.s * .6); if (q.y > 402) { q.y = -4; q.x = rnd() * 800; } q.x = ((q.x + 10) % 820 + 820) % 820 - 10; ctx.beginPath(); ctx.arc(q.x, q.y, .8 + q.s * 1.6, 0, 7); ctx.fill(); } }
+  else if (k === 'drizzle') { ctx.fillStyle = 'rgba(40,60,90,.12)'; ctx.fillRect(0, 0, 800, 400); ctx.strokeStyle = 'rgba(200,220,255,.35)'; ctx.lineWidth = 1; ctx.beginPath(); for (const q of wxP) { q.y += 7 + q.s * 4; q.x += -1.5 - dx * .8; if (q.y > 404) { q.y = -10; q.x = rnd() * 840; } q.x = ((q.x + 20) % 840 + 840) % 840 - 20; ctx.moveTo(q.x, q.y); ctx.lineTo(q.x - 2, q.y + 8 + q.s * 5); } ctx.stroke(); }
+  else if (k === 'sand') { const g = .5 + .5 * Math.sin(t / 2600); ctx.fillStyle = 'rgba(214,170,110,' + (.07 + g * .12).toFixed(3) + ')'; ctx.fillRect(0, 0, 800, 400); ctx.strokeStyle = 'rgba(240,210,160,' + (.25 + g * .35).toFixed(2) + ')'; ctx.lineWidth = 1.2; ctx.beginPath(); for (const q of wxP) { q.x -= 4 + q.s * 6 + g * 6 + dx * .6; q.y += Math.sin(t / 300 + q.a) * .5; if (q.x < -20) { q.x = 820; q.y = rnd() * 400; } if (q.x > 830) q.x = -10; ctx.moveTo(q.x, q.y); ctx.lineTo(q.x + 8 + q.s * 10, q.y); } ctx.stroke(); }
+  else if (k === 'leaves') { for (const q of wxP) { q.x += -.6 - q.s * .8 - dx * .7 + Math.sin(t / 700 + q.a) * .6; q.y += .45 + q.s * .5; q.a += .03; if (q.y > 404 || q.x < -12) { q.y = -6; q.x = rnd() * 860; } if (q.x > 860) q.x = -8; ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.a); ctx.fillStyle = q.s > .5 ? 'rgba(120,170,60,.85)' : 'rgba(220,170,60,.85)'; ctx.beginPath(); ctx.ellipse(0, 0, 3.4, 1.6, 0, 0, 7); ctx.fill(); ctx.restore(); } }
+  else if (k === 'fog') { if (!FOGC) FOGC = fogCanvas(); for (const [yy, sp, al] of [[170, 1, .9], [250, 1.6, 1], [310, .7, .8]]) { const ox = -((((wxCam * .4 + t / 80) * sp) % 400) + 400) % 400; ctx.globalAlpha = al; for (let x = ox; x < 800; x += 400) ctx.drawImage(FOGC, x, yy - 70, 400, 140); } ctx.globalAlpha = 1; }
+  ctx.restore();
+}
+
+// ----- 6. le jour et la nuit dans le monde ouvert (et la météo vue de haut) -----
+function tdSky() {
+  const T = td; if (!T) return;
+  if (!T.open) { drawWeather(WEATHER[tdLv]); return; }
+  const ph = (levelT % 10800) / 10800, s = Math.cos((ph - .25) * Math.PI * 2), night = Math.max(0, Math.min(1, (.2 - s) / .9)), dusk = Math.max(0, 1 - Math.abs(s - .05) / .35) * (1 - night * .6);
+  if (dusk > .01) { ctx.fillStyle = 'rgba(255,120,60,' + (dusk * .16).toFixed(3) + ')'; ctx.fillRect(0, 0, 800, 400); }
+  if (night > .01) {
+    ctx.fillStyle = 'rgba(10,16,52,' + (night * .58).toFixed(3) + ')'; ctx.fillRect(0, 0, 800, 400);
+    const cy = Math.round(T.camY), a = night.toFixed(2); ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (const h of T.houses) { const X = h.x + h.w / 2 - cam, Y = h.y + h.h * .55 - cy; if (X < -80 || X > 880 || Y < -80 || Y > 480) continue; ctx.fillStyle = RG(X, Y, 2, 64, [[0, 'rgba(255,200,110,' + (night * .5).toFixed(2) + ')'], [1, 'rgba(255,170,80,0)']]); ctx.fillRect(X - 64, Y - 64, 128, 128); }
+    const H = T.h, X = H.x - cam, Y = H.y - 30 - cy; ctx.fillStyle = RG(X, Y, 4, 110, [[0, 'rgba(255,235,180,' + (night * .35).toFixed(2) + ')'], [1, 'rgba(255,220,150,0)']]); ctx.fillRect(X - 110, Y - 110, 220, 220);
+    ctx.restore();
+    if (night > .3) { ctx.save(); ctx.globalAlpha = (night - .3) / .7; for (let i = 0; i < 40; i++) { ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fillRect(hsh(i) * 800, hsh(i + 31) * 120, 1, 1); } ctx.restore(); }
+  }
+  const moon = night > .5; gEll(ctx, 620, 22, 9, 9, moon ? '#e8ecff' : '#ffd23a'); if (moon) gEll(ctx, 624, 19, 7.5, 7.5, 'rgba(20,24,60,.95)');
+}
+
+// ----- 7. les animaux -----
+let critters = [];
+function groundAt(x) { for (const b of blocks) if (!b.rock && x > b.x + 8 && x < b.x + b.w - 8 && Math.abs(b.y - FLOOR) < 90) return b; return null; }
+function critSpawn(n) {
+  critters = []; const L = LEVELS[n]; if (!L || L.theme === 'ciel' || L.sea) return;
+  const r = rng(n * 131 + 7), dry = ['desert', 'lions', 'fournaise', 'sinai', 'carmel'].includes(L.theme);
+  for (let i = 0; i < 40 && critters.length < 9; i++) {
+    const x = 500 + r() * Math.max(200, arenaX - 900), b = groundAt(x); if (!b) continue;
+    const k = r() < .35 ? 'bird' : (dry || r() < .35) ? 'goat' : 'sheep';
+    critters.push({ k, x, y:b.y, gy:b.y, dir:r() < .5 ? -1 : 1, t:Math.floor(r() * 300), run:0, fly:false, vx:0, vy:0, hop:0, col:r() });
+  }
+}
+function critUpdate() {
+  const hx = p.x + p.w / 2, hy = p.y + p.h;
+  for (const c of critters) {
+    c.t++;
+    const d = c.x - hx, near = Math.abs(d) < (c.k === 'bird' ? 150 : 110) && Math.abs(c.gy - hy) < 140;
+    if (c.k === 'bird') {
+      if (!c.fly && near) { c.fly = true; c.vx = (d >= 0 ? 1 : -1) * (2.4 + rnd()); c.vy = -2.6; c.dir = Math.sign(c.vx); }
+      if (c.fly) { c.x += c.vx; c.y += c.vy; c.vy = Math.max(-3.2, c.vy - .03); } else if (c.t % 120 === 0 && rnd() < .5) c.dir *= -1;
+      continue;
+    }
+    if (near && c.run <= 0) { c.run = 50 + rnd() * 30; c.dir = d >= 0 ? 1 : -1; if (rnd() < .35) sfx('baa'); }
+    if (c.run > 0) { c.run--; const nx = c.x + c.dir * (c.k === 'goat' ? 3.4 : 2.8), b = groundAt(nx + c.dir * 14); if (b && Math.abs(b.y - c.gy) < 4) c.x = nx; else c.run = 0; c.hop = Math.abs(Math.sin(c.t * .35)) * 5; }
+    else { c.hop = 0; if (c.t % 240 === 0) c.dir *= -1; if (c.t % 240 > 170) { const nx = c.x + c.dir * .4, b = groundAt(nx + c.dir * 14); if (b && Math.abs(b.y - c.gy) < 4) c.x = nx; } }
+  }
+  critters = critters.filter(c => !(c.fly && c.y < -60));
+}
+function drawSheep(X, Y, dir, t, run, dim) {
+  ctx.save(); ctx.translate(X, Y); ctx.scale(dir, 1); const lg = run ? Math.sin(t * .5) * 3 : 0;
+  ctx.strokeStyle = '#3a3030'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  for (const [lx, s] of [[-8, 1], [-4, -1], [5, 1], [9, -1]]) { ctx.beginPath(); ctx.moveTo(lx, -8); ctx.lineTo(lx + lg * s, 0); ctx.stroke(); }
+  const W = dim ? '#d8d0c0' : '#f4f0e6';
+  for (const [wx, wy, r] of [[-8, -13, 6], [-2, -15, 6.5], [4, -14, 6], [8, -11, 5], [-10, -9, 4.5], [0, -10, 6], [6, -9, 5]]) gEll(ctx, wx, wy, r, r * .9, W);
+  gEll(ctx, -3, -17, 5, 3, 'rgba(255,255,255,.6)');
+  gEll(ctx, 13, -15, 4.2, 3.2, '#3a3030', .3); gEll(ctx, 10.5, -17.5, 2.2, 1.2, '#2a2020', -.6); gEll(ctx, 14.4, -16, .8, .8, '#fff');
+  ctx.restore();
+}
+function drawGoat(X, Y, dir, t, run, col) {
+  ctx.save(); ctx.translate(X, Y); ctx.scale(dir, 1); const lg = run ? Math.sin(t * .5) * 3 : 0, C = col > .5 ? '#8a5a32' : '#2e2622', C2 = lite(C, .25);
+  ctx.strokeStyle = dark(C, .2); ctx.lineWidth = 2; ctx.lineCap = 'round';
+  for (const [lx, s] of [[-8, 1], [-4, -1], [5, 1], [9, -1]]) { ctx.beginPath(); ctx.moveTo(lx, -9); ctx.lineTo(lx + lg * s, 0); ctx.stroke(); }
+  gEll(ctx, 0, -13, 12, 6, C); gEll(ctx, -2, -15, 8, 2.5, C2);
+  ctx.strokeStyle = C; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(9, -15); ctx.lineTo(13, -20); ctx.stroke();
+  gEll(ctx, 15, -21, 4.2, 3, C, .5);
+  ctx.strokeStyle = '#d8ccb0'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(13, -24); ctx.quadraticCurveTo(10, -30, 7, -27); ctx.stroke();
+  ctx.fillStyle = '#d8ccb0'; ctx.beginPath(); ctx.moveTo(17, -19); ctx.lineTo(18, -14); ctx.lineTo(16, -18); ctx.fill();
+  gEll(ctx, 16, -22, .8, .8, '#111'); ctx.strokeStyle = C; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-11, -14); ctx.lineTo(-14, -17); ctx.stroke();
+  ctx.restore();
+}
+function drawBird(X, Y, dir, t, fly) {
+  ctx.save(); ctx.translate(X, Y); ctx.scale(dir || 1, 1);
+  if (fly) { const w = Math.sin(t * .6) * 5; gEll(ctx, 0, 0, 4.5, 2.2, '#3a3440'); ctx.strokeStyle = '#3a3440'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(-5, -w); ctx.quadraticCurveTo(-2, -2, 0, 0); ctx.quadraticCurveTo(2, -2, 5, -w); ctx.stroke(); ctx.fillStyle = '#e8a030'; ctx.fillRect(4, -.5, 2, 1); }
+  else { const pk = (t % 70) < 12 ? 2 : 0; gEll(ctx, 0, -4, 4, 3, '#6a5a4a'); gEll(ctx, 3.5, -7 + pk, 2.2, 2, '#6a5a4a'); ctx.fillStyle = '#e8a030'; ctx.beginPath(); ctx.moveTo(5.4, -7 + pk); ctx.lineTo(7.6, -6.4 + pk); ctx.lineTo(5.4, -6 + pk); ctx.fill(); gEll(ctx, 4, -7.6 + pk, .5, .5, '#111'); ctx.strokeStyle = '#c08040'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(-1, -1); ctx.lineTo(-1, 0); ctx.moveTo(1, -1); ctx.lineTo(1, 0); ctx.stroke(); }
+  ctx.restore();
+}
+function drawCrit(c, X, Y) {
+  if (c.k === 'sheep') drawSheep(X, Y, c.dir, c.t, c.run > 0);
+  else if (c.k === 'goat') drawGoat(X, Y, c.dir, c.t, c.run > 0, c.col);
+  else drawBird(X, Y, c.dir, c.t, c.fly);
+}
+function drawCritters() { for (const c of critters) { const X = c.x - cam; if (X > -40 && X < 840) drawCrit(c, X, c.y - c.hop); } }
+function drawFish(X, Y, ang, t) { ctx.save(); ctx.translate(X, Y); ctx.rotate(ang); const w = Math.sin(t * .3) * .4; gEll(ctx, 0, 0, 7, 2.6, 'rgba(20,50,70,.5)'); ctx.fillStyle = 'rgba(20,50,70,.5)'; ctx.beginPath(); ctx.moveTo(-6, 0); ctx.lineTo(-11, -3 + w * 4); ctx.lineTo(-11, 3 + w * 4); ctx.fill(); ctx.restore(); }
+function tdCritSpawn() {
+  const T = td; if (!T) return; T.crit = []; const Lk = T.lake, open = T.open;
+  const inLake = (x, y, m) => ((x - Lk.cx) / (Lk.rx + m)) ** 2 + ((y - Lk.cy) / (Lk.ry + m)) ** 2 < 1;
+  const inHouse = (x, y) => T.houses.some(h => x > h.x - 24 && x < h.x + h.w + 24 && y > h.y - 50 && y < h.y + h.h + 24);
+  const A = T.arena, inArena = (x, y) => x > A.x - 40 && x < A.x + A.w + 40 && y > A.y - 40 && y < A.y + A.h + 40;
+  const nLand = open ? 34 : 12;
+  for (let i = 0, k = 0; i < 500 && k < nLand; i++) {
+    const x = 80 + rnd() * (TDW - 160), y = 120 + rnd() * (TDH - 200);
+    if (inLake(x, y, 40) || inHouse(x, y) || inArena(x, y) || Math.hypot(x - T.h.x, y - T.h.y) < 220) continue;
+    const r = rnd(); T.crit.push({ k:r < .3 ? 'bird' : r < .55 ? 'goat' : 'sheep', x, y, dir:rnd() < .5 ? -1 : 1, vx:0, vy:0, t:Math.floor(rnd() * 300), run:0, fly:false, z:0, col:rnd() }); k++;
+  }
+  if (Lk.cx > 0 && Lk.rx > 20) for (let i = 0; i < (open ? 16 : 8); i++) { const a = rnd() * 6.28, rr = Math.sqrt(rnd()) * .78; T.crit.push({ k:'fish', x:Lk.cx + Math.cos(a) * Lk.rx * rr, y:Lk.cy + Math.sin(a) * Lk.ry * rr, ang:rnd() * 6.28, t:Math.floor(rnd() * 300), jump:0 }); }
+}
+function tdCritUpdate() {
+  const T = td, H = T.h, Lk = T.lake; if (!T.crit) return;
+  const inLake = (x, y, m) => ((x - Lk.cx) / (Lk.rx + m)) ** 2 + ((y - Lk.cy) / (Lk.ry + m)) ** 2 < 1;
+  for (const c of T.crit) {
+    c.t++;
+    if (c.k === 'fish') { c.ang += Math.sin(c.t * .02 + c.x) * .03; const nx = c.x + Math.cos(c.ang) * .7, ny = c.y + Math.sin(c.ang) * .7; if (inLake(nx, ny, -30)) { c.x = nx; c.y = ny; } else c.ang += 2; if (c.jump > 0) c.jump--; else if (rnd() < .002) c.jump = 40; continue; }
+    const dx = c.x - H.x, dy = c.y - H.y, d = Math.hypot(dx, dy) || 1;
+    if (c.k === 'bird') { if (!c.fly && d < 130) { c.fly = true; c.vx = dx / d * 3; c.vy = dy / d * 3; c.dir = c.vx < 0 ? -1 : 1; } if (c.fly) { c.x += c.vx; c.y += c.vy; c.z = Math.min(160, c.z + 2.2); } continue; }
+    if (d < 120 && c.run <= 0) { c.run = 45 + rnd() * 30; c.vx = dx / d * 2.6; c.vy = dy / d * 2.6; c.dir = c.vx < 0 ? -1 : 1; if (rnd() < .3) sfx('baa'); }
+    let mx = 0, my = 0;
+    if (c.run > 0) { c.run--; mx = c.vx; my = c.vy; }
+    else if (c.t % 300 > 200) { if (c.t % 300 === 201) { const a = rnd() * 6.28; c.vx = Math.cos(a) * .4; c.vy = Math.sin(a) * .3; c.dir = c.vx < 0 ? -1 : 1; } mx = c.vx; my = c.vy; }
+    if (mx || my) { const nx = c.x + mx, ny = c.y + my; if (!tdBlocked(nx, ny, 12)) { c.x = nx; c.y = ny; } else c.run = 0; }
+  }
+  T.crit = T.crit.filter(c => !(c.fly && c.z >= 160));
+}
+function tdCritDraw(E, vis) {
+  const T = td; if (!T || !T.crit) return;
+  for (const c of T.crit) {
+    if (!vis(c.x, c.y, 60)) continue;
+    if (c.k === 'fish') { E.push([c.y - 5000, () => { const X = c.x - cam; if (c.jump > 0) { const u = 1 - c.jump / 40, hg = Math.sin(u * Math.PI) * 18; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(X, c.y, 6 + u * 10, 2 + u * 4, 0, 0, 7); ctx.stroke(); ctx.save(); ctx.translate(X + (u - .5) * 16, c.y - hg); ctx.rotate(-1 + u * 2); gEll(ctx, 0, 0, 6, 2.4, '#c8d8e8'); ctx.restore(); } else drawFish(X, c.y, c.ang, c.t); }]); continue; }
+    E.push([c.y, () => { tdShadow(c.x, c.y, c.k === 'bird' ? 5 : 11); drawCrit(c, c.x - cam, c.y - (c.z || 0)); }]);
+  }
+}
+
+// ----- 10. les paraboles jouables -----
+let paraSel = 0, para = null, paraStars = loadJ('sj-para', {});
+const PARAS = [{ k:'sheep', name:'La brebis perdue', bk:'Lc', ref:'15:7' }, { k:'sower', name:'Le semeur', bk:'Mt', ref:'13:23' }, { k:'son', name:'Le fils prodigue', bk:'Lc', ref:'15:24' }];
+const ITEM_NAME = { robe:'Robe', ring:'Anneau', shoes:'Sandales' };
+const SON0 = Object.assign({}, CHARS[0], { name:'fils', halo:false, beard:false, robe:'#7a6a50', top:'#6a5a40', sash:null, trim:null, belt:'#4a3a20', hair:'#2a1a10', skin:'#c8946a' });
+const SON1 = Object.assign({}, SON0, { robe:'#f4ecd8', top:'#fbf6ea', trim:'#d4a52a', sash:'#b3122e', belt:'#d4a52a' });
+function drawStar(x, y, r, col) { ctx.fillStyle = col; ctx.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .45 : r; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } ctx.closePath(); ctx.fill(); }
+function paraStart(i) {
+  const P = { k:PARAS[i].k, t:0, done:false, msgs:[], tx:null, ty:null, prevAct:true, face:1, moving:false };
+  if (P.k === 'sheep') {
+    Object.assign(P, { hx:170, hy:226, bushes:[], found:false, sx:0, sy:0, auto:-1, dark:mkCanvas(400, 200) });
+    for (let n = 0; n < 500 && P.bushes.length < 11; n++) { const x = 250 + rnd() * 510, y = 90 + rnd() * 270; if (P.bushes.some(b => Math.hypot(b.x - x, b.y - y) < 82)) continue; P.bushes.push({ x, y, r:18 + rnd() * 8, shake:0, seen:false }); }
+    P.lost = Math.floor(rnd() * P.bushes.length);
+  } else if (P.k === 'sower') {
+    Object.assign(P, { hx:400, seeds:20, flying:[], plants:[], birds:[], good:0, cd:0, throwT:0, pend:null });
+    P.zones = shuffle(['path', 'rock', 'thorn', 'good', 'good', 'good', 'path', 'rock', 'thorn', 'good']).map((k, i) => ({ k, x:i * 80, w:80 }));
+  } else {
+    Object.assign(P, { hx:690, face:-1, son:-30, hug:0, stars:1 });
+    P.items = [{ k:'robe', x:560 + rnd() * 50 }, { k:'ring', x:330 + rnd() * 90 }, { k:'shoes', x:110 + rnd() * 120 }];
+  }
+  para = P; sfx('ok'); go('para'); speak(L8(PARA_TXT[P.k].help));
+}
+function paraWin(P, s) { if (P.done) return; P.done = true; P.stars = s; P.winT = 0; paraStars[P.k] = Math.max(paraStars[P.k] || 0, s); saveJ('sj-para', paraStars); sfx('win'); }
+function paraPickKey(k) {
+  if (k === 'Escape') { go('mode'); return; }
+  if (['ArrowLeft', 'a'].includes(k)) { paraSel = (paraSel + 2) % 3; sfx('blip'); }
+  else if (['ArrowRight', 'd'].includes(k)) { paraSel = (paraSel + 1) % 3; sfx('blip'); }
+  else if ([' ', 'Enter', 'x', 'z'].includes(k)) paraStart(paraSel);
+}
+function paraPickPointer(X, Y) { if (Y < 56) { go('mode'); return; } const i = Math.max(0, Math.min(2, Math.floor((X - 30) / 250))); if (i === paraSel) paraStart(i); else { paraSel = i; sfx('blip'); } }
+function drawParaPick() {
+  const t = Date.now(), oc = cam; cam = 0;
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#3a2412'], [1, '#160c04']]); ctx.fillRect(0, 0, 800, 400);
+  label('LES PARABOLES DE JÉSUS', 400, 42, 26, '#ffc83d');
+  ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = 'bold 14px Trebuchet MS, sans-serif'; ctx.textAlign = 'left'; ctx.fillText('◀', 18, 40);
+  PARAS.forEach((P, i) => {
+    const x = 30 + i * 250, y = 66, w = 240, h = 266, on = paraSel === i;
+    rrPath(ctx, x, y, w, h, 16); ctx.fillStyle = on ? 'rgba(150,100,40,.85)' : 'rgba(255,255,255,.07)'; ctx.fill();
+    if (on) { ctx.strokeStyle = '#ffc83d'; ctx.lineWidth = 4; ctx.stroke(); }
+    const px = x + 12, py = y + 12, pw = w - 24, ph = 150;
+    ctx.save(); rrPath(ctx, px, py, pw, ph, 10); ctx.clip();
+    if (P.k === 'sheep') { ctx.fillStyle = LG(0, py, 0, py + ph, [[0, '#0e1630'], [1, '#1e3a24']]); ctx.fillRect(px, py, pw, ph); gEll(ctx, px + pw - 30, py + 26, 12, 12, '#e8ecff'); for (const [bx, by] of [[px + 40, py + 100], [px + 150, py + 80], [px + 180, py + 130]]) { gEll(ctx, bx, by, 26, 20, '#2a5a2a'); gEll(ctx, bx - 8, by - 8, 16, 12, '#3a7a34'); } ctx.save(); ctx.translate(px + 108, py + 136); ctx.scale(1.5, 1.5); drawSheep(0, 0, -1, t / 16, false); ctx.restore(); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(px + 108, py + 115, 0, 50, [[0, 'rgba(255,220,140,.4)'], [1, 'rgba(255,220,140,0)']]); ctx.fillRect(px + 58, py + 65, 100, 100); ctx.restore(); }
+    else if (P.k === 'sower') { ctx.fillStyle = LG(0, py, 0, py + ph, [[0, '#7ac0f0'], [1, '#d8f0ff']]); ctx.fillRect(px, py, pw, ph); ctx.fillStyle = '#4a2e18'; ctx.fillRect(px, py + 104, pw, 46); for (let k = 0; k < 14; k++) { const wx = px + 14 + k * 14, sw = Math.sin(t / 500 + k) * 2; ctx.strokeStyle = '#c8a030'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(wx, py + 140); ctx.lineTo(wx + sw, py + 100); ctx.stroke(); gEll(ctx, wx + sw, py + 97, 2.4, 6, '#e8c040'); } heroAt(hero(), px + 60, py + 100, .8, 1, { k:-1, v:0 }, Math.sin(t / 300) > .6); }
+    else { ctx.fillStyle = LG(0, py, 0, py + ph, [[0, '#f0a060'], [1, '#fbe8c0']]); ctx.fillRect(px, py, pw, ph); ctx.fillStyle = '#c8a870'; ctx.fillRect(px, py + 120, pw, 30); ctx.fillStyle = '#e8d8b0'; ctx.fillRect(px + pw - 54, py + 66, 50, 56); ctx.fillStyle = '#6a4a2a'; ctx.fillRect(px + pw - 36, py + 92, 14, 30); heroAt(SON0, px + 70, py + 124, .85, 1, { k:0, v:1 }, false); heroAt(hero(), px + 104, py + 124, .9, -1, { k:0, v:3 }, false); }
+    ctx.restore();
+    label(P.name, x + w / 2, y + 190, 20, on ? '#fff' : '#f0e0c0');
+    ctx.fillStyle = on ? '#ffe27a' : '#c8b090'; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(BOOKS[P.bk][LIX()] + ' ' + P.ref.split(':')[0], x + w / 2, y + 212);
+    for (let s = 0; s < 3; s++) drawStar(x + w / 2 - 30 + s * 30, y + 240, 11, s < (paraStars[P.k] || 0) ? '#ffd23a' : 'rgba(255,255,255,.2)');
+  });
+  ctx.fillStyle = '#f0e8d8'; ctx.font = '13px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Flèches pour choisir, Espace ou Entrée pour valider — ou touche une carte', 400, 368, 760);
+  cam = oc;
+}
+function paraPointer(X, Y) {
+  const P = para; if (!P || P.done) return;
+  if (P.k === 'sheep') { P.tx = X; P.ty = Math.max(70, Math.min(390, Y + 18)); const bi = P.bushes.findIndex(b => Math.hypot(b.x - X, b.y - Y) < b.r + 16); P.auto = bi; }
+  else if (P.k === 'sower') { P.tx = Math.max(20, Math.min(780, X)); P.pend = X; }
+  else P.tx = X;
+}
+function paraUpdate() {
+  const P = para; if (!P) return; P.t++;
+  const ix = (keys.ArrowRight || keys.d || keys.D ? 1 : 0) - (keys.ArrowLeft || keys.a || keys.A || keys.q ? 1 : 0), iy = (keys.ArrowDown || keys.s || keys.S ? 1 : 0) - (keys.ArrowUp || keys.w || keys.W || keys.z ? 1 : 0);
+  const act = !!(keys[' '] || keys.x || keys.X || keys.Enter), edge = act && !P.prevAct; P.prevAct = act;
+  for (const m of P.msgs) m.life--; P.msgs = P.msgs.filter(m => m.life > 0);
+  if (P.done) { if (++P.winT > 110) go('paraend'); }
+  else if (P.k === 'sheep') sheepUpdate(P, ix, iy, edge); else if (P.k === 'sower') sowerUpdate(P, ix, edge); else sonUpdate(P, ix);
+  if (P.k === 'sower' && P.done) sowerTick(P);
+}
+function sheepUpdate(P, ix, iy, edge) {
+  let mx = ix, my = iy;
+  if (ix || iy) { P.tx = null; P.auto = -1; }
+  else if (P.tx !== null) { const dx = P.tx - P.hx, dy = P.ty - P.hy, d = Math.hypot(dx, dy); if (d > 4) { mx = dx / d; my = dy / d; } else P.tx = null; }
+  const m = Math.hypot(mx, my) || 1; P.hx = Math.max(20, Math.min(780, P.hx + mx / m * 2.7)); P.hy = Math.max(70, Math.min(392, P.hy + my / m * 2.7)); if (mx) P.face = mx > 0 ? 1 : -1; P.moving = !!(mx || my);
+  const near = P.bushes.findIndex(b => Math.hypot(b.x - P.hx, b.y - (P.hy - 12)) < b.r + 26);
+  if (!P.found && near >= 0 && (edge || P.auto === near)) {
+    P.auto = -1; const b = P.bushes[near]; b.shake = 26;
+    if (near === P.lost) { P.found = true; P.sx = b.x; P.sy = b.y + 10; sfx('heal'); P.msgs.push({ t:'Trouvée !', x:b.x, y:b.y - 36, col:'#ffe27a', life:90 }); speak(tr('Trouvée !')); }
+    else { b.seen = true; sfx('blip'); P.msgs.push({ t:'Pas ici…', x:b.x, y:b.y - 34, col:'#cfd8ff', life:60 }); }
+  }
+  for (const b of P.bushes) if (b.shake > 0) b.shake--;
+  if (P.found) { const tx = P.hx - P.face * 28, ty = P.hy + 2; P.sx += (tx - P.sx) * .08; P.sy += (ty - P.sy) * .08; if (P.hx < 145 && P.hy > 150 && P.hy < 310) paraWin(P, P.t < 1800 ? 3 : P.t < 3600 ? 2 : 1); }
+  if (!P.found && P.t % 150 === 60) { sfx('baa'); const b = P.bushes[P.lost]; P.bleat = { x:b.x, y:b.y - 30, life:80 }; }
+  if (P.bleat && --P.bleat.life <= 0) P.bleat = null;
+}
+function sowerUpdate(P, ix, edge) {
+  let mx = ix;
+  if (ix) { P.tx = null; P.pend = null; }
+  else if (P.tx !== null) { const d = P.tx - P.hx; if (P.pend !== null && Math.abs(P.pend - P.hx) < 120) mx = 0; else if (Math.abs(d) > 4) mx = Math.sign(d); else P.tx = null; }
+  P.hx = Math.max(20, Math.min(780, P.hx + mx * 3)); if (mx) P.face = mx; P.moving = !!mx;
+  if (P.cd > 0) P.cd--; if (P.throwT > 0) P.throwT--;
+  const throwAt = x => { if (P.seeds <= 0 || P.cd > 0) return false; P.seeds--; P.cd = 14; P.throwT = 10; P.face = x >= P.hx ? 1 : -1; P.flying.push({ x0:P.hx + P.face * 8, y0:180, x1:Math.max(4, Math.min(796, x + (rnd() - .5) * 26)), y1:290 + rnd() * 70, u:0 }); sfx('coin'); return true; };
+  if (edge) throwAt(P.hx + P.face * 50);
+  if (P.pend !== null && Math.abs(P.pend - P.hx) < 120 && throwAt(P.pend)) { P.pend = null; P.tx = null; }
+  sowerTick(P);
+  if (P.seeds <= 0 && !P.flying.length && !P.birds.length && P.plants.every(pl => pl.t > 200)) paraWin(P, P.good >= 12 ? 3 : P.good >= 8 ? 2 : 1);
+}
+function sowerTick(P) {
+  for (const s of P.flying) { s.u += .035; if (s.u >= 1) { s.dead = true; const z = P.zones.find(q => s.x1 >= q.x && s.x1 < q.x + q.w) || P.zones[0], pl = { x:s.x1, y:s.y1, k:z.k, t:0 }; P.plants.push(pl); if (z.k === 'path') P.birds.push({ x:s.x1 > 400 ? -20 : 820, y:40 + rnd() * 40, pl, t:0, dir:s.x1 > 400 ? 1 : -1 }); } }
+  P.flying = P.flying.filter(s => !s.dead);
+  for (const pl of P.plants) { pl.t++; if (pl.k === 'good' && pl.t === 170) { P.good++; P.msgs.push({ t:'+1', x:pl.x, y:pl.y - 50, col:'#ffe27a', life:60 }); sfx('heal'); } }
+  for (const b of P.birds) { b.t++; const pl = b.pl; if (!pl.eaten) { const dx = pl.x - b.x, dy = pl.y - 4 - b.y, d = Math.hypot(dx, dy); if (d < 6) { pl.eaten = true; sfx('touch'); } else { b.x += dx / d * 4.5; b.y += dy / d * 4.5; b.dir = dx < 0 ? -1 : 1; } } else { b.x += b.dir * 4; b.y -= 2.5; } }
+  P.birds = P.birds.filter(b => b.y > -40 && b.x > -60 && b.x < 860);
+}
+function sonUpdate(P, ix) {
+  let mx = ix; if (ix) P.tx = null; else if (P.tx !== null) { const d = P.tx - P.hx; if (Math.abs(d) > 4) mx = Math.sign(d); else P.tx = null; }
+  if (!P.hug) { P.hx = Math.max(16, Math.min(784, P.hx + mx * 3.2)); if (mx) P.face = mx; P.moving = !!mx; P.son = Math.min(640, P.son + .38); }
+  const all = () => P.items.every(q => q.got);
+  for (const it of P.items) if (!it.got && Math.abs(it.x - P.hx) < 18) { it.got = true; sfx('coin'); P.msgs.push({ t:ITEM_NAME[it.k], x:it.x, y:250, col:'#ffe27a', life:60 }); if (all()) { P.msgs.push({ t:'Cours vers ton fils !', x:400, y:120, col:'#fff', life:130 }); speak(tr('Cours vers ton fils !')); } }
+  if (!P.hug && all() && Math.abs(P.son - P.hx) < 28) { P.hug = 1; sfx('heal'); P.msgs.push({ t:'Mon fils est revenu !', x:P.son, y:200, col:'#ffe27a', life:150 }); speak(tr('Mon fils est revenu !')); P.stars = P.son < 230 ? 3 : P.son < 380 ? 2 : 1; }
+  if (P.hug && ++P.hug > 170) paraWin(P, P.stars);
+}
+function paraDraw() {
+  const P = para; if (!P) return; const oc = cam; cam = 0; ctx.save();
+  if (P.k === 'sheep') sheepDraw(P); else if (P.k === 'sower') sowerDraw(P); else sonDraw(P);
+  for (const m of P.msgs) { ctx.globalAlpha = Math.min(1, m.life / 20); label(m.t, m.x, m.y - (90 - m.life) * .25, 16, m.col); } ctx.globalAlpha = 1;
+  label(PARAS.find(q => q.k === P.k).name, 400, 24, 20, '#ffc83d');
+  ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '11px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Flèches ou touche l\'écran pour bouger · Espace ou ✋ pour agir', 400, 42, 560);
+  if (P.t < 420) { const a = Math.min(1, (420 - P.t) / 40); ctx.globalAlpha = a; rrPath(ctx, 60, 54, 680, 50, 12); ctx.fillStyle = 'rgba(12,8,24,.82)'; ctx.fill(); ctx.fillStyle = '#fff6dc'; ctx.font = 'bold 15px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; const L = wrapText(L8(PARA_TXT[P.k].help), 650).slice(0, 2); L.forEach((l, i) => ctx.fillText(l, 400, 84 + (i - (L.length - 1) / 2) * 18)); ctx.globalAlpha = 1; }
+  ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Trebuchet MS, sans-serif'; ctx.fillText('⏱ ' + fmtT(P.t), 14, 24);
+  ctx.restore(); cam = oc;
+}
+function sheepDraw(P) {
+  const t = Date.now();
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#1e3a24'], [1, '#2a4a2a']]); ctx.fillRect(0, 0, 800, 400);
+  ctx.strokeStyle = 'rgba(120,170,90,.35)'; ctx.lineWidth = 1; ctx.beginPath(); for (let i = 0; i < 110; i++) { const x = hsh(i) * 800, y = 50 + hsh(i + 40) * 350; ctx.moveTo(x, y); ctx.lineTo(x - 2, y - 6); ctx.moveTo(x + 2, y); ctx.lineTo(x + 3, y - 5); } ctx.stroke();
+  ctx.fillStyle = 'rgba(160,130,80,.25)'; ctx.fillRect(20, 150, 120, 160);
+  ctx.strokeStyle = '#7a5a32'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(140, 150); ctx.lineTo(20, 150); ctx.lineTo(20, 310); ctx.lineTo(140, 310); ctx.stroke();
+  ctx.fillStyle = '#5a3a1e'; for (let x = 20; x <= 140; x += 20) { ctx.fillRect(x - 2, 144, 4, 12); ctx.fillRect(x - 2, 304, 4, 12); } for (let y = 150; y <= 310; y += 20) ctx.fillRect(16, y - 4, 8, 4);
+  for (let i = 0; i < 12; i++) drawSheep(40 + (i % 4) * 26, 190 + Math.floor(i / 4) * 44, i % 2 ? 1 : -1, P.t + i * 20, false, true);
+  label('99', 80, 140, 14, '#e8e0c0');
+  for (const b of P.bushes) { const sx = b.shake ? Math.sin(b.shake * 1.3) * 3 : 0; gEll(ctx, b.x + 4, b.y + b.r * .55, b.r * 1.1, b.r * .4, 'rgba(0,0,0,.3)'); for (const [dx, dy, k] of [[-.5, 0, .8], [.5, 0, .8], [0, -.45, .9], [0, .1, 1]]) gEll(ctx, b.x + dx * b.r + sx, b.y + dy * b.r, b.r * k, b.r * k * .85, k === 1 ? '#2a5a2a' : '#3a7a34'); if (b.seen) gEll(ctx, b.x + sx, b.y - b.r * .3, 3, 3, '#c83a3a'); }
+  if (P.found) drawSheep(P.sx, P.sy, P.face, P.t, P.moving);
+  heroAt(hero(), P.hx, P.hy, .95, P.face, P.moving ? { k:0, v:3 } : { k:-1, v:0 }, false);
+  const lx = P.hx + P.face * 12, ly = P.hy - 30; ctx.fillStyle = '#3a2a1a'; ctx.fillRect(lx - 3, ly - 6, 6, 9); gEll(ctx, lx, ly - 1, 2.4, 3, '#ffd870');
+  const [dk, dg] = P.dark; dg.globalCompositeOperation = 'source-over'; dg.clearRect(0, 0, 400, 200); dg.fillStyle = 'rgba(4,6,20,.9)'; dg.fillRect(0, 0, 400, 200); dg.globalCompositeOperation = 'destination-out';
+  const hole = (x, y, r) => { dg.fillStyle = gRG(dg, x / 2, y / 2, 0, r / 2, [[0, 'rgba(0,0,0,1)'], [.6, 'rgba(0,0,0,.85)'], [1, 'rgba(0,0,0,0)']]); dg.fillRect(x / 2 - r / 2, y / 2 - r / 2, r, r); };
+  hole(P.hx, P.hy - 26, 124 + Math.sin(t / 300) * 4); hole(80, 230, 130);
+  ctx.drawImage(dk, 0, 0, 800, 400);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(lx, ly, 0, 40, [[0, 'rgba(255,210,120,.45)'], [1, 'rgba(255,210,120,0)']]); ctx.fillRect(lx - 40, ly - 40, 80, 80); ctx.restore();
+  gEll(ctx, 760, 70, 13, 13, '#e8ecff');
+  if (P.bleat) { const b = P.bleat, d = Math.hypot(b.x - P.hx, b.y - P.hy), k = Math.max(.25, Math.min(1, 1 - d / 560)); ctx.globalAlpha = Math.min(1, b.life / 20) * k; label('Bêê…', b.x + Math.sin(P.t) * 1.5, b.y - (80 - b.life) * .3, 12 + k * 14, '#ffffff'); ctx.globalAlpha = 1; }
+}
+function sowerDraw(P) {
+  const t = Date.now();
+  ctx.fillStyle = LG(0, 0, 0, 220, [[0, '#7ac0f0'], [1, '#d8f0ff']]); ctx.fillRect(0, 0, 800, 220); gEll(ctx, 690, 70, 22, 22, '#fff2b0');
+  ctx.fillStyle = '#9cc47a'; ctx.beginPath(); ctx.moveTo(0, 230); for (let x = 0; x <= 800; x += 40) ctx.lineTo(x, 176 + Math.sin(x / 120) * 16); ctx.lineTo(800, 230); ctx.fill();
+  ctx.fillStyle = '#d8c08a'; ctx.fillRect(0, 206, 800, 30); ctx.fillStyle = '#2a1a0e'; ctx.fillRect(0, 380, 800, 20);
+  for (const z of P.zones) {
+    const x = z.x, w = z.w, y = 236, h = 144;
+    ctx.fillStyle = z.k === 'good' ? '#4a2e18' : z.k === 'path' ? '#c8ae7a' : z.k === 'rock' ? '#7a6248' : '#5a4228'; ctx.fillRect(x, y, w, h);
+    if (z.k === 'good') { ctx.strokeStyle = 'rgba(30,16,6,.5)'; ctx.lineWidth = 2; for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.moveTo(x + 2, y + 14 + k * 24); ctx.lineTo(x + w - 2, y + 14 + k * 24); ctx.stroke(); } }
+    if (z.k === 'path') for (let k = 0; k < 8; k++) gEll(ctx, x + 26 + (k % 2) * 28, y + 12 + k * 18, 5, 3, 'rgba(120,90,50,.35)');
+    if (z.k === 'rock') for (let k = 0; k < 9; k++) gEll(ctx, x + 10 + hsh(k + x) * (w - 20), y + 10 + hsh(k * 3 + x) * (h - 20), 6 + hsh(k + 7 + x) * 6, 4 + hsh(k + 2 + x) * 3, '#a8a090');
+    if (z.k === 'thorn') { ctx.strokeStyle = '#2a3a1a'; ctx.lineWidth = 1.4; ctx.beginPath(); for (let k = 0; k < 7; k++) { const tx = x + 10 + hsh(k + x) * (w - 20), ty = y + 20 + hsh(k * 5 + x) * (h - 30); for (let j = 0; j < 6; j++) { ctx.moveTo(tx, ty); ctx.lineTo(tx + Math.cos(j * 1.05) * 10, ty + Math.sin(j * 1.05) * 7 - 4); } } ctx.stroke(); }
+    ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.fillRect(x + w - 1, y, 1, h);
+    ctx.fillStyle = z.k === 'good' ? '#ffe27a' : '#f0e8d8'; ctx.font = 'bold 11px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText({ good:'Bonne terre', path:'Chemin', rock:'Pierres', thorn:'Épines' }[z.k], x + w / 2, 394, w - 4);
+  }
+  for (const pl of P.plants) {
+    const X = pl.x, Y = pl.y, k = pl.t;
+    if (pl.k === 'path') { if (!pl.eaten) gEll(ctx, X, Y, 2.2, 1.6, '#f0e0a0'); continue; }
+    if (pl.k === 'good') { const g = Math.min(1, k / 170), h = 6 + g * 34, sw = Math.sin(t / 600 + X) * 2 * g; ctx.strokeStyle = g < 1 ? '#5aa83a' : '#c8a030'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X, Y); ctx.quadraticCurveTo(X + 2, Y - h / 2, X + sw, Y - h); ctx.stroke(); if (g >= 1) for (let j = 0; j < 5; j++) gEll(ctx, X + sw + (j % 2 ? 2 : -2), Y - h + 2 + j * 3, 2.2, 3, '#e8c040'); continue; }
+    if (pl.k === 'rock') { const g = Math.min(1, k / 50), dd = Math.max(0, Math.min(1, (k - 70) / 70)), h = 4 + g * 12; ctx.strokeStyle = mixC('#5aa83a', '#8a6a30', dd); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X, Y); ctx.quadraticCurveTo(X, Y - h, X + dd * 9, Y - h + dd * 8); ctx.stroke(); continue; }
+    const g = Math.min(1, k / 40), th = Math.max(0, Math.min(1, (k - 40) / 90)); ctx.strokeStyle = '#5aa83a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X, Y); ctx.lineTo(X, Y - 4 - g * 8); ctx.stroke();
+    if (th > 0) { ctx.strokeStyle = '#1e2a12'; ctx.lineWidth = 1.5; ctx.beginPath(); for (let j = 0; j < 8; j++) { const a = j * .8; ctx.moveTo(X, Y - 6); ctx.lineTo(X + Math.cos(a) * 14 * th, Y - 6 + Math.sin(a) * 10 * th); } ctx.stroke(); }
+  }
+  for (const s of P.flying) { const x = s.x0 + (s.x1 - s.x0) * s.u, y = s.y0 + (s.y1 - s.y0) * s.u - Math.sin(s.u * Math.PI) * 70; gEll(ctx, x, y, 2.2, 1.6, '#f0e0a0'); }
+  for (const b of P.birds) drawBird(b.x, b.y, b.dir, b.t, true);
+  heroAt(hero(), P.hx, 224, .9, P.face, P.moving ? { k:0, v:3 } : { k:-1, v:0 }, P.throwT > 0);
+  label('Graines', 70, 64, 14, '#fff'); label(String(P.seeds), 70, 88, 22, '#ffe27a');
+  label('Bonne terre : ' + P.good, 700, 70, 16, '#ffe27a');
+}
+function sonDraw(P) {
+  const t = Date.now(), all = P.items.every(q => q.got);
+  ctx.fillStyle = LG(0, 0, 0, 330, [[0, '#f0a060'], [.6, '#f8d090'], [1, '#fbe8c0']]); ctx.fillRect(0, 0, 800, 330);
+  gEll(ctx, 180, 150, 34, 34, 'rgba(255,240,200,.9)');
+  cineHills(262, '#c8a878', 14, 150, 1); cineHills(300, '#a8b87a', 8, 110, 3);
+  ctx.fillStyle = '#c8a870'; ctx.fillRect(0, 322, 800, 78); ctx.fillStyle = '#d8bc88'; ctx.fillRect(0, 316, 800, 10);
+  ctx.fillStyle = '#e8d8b0'; ctx.fillRect(700, 232, 90, 90); ctx.fillStyle = '#c8b890'; ctx.fillRect(694, 226, 102, 8); ctx.fillStyle = '#6a4a2a'; ctx.fillRect(722, 272, 22, 50); ctx.fillStyle = '#3a2a1a'; ctx.fillRect(760, 254, 16, 14);
+  if (P.hug > 40) for (let i = 0; i < 9; i++) { const x = 700 + i * 11, on = Math.sin(t / 150 + i) > 0; gEll(ctx, x, 238 + Math.sin(i) * 3, 3, 3, on ? '#ffd23a' : '#e83a5a'); }
+  for (const it of P.items) {
+    if (it.got) continue; const X = it.x, Y = 300 + Math.sin(t / 300 + X) * 4;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y, 0, 26, [[0, 'rgba(255,230,150,.55)'], [1, 'rgba(255,230,150,0)']]); ctx.fillRect(X - 26, Y - 26, 52, 52); ctx.restore();
+    if (it.k === 'robe') { ctx.fillStyle = '#f8f2e2'; ctx.beginPath(); ctx.moveTo(X - 6, Y - 12); ctx.lineTo(X + 6, Y - 12); ctx.lineTo(X + 11, Y + 10); ctx.lineTo(X - 11, Y + 10); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#d4a52a'; ctx.fillRect(X - 11, Y + 8, 22, 2.4); ctx.fillRect(X - 1, Y - 12, 2, 20); }
+    else if (it.k === 'ring') { ctx.strokeStyle = '#ffd23a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X, Y, 7, 0, 7); ctx.stroke(); gEll(ctx, X, Y - 8, 3, 3, '#e83a5a'); }
+    else { gEll(ctx, X - 6, Y + 4, 4, 9, '#8a5a2a', .2); gEll(ctx, X + 6, Y + 4, 4, 9, '#8a5a2a', -.2); ctx.strokeStyle = '#5a3a1a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X - 9, Y); ctx.lineTo(X - 3, Y); ctx.moveTo(X + 3, Y); ctx.lineTo(X + 9, Y); ctx.stroke(); }
+  }
+  heroAt(P.hug ? SON1 : SON0, P.son, 322, .95, 1, P.hug ? { k:-1, v:0 } : { k:0, v:1 }, false);
+  heroAt(hero(), P.hug ? P.son + 20 : P.hx, 322, 1, P.hug ? -1 : P.face, P.moving && !P.hug ? { k:0, v:4, fast:true } : { k:-1, v:0 }, false);
+  if (P.hug) for (let i = 0; i < 6; i++) { const u = ((P.hug * 1.5 + i * 22) % 120) / 120; ctx.globalAlpha = 1 - u; ctx.fillStyle = '#e83a5a'; const hx = P.son + 10 + Math.sin(i * 2 + P.hug / 10) * 16, hy = 250 - u * 80; ctx.beginPath(); ctx.arc(hx - 2.5, hy, 3, Math.PI, 0); ctx.arc(hx + 2.5, hy, 3, Math.PI, 0); ctx.lineTo(hx, hy + 6); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1; }
+  P.items.forEach((it, i) => { const x = 620 + i * 60; rrPath(ctx, x - 26, 52, 52, 26, 8); ctx.fillStyle = it.got ? 'rgba(46,138,62,.85)' : 'rgba(20,12,36,.5)'; ctx.fill(); ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText((it.got ? '✓ ' : '') + tr(ITEM_NAME[it.k]), x, 69, 50); });
+  if (!all && P.son > 120 && P.t % 60 < 40) { ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = 'bold 18px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('…', P.son, 262); }
+}
+function drawParaEnd() {
+  const P = para; if (!P) { go('parapick'); return; } const Pd = PARAS.find(q => q.k === P.k);
+  ctx.fillStyle = LG(0, 0, 0, 400, [[0, '#3a2412'], [1, '#160c04']]); ctx.fillRect(0, 0, 800, 400);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(400, 110, 0, 320, [[0, 'rgba(255,215,120,.3)'], [1, 'rgba(255,215,120,0)']]); ctx.fillRect(0, 0, 800, 400); ctx.restore();
+  label('BRAVO !', 400, 62, 42, '#ffc83d'); label(Pd.name, 400, 98, 22, '#fff');
+  for (let i = 0; i < 3; i++) drawStar(340 + i * 60, 142, 21, i < P.stars ? '#ffd23a' : 'rgba(255,255,255,.18)');
+  ctx.fillStyle = '#fff6dc'; ctx.font = 'italic bold 19px Georgia, serif'; ctx.textAlign = 'center';
+  const L = wrapText(L8(PARA_TXT[P.k].verse), 680).slice(0, 4); L.forEach((l, i) => ctx.fillText(l, 400, 214 + i * 25));
+  ctx.fillStyle = '#ffc83d'; ctx.font = 'bold 15px Trebuchet MS, sans-serif'; ctx.fillText(BOOKS[Pd.bk][LIX()] + ' ' + Pd.ref, 400, 222 + L.length * 25);
+  if (stT > 40) label('Touche pour revenir aux paraboles', 400, 372, 16, '#bcd8ff');
+}
+
+// ----- les touches et le doigt pour les nouveaux écrans -----
+function newMenu(k) {
+  if (state === 'quiz') { quizKey(k); return true; }
+  if (state === 'cine') { if (k === 'Escape') cineSkip(); else cineNext(); return true; }
+  if (state === 'racepick') { raceKey(k); return true; }
+  if (state === 'raceend') { if (stT > 40) go('racepick'); return true; }
+  if (state === 'parapick') { paraPickKey(k); return true; }
+  if (state === 'para') { if (k === 'Escape') go('parapick'); return true; }
+  if (state === 'paraend') { if (stT > 40) go('parapick'); return true; }
+  if (state === 'over' && race) { if (stT > 40) go('racepick'); return true; }
+  if (state === 'mode') { modeKey(k); return true; }
+  return false;
+}
+function newPointer(e) {
+  const r = cv.getBoundingClientRect(), X = (e.clientX - r.left) / r.width * 800, Y = (e.clientY - r.top) / r.height * 400;
+  if (state === 'quiz') { quizPointer(X, Y); return true; }
+  if (state === 'cine') { cineNext(); return true; }
+  if (state === 'racepick') { racePointer(X, Y); return true; }
+  if (state === 'parapick') { paraPickPointer(X, Y); return true; }
+  if (state === 'para') { paraPointer(X, Y); return true; }
+  if (state === 'mode') { modeClick(X / 800, Y); return true; }
+  return false;
+}
+function drawNewStates() {
+  if (state === 'quiz') drawQuiz();
+  else if (state === 'cine') drawCine();
+  else if (state === 'racepick') drawRacePick();
+  else if (state === 'raceend') drawRaceEnd();
+  else if (state === 'parapick') drawParaPick();
+  else if (state === 'para') { paraUpdate(); if (state === 'para') paraDraw(); }
+  else if (state === 'paraend') drawParaEnd();
+  else return false;
+  return true;
+}
+
+// ----- branchements : animaux et météo dans les niveaux -----
+{ const b0 = buildLevel; buildLevel = function (n) { b0(n); critSpawn(n); wxReset(); }; }
+{ const u0 = update; update = function () { u0(); if (state === 'play') critUpdate(); }; }
+{ const b0 = tdBuild; tdBuild = function () { b0(); tdCritSpawn(); wxReset(); }; }
+{ const u0 = tdUpdate; tdUpdate = function () { u0(); if (state === 'tdplay' && td) tdCritUpdate(); }; }
+
 function loop() {
   stT++;
   if (vBtn) vBtn.classList.toggle('off', !((state === 'play' || state === 'tdplay') && rains > 0));
   setSong(pickSong());
   document.body.classList.toggle('tdmode', state === 'tdplay');
-  if (state === 'play') { if (hitStop > 0) hitStop--; else update(); draw(); }
+  if (state === 'play') { if (hitStop > 0) hitStop--; else { update(); if (race && state === 'play') raceT++; } if (state === 'play') { draw(); if (race) drawRaceClock(); } }
   else if (state === 'tdplay') { tdUpdate(); if (state === 'tdplay') tdDraw(); }
   else if (state === 'mode') drawMode();
   else if (state === 'book') drawBook();
   else if (state === 'cont') drawCont();
   else if (state === 'tdpick') drawTdPick();
+  else if (drawNewStates()) {}
   else if (state === 'tdnext') drawWorldMap();
   else if (state === 'tdwin' || state === 'tdover') { tdDraw(); if (state === 'tdwin') banner(td.open ? 'LA GALILÉE EST LIBÉRÉE !' : 'VICTOIRE !', 'Points : ' + score, 'Touche pour revenir au menu'); else banner('PARTIE TERMINÉE', 'Appuie sur une touche pour recommencer ce niveau', td.title); }
   else if (state === 'select') drawSelect();
