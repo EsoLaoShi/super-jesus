@@ -415,6 +415,17 @@ TR_TPL.push(
   [/^Libère (\d+) captifs$/, ['Free {1} captives', 'Libera {1} cautivos', 'Libera {1} prigionieri', 'Liberte {1} cativos', 'Kangola bato {1}', 'Waweke huru mateka {1}', 'حرّر {1} أسرى']],
   [/^Une lampe s’allume… \((\d) \/ 3\)$/, ['A lamp lights up… ({1} / 3)', 'Una lámpara se enciende… ({1} / 3)', 'Una lampada si accende… ({1} / 3)', 'Uma lâmpada se acende… ({1} / 3)', 'Mwinda moko epeli… ({1} / 3)', 'Taa moja inawaka… ({1} / 3)', 'مصباح يضيء… ({1} / 3)']]
 );
+// textes du lot 4 (montures, deux joueurs)
+for (const r of [
+  ["À dos d'âne !", "On a donkey!", "¡En burro!", "In groppa all'asino!", "No lombo do jumento!", "Likolo ya mpunda!", "Juu ya punda!", "على ظهر الحمار!"],
+  ["À vélo !", "On a bike!", "¡En bicicleta!", "In bicicletta!", "De bicicleta!", "Na velo!", "Kwa baiskeli!", "على الدراجة!"],
+  ["En barque ! Tu flottes sur l’eau.", "In a boat! You float on the water.", "¡En barca! Flotas sobre el agua.", "In barca! Galleggi sull'acqua.", "De barco! Você flutua na água.", "Na bwato! Ozali kopema likolo ya mai.", "Katika mashua! Unaelea juu ya maji.", "في القارب! أنت تطفو على الماء."],
+  ["Pied à terre !", "Back on foot!", "¡A pie!", "A piedi!", "A pé!", "Na makolo!", "Kwa miguu!", "سيرًا على الأقدام!"],
+  ["Oui", "Yes", "Sí", "Sì", "Sim", "Iyo", "Ndiyo", "نعم"],
+  ["Non", "No", "No", "No", "Não", "Te", "Hapana", "لا"],
+  ["↑ ↓ : difficulté · L : versets · 2 : deux joueurs (J2 : I J K L pour marcher, U pour frapper)", "↑ ↓: difficulty · L: verses · 2: two players (P2: I J K L to walk, U to strike)", "↑ ↓: dificultad · L: versículos · 2: dos jugadores (J2: I J K L para andar, U para golpear)", "↑ ↓: difficoltà · L: versetti · 2: due giocatori (G2: I J K L per camminare, U per colpire)", "↑ ↓: dificuldade · L: versículos · 2: dois jogadores (J2: I J K L para andar, U para bater)", "↑ ↓: bokasi · L: bavese · 2: basakani mibale (J2: I J K L mpo na kotambola, U mpo na kobeta)", "↑ ↓: ugumu · L: mistari · 2: wachezaji wawili (M2: I J K L kutembea, U kupiga)", "↑ ↓: الصعوبة · L: الآيات · 2: لاعبان (ل2: I J K L للمشي، U للضرب)"]
+]) { TR_ROWS.push(r.slice(0, 6)); TR_SW[r[0]] = r[6]; TR_AR[r[0]] = r[7]; }
+TR_TPL.push([/^👥 Deux joueurs : (.+)$/, ['👥 Two players: {t1}', '👥 Dos jugadores: {t1}', '👥 Due giocatori: {t1}', '👥 Dois jogadores: {t1}', '👥 Basakani mibale: {t1}', '👥 Wachezaji wawili: {t1}', '👥 لاعبان: {t1}']]);
 // la grande phrase de victoire, sans accord compliqué : {X} = le nom traduit
 const VICTORY = {
   en:['{X} has been defeated!', '{X} has no more power!', '{X} is cast out!', '{X} has lost!'],
@@ -857,6 +868,7 @@ function buildLevel(n) {
   hardenFoes(horde); verseShow = null;
   { const ps = plats.filter(q => !q.range && !q.kind).sort((a, b) => a.y - b.y), sp = ps[1] || ps[0]; vscroll = sp ? { x:sp.x + sp.w / 2, y:sp.y - 30, got:false, i:n } : null; } // le parchemin du niveau
   buildLot3(n);
+  buildLot4(n);
 }
 
 // ---------- Bataille finale : la horde du géant, et les captifs ----------
@@ -935,6 +947,7 @@ function placePlayer() {
   p = { x:START_X, y:FLOOR - 60, w:36, h:60, vx:0, vy:0, face:1, air:true, punch:0, cd:0, inv:0, dj:false, prevJ:false, coy:0, buf:0, jumping:false, on:null };
   cam = 0; cp = START_X; cpY = FLOOR; p.ride = 0; p.still = 0; p.sinking = false; fires = []; lies = []; texts = []; flameParts = []; god = { x:p.x - 70, y:p.y - 90 };
   words = []; balls = []; for (const a of angels) { a.x = p.x; a.y = p.y; }
+  p.mount = null; p2Reset();
 }
 
 function go(s) { state = s; stT = 0; if (['next', 'win', 'over', 'tdwin', 'tdover'].includes(s)) noteRecord(); if (s === 'win') saveJ('sj-save', null); const j = { next:'level', win:'win', over:'over', talk:'laugh' }[s]; if (j) sfx(j); }
@@ -952,6 +965,7 @@ function menuInput(k) {
   if ((k === 'l' || k === 'L') && (state === 'title' || state === 'mode')) { bookBack = state; bookPage = 0; go('book'); return; }
   if (state === 'mode') { // choisir entre plateforme et vue de haut
     if (['ArrowLeft', 'a', 'ArrowRight', 'd'].includes(k)) { modeSel = 1 - modeSel; sfx('blip'); }
+    else if (k === '2') setTwoP(!twoP);
     else if (['ArrowUp', 'w', 'W'].includes(k)) setDiff(diff + 1); else if (['ArrowDown', 's', 'S'].includes(k)) setDiff(diff - 1);
     else if ([' ', 'Enter', 'x', 'z'].includes(k)) { gameMode = modeSel ? 'td' : 'plat'; sfx('ok'); go('select'); }
     return;
@@ -984,7 +998,7 @@ cv.addEventListener('pointerdown', e => {
   if (state === 'play') return;
   if (state === 'tdplay') { tdPointer(e); return; }
   if (state === 'mode') { const r = cv.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height * 400;
-    if (fy > 326 && fy < 360) { if (fx < .5) setDiff(diff + 1); else { bookBack = 'mode'; bookPage = 0; go('book'); } return; }
+    if (fy > 326 && fy < 360) { const si = Math.floor((fx * 800 - 40) / 245); if (si <= 0) setDiff(diff + 1); else if (si === 1) { bookBack = 'mode'; bookPage = 0; go('book'); } else setTwoP(!twoP); return; }
     const i = fx < .5 ? 0 : 1; if (i === modeSel) menuInput('Enter'); else { modeSel = i; sfx('blip'); } return; }
   if (state === 'cont') { const r = cv.getBoundingClientRect(), i = (e.clientX - r.left) / r.width < .5 ? 0 : 1; if (i === contSel) menuInput('Enter'); else { contSel = i; sfx('blip'); } return; }
   if (state === 'book') { const r = cv.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width; menuInput(fx < .2 ? 'ArrowLeft' : fx > .8 ? 'ArrowRight' : 'Escape'); return; }
@@ -1003,7 +1017,7 @@ function die() {
   if (angels.length) { for (const a of angels.slice(-40)) spawnFire(a.x, a.y + 6, 12, true); angels = []; balls = []; sfx('poof'); say(p.x + p.w / 2, p.y - 24, "Tes anges s'envolent...", '#e8e8ff'); }
   rainMark = 0; boost = Math.max(0, boost - 2); storm = 0; p.flyC = false;
   if (lives <= 0) { go('over'); return; }
-  p.ride = 0; p.still = 0; p.sinking = false; p.x = cp; p.y = cpY - p.h - 40; p.vx = 0; p.vy = 0; p.inv = 120; p.punch = 0; p.on = null; lies = []; words = [];
+  p.mount = null; p.ride = 0; p.still = 0; p.sinking = false; p.x = cp; p.y = cpY - p.h - 40; p.vx = 0; p.vy = 0; p.inv = 120; p.punch = 0; p.on = null; lies = []; words = [];
   god.x = p.x - 70; god.y = p.y - 90;
   for (const f of foes) if (f.horde && !f.dead && Math.abs(f.x - p.x) < 260) f.x = Math.min(f.max - f.w, p.x + 300 + rnd() * 200);
 }
@@ -1174,7 +1188,7 @@ function groundBelow(x, y) {
 
 function update() {
   const c = hero(), L = LEVELS[level], l = keys.ArrowLeft || keys.a, r = keys.ArrowRight || keys.d, j = keys.ArrowUp || keys[' '] || keys.w;
-  const spd = (p.ride ? 7.2 : c.spd || 4.5) * (gfx && gfx.k === 'slow' ? .5 : 1), jEdge = j && !p.prevJ; p.prevJ = j;
+  const spd = (p.ride ? 7.2 : p.mount ? MOUNTS[p.mount.k].spd : c.spd || 4.5) * (gfx && gfx.k === 'slow' ? .5 : 1), jEdge = j && !p.prevJ; p.prevJ = j;
   levelT++;
   // plateformes et barques qui bougent (elles emportent le joueur)
   for (const q of plats) if (q.range) { const nx = q.bx + (Math.sin(levelT * q.spd + q.ph) * .5 + .5) * q.range; q.dx = nx - q.x; q.x = nx; }
@@ -1249,6 +1263,7 @@ function update() {
   for (const ch of chariots) if (!ch.used && p.ride <= 0 && hit(p, { x:ch.x - 50, y:ch.y - 60, w:100, h:60 })) {
     ch.used = true; p.ride = 900; sfx('chariot'); spawnFire(ch.x, ch.y, 30); say(ch.x, ch.y - 90, 'Char de feu !', '#ffb43a', true);
   }
+  if (p.mount && p.mount.k === 'boat' && p.vy >= 0 && p.y + p.h > 358) { p.y = 358 - p.h; p.vy = 0; p.air = false; p.coy = 6; p.jumping = false; } // la barque flotte
   if (p.y > 470 && p.ride > 0) { // les chevaux de feu s'envolent au-dessus du vide
     p.y = 430; p.vy = -17; p.ride = Math.max(1, p.ride - 150); spawnFire(p.x + p.w / 2, 440, 24); sfx('chariot');
   }
@@ -1328,6 +1343,7 @@ function update() {
   updateStorm();
   updateCaptives(boss);
   updateLot3(boss, hand);
+  updateMount(body); updateP2();
   god.x += (p.x - p.face * 70 - god.x) * 0.08; god.y += (p.y - 90 - god.y) * 0.08;
   // particules
   for (const q of fires) { q.x += q.vx + (q.dust ? 0 : Math.sin(q.life * .3 + (q.seed || 0)) * .35); q.y += q.vy; q.vy += q.dust ? .03 : -.025; q.life--; }
@@ -2030,7 +2046,9 @@ function draw() {
   }
   drawQuest();
   drawLies();
-  drawPlayer();
+  drawMounts();
+  drawP2();
+  drawPlayerMounted();
   for (const q of fires) if (q.dust) { const a = q.life / q.max; ctx.globalAlpha = a * .8; rect(q.x, q.y, q.sz * (1 + (1 - a)), q.sz * (1 + (1 - a)), T.top2); ctx.globalAlpha = 1; }
   if (L.dark) drawDark(L.dark, boss);
   if (T.fireflies) drawFireflies();
@@ -3015,12 +3033,12 @@ function drawMode() {
     label(n, x + w / 2, y + 182, 22, on ? '#fff' : '#cfc6e8');
     ctx.fillStyle = on ? '#ffc83d' : '#9a8cc0'; ctx.font = 'bold 12px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(d, x + w / 2, y + 210, w - 20);
   });
-  for (const [i, txt, col] of [[0, '◀  Difficulté : ' + DIFF_NAMES[diff] + '  ▶', ['#8fe08a', '#ffd84a', '#ff7a6a'][diff]], [1, '📜 Livre des versets (' + versesGot.length + ' / ' + VERSES.length + ')', '#ffe0a0']]) {
-    const x = 120 + i * 300; rrPath(ctx, x, 330, 260, 28, 10); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
-    ctx.fillStyle = col; ctx.font = 'bold 14px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(txt, x + 130, 349, 244); }
+  for (const [i, txt, col] of [[0, '◀  Difficulté : ' + DIFF_NAMES[diff] + '  ▶', ['#8fe08a', '#ffd84a', '#ff7a6a'][diff]], [1, '📜 Livre des versets (' + versesGot.length + ' / ' + VERSES.length + ')', '#ffe0a0'], [2, '👥 Deux joueurs : ' + (twoP ? 'Oui' : 'Non'), twoP ? '#9ad8ff' : '#b0a8c8']]) {
+    const x = 40 + i * 245; rrPath(ctx, x, 330, 230, 28, 10); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = col; ctx.font = 'bold 14px Trebuchet MS, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(txt, x + 115, 349, 216); }
   ctx.fillStyle = '#e8e0ff'; ctx.font = '13px Trebuchet MS, sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('Flèches pour choisir, Espace ou Entrée pour valider — ou touche une carte', 400, 378, 760);
-  ctx.fillText('↑ ↓ : difficulté · L : livre des versets', 400, 395, 760);
+  ctx.fillText('↑ ↓ : difficulté · L : versets · 2 : deux joueurs (J2 : I J K L pour marcher, U pour frapper)', 400, 395, 780);
 }
 
 // ----- construire la carte -----
@@ -3077,7 +3095,7 @@ function tdStart() {
   if (!unlocked(sel)) { sfx('hurt'); return; }
   sfx('ok'); score = 0; lives = startLives(); faith = hero().startFaith || 0; flameLvl = flameFor(faith); level = 0;
   angels = []; balls = []; boost = 0; rains = 0; rainMark = 0; storm = 0; shake = 0; flash = 0;
-  tdBuild(); hardenFoes(td.horde); verseShow = null; go('tdplay');
+  p2 = null; tdBuild(); hardenFoes(td.horde); verseShow = null; go('tdplay');
 }
 
 // ----- collisions : le héros et les ennemis sont des petits cercles posés au sol -----
@@ -3108,6 +3126,7 @@ function tdUpdate() {
   const T = td, H = T.h, c = hero(); levelT++;
   if (vscroll && !vscroll.got && Math.hypot(H.x - vscroll.x, H.y - vscroll.y) < 30) gotScroll();
   tdLot3Update(H);
+  tdP2Update();
   // déplacement : flèches / ZQSD, ou le joystick tactile
   let ix = (keys.ArrowRight || keys.d || keys.D ? 1 : 0) - (keys.ArrowLeft || keys.a || keys.A || keys.q ? 1 : 0);
   let iy = (keys.ArrowDown || keys.s || keys.S ? 1 : 0) - (keys.ArrowUp || keys.w || keys.W || keys.z ? 1 : 0);
@@ -3278,6 +3297,7 @@ function tdDraw() {
   if (cage && vis(cage.x + cage.w / 2, cage.y, 160)) E.push([cage.y, () => drawCaptives()]);
   if (vscroll && !vscroll.got && vis(vscroll.x, vscroll.y, 30)) E.push([vscroll.y, () => { tdShadow(vscroll.x, vscroll.y, 11); drawScrollItem(vscroll.x - cam, vscroll.y - 24, t); }]);
   tdLot3Draw(E, vis, t);
+  tdP2Draw(E, vis);
   E.push([H.y, () => { tdShadow(H.x, H.y, 14); if (!(H.inv > 0 && Math.floor(H.inv / 5) % 2)) { if (Math.abs(H.dy) > Math.abs(H.dx) * 1.2 && H.punch <= 0) drawHeroFB(hero(), H.x - 18, H.y - 60, H.dy < 0, levelT * .28, Math.hypot(H.vx, H.vy) > .4); else drawHeroP(hero(), H.x - 18, H.y - 60, H.face, { air:false, k:Math.hypot(H.vx, H.vy) > .4 ? 0 : -1, v:Math.hypot(H.vx, H.vy) * 1.6, fast:false }, H.punch > 0); } }]);
   if (T.portal) E.push([T.portal.y, () => { const X = T.portal.x - cam, Y = T.portal.y; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y - 40, 4, 70, [[0, 'rgba(255,255,230,.9)'], [.4, 'rgba(255,230,140,.45)'], [1, 'rgba(255,200,80,0)']]); ctx.fillRect(X - 70, Y - 120, 140, 140); ctx.fillStyle = LG(X - 16, 0, X + 16, 0, [[0, 'rgba(255,240,180,0)'], [.5, 'rgba(255,250,220,.8)'], [1, 'rgba(255,240,180,0)']]); ctx.fillRect(X - 16, Y - 160 + Math.sin(t / 200) * 4, 32, 160); ctx.restore(); }]);
   E.sort((a, b) => a[0] - b[0]); for (const e of E) e[1]();
@@ -3797,6 +3817,142 @@ function drawHeroFB(c, x, y, back, ph, moving) {
   if (c.band) { ctx.fillStyle = '#d62020'; ctx.fillRect(X - 8, y + 6, 16, 2.4); }
   if (c.crown) { ctx.fillStyle = '#ffd23a'; ctx.beginPath(); ctx.moveTo(X - 7, y + 4); for (let i = 0; i <= 4; i++) ctx.lineTo(X - 7 + i * 3.5, y + (i % 2 ? 3.5 : -1)); ctx.lineTo(X + 7, y + 4); ctx.fill(); }
   if (c.halo && !back) { ctx.strokeStyle = 'rgba(255,215,90,.95)'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.ellipse(X, y - 1, 10, 3.5, 0, Math.PI, 0); ctx.stroke(); }
+}
+
+// ================== Lot 4 : montures (âne, vélo, barque) et mode à deux joueurs ==================
+const MOUNTS = { donkey:{ spd:5.6, lift:16, txt:"À dos d'âne !" }, bike:{ spd:7.6, lift:10, txt:'À vélo !' }, boat:{ spd:5, lift:5, txt:'En barque ! Tu flottes sur l’eau.' } };
+const MOUNT_LV = { 0:'bike', 3:'bike', 19:'bike', 1:'donkey', 6:'donkey', 7:'donkey', 13:'donkey', 2:'boat', 8:'boat', 10:'boat' };
+let mounts = [];
+function buildLot4(n) {
+  mounts = []; const k = MOUNT_LV[n]; if (!k) return;
+  mounts.push({ k, x:520, y:FLOOR });
+  const mid = blocks.filter(b => !b.rock && !b.secret && b.x > 1500 && b.x < arenaX - 800 && b.w >= 560)[0];
+  if (mid) mounts.push({ k, x:mid.x + 120, y:mid.y });
+}
+function updateMount(body) {
+  for (const m of mounts) if (!m.used && !p.mount && p.ride <= 0 && hit(p, { x:m.x - 30, y:m.y - 40, w:60, h:40 })) {
+    m.used = true; p.mount = { k:m.k, t:660 }; sfx('ok'); dust(m.x, m.y, 14); say(m.x, m.y - 80, MOUNTS[m.k].txt, '#ffe27a', true);
+  }
+  if (!p.mount) return;
+  const M = p.mount; M.t--; p.inv = Math.max(p.inv, 2);
+  for (const f of foes) if (!f.dead && !f.boss && !f.lion && hit(body, f)) damageFoe(f, 2); // la monture renverse les ennemis
+  if (M.t <= 0 || p.x > arenaX + 60 || p.ride > 0) { p.mount = null; p.inv = 60; sfx('poof'); say(p.x + p.w / 2, p.y - 30, 'Pied à terre !', '#ffe0a0'); }
+}
+function drawMountShape(k, X, Y, f, ph, moving) { // X, Y : centre au sol
+  ctx.save(); ctx.translate(X, Y); ctx.scale(f, 1);
+  if (k === 'donkey') {
+    const sw = moving ? Math.sin(ph) * 5 : 0;
+    gEll(ctx, 0, 0, 28, 5, 'rgba(0,0,0,.25)');
+    ctx.fillStyle = '#6e6258'; for (const [lx, s] of [[-17, 1], [-10, -1], [12, 1], [19, -1]]) ctx.fillRect(lx + s * sw * .4, -18, 4.5, 18);
+    gEll(ctx, -24, -24, 4, 9, '#5a5048');
+    gEll(ctx, 0, -24, 24, 11, '#8a7c70'); gEll(ctx, 0, -20, 20, 6, '#a89a8c');
+    ctx.fillStyle = '#b3122e'; rrPath(ctx, -12, -36, 22, 12, 3); ctx.fill(); ctx.fillStyle = '#d4a52a'; ctx.fillRect(-12, -26, 22, 2);
+    ctx.fillStyle = '#8a7c70'; ctx.beginPath(); ctx.moveTo(14, -30); ctx.lineTo(26, -44); ctx.lineTo(32, -40); ctx.lineTo(22, -22); ctx.fill();
+    gEll(ctx, 32, -40, 8, 5.5, '#8a7c70'); gEll(ctx, 37, -38, 3.5, 3, '#c8bcb0');
+    gEll(ctx, 26, -52, 2.5, 8, '#7a6e62'); gEll(ctx, 30, -52, 2.5, 8, '#8a7c70');
+    gEll(ctx, 31, -42, 1.2, 1.2, '#111');
+  } else if (k === 'bike') {
+    gEll(ctx, 0, 0, 26, 4, 'rgba(0,0,0,.25)');
+    for (const wx of [-15, 15]) { ctx.strokeStyle = '#222'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(wx, -10, 9.5, 0, 7); ctx.stroke(); ctx.strokeStyle = '#aaa'; ctx.lineWidth = .8; ctx.beginPath(); for (let i = 0; i < 4; i++) { const a = ph + i * Math.PI / 4; ctx.moveTo(wx + Math.cos(a) * 9, -10 + Math.sin(a) * 9); ctx.lineTo(wx - Math.cos(a) * 9, -10 - Math.sin(a) * 9); } ctx.stroke(); }
+    ctx.strokeStyle = '#d62020'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-15, -10); ctx.lineTo(-3, -26); ctx.lineTo(12, -26); ctx.lineTo(15, -10); ctx.moveTo(-3, -26); ctx.lineTo(1, -10); ctx.lineTo(-15, -10); ctx.moveTo(1, -10); ctx.lineTo(12, -26); ctx.stroke();
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(12, -26); ctx.lineTo(10, -34); ctx.lineTo(16, -35); ctx.stroke();
+    ctx.fillStyle = '#222'; rrPath(ctx, -8, -30, 10, 4, 2); ctx.fill();
+  } else {
+    gEll(ctx, 0, 2, 32, 5, 'rgba(0,40,80,.3)');
+    ctx.fillStyle = LG(0, -16, 0, 0, [[0, '#a0703a'], [1, '#5a3412']]); ctx.beginPath(); ctx.moveTo(-32, -16); ctx.lineTo(32, -16); ctx.quadraticCurveTo(28, 0, 18, 1); ctx.lineTo(-18, 1); ctx.quadraticCurveTo(-28, 0, -32, -16); ctx.fill();
+    ctx.fillStyle = '#c98a4b'; ctx.fillRect(-32, -17, 64, 3);
+    ctx.strokeStyle = '#7a4a22'; ctx.lineWidth = 2; ctx.beginPath(); const oa = Math.sin(ph) * .5; ctx.moveTo(-4, -18); ctx.lineTo(-26 - Math.cos(oa) * 6, 2 + Math.sin(oa) * 4); ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawMounts() {
+  const t = Date.now();
+  for (const m of mounts) if (!m.used && m.x - cam > -60 && m.x - cam < 860) {
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(m.x - cam, m.y - 20, 2, 50, [[0, 'rgba(255,240,170,' + (.25 + .15 * Math.sin(t / 300)).toFixed(2) + ')'], [1, 'rgba(255,220,120,0)']]); ctx.fillRect(m.x - cam - 50, m.y - 70, 100, 100); ctx.restore();
+    drawMountShape(m.k, m.x - cam, m.y, 1, 0, false);
+  }
+}
+// le joueur et sa monture : le héros est un peu surélevé, la monture passe devant ses jambes
+function drawPlayerMounted() {
+  if (!p.mount) { drawPlayer(); return; }
+  const M = p.mount, blink = M.t < 100 && Math.floor(M.t / 6) % 2;
+  ctx.save(); ctx.translate(0, -MOUNTS[M.k].lift); drawPlayer(); ctx.restore();
+  if (!blink) drawMountShape(M.k, p.x + p.w / 2 - cam, p.y + p.h, p.face, levelT * Math.abs(p.vx) * .05, Math.abs(p.vx) > .5);
+}
+
+// ----- deux joueurs : un deuxième serviteur (touches I J K L + U), ou qui suit tout seul -----
+let twoP = loadJ('sj-2p', false), p2 = null;
+function sel2() { for (let k = 1; k < N; k++) { const i = (sel + k) % N; if (unlocked(i)) return i; } return sel; }
+function setTwoP(v) { twoP = v; saveJ('sj-2p', v); sfx('blip'); }
+function p2Reset() { p2 = twoP ? { x:p.x - 40, y:p.y, w:30, h:56, vx:0, vy:0, face:1, air:true, punch:0, cd:0, ai:true, idle:0 } : null; }
+function solidAt(x, y, w, h, plat, prevBottom) {
+  for (const b of blocks) if (x < b.x + b.w && x + w > b.x && y < b.y + b.h && y + h > b.y) return b;
+  if (plat) for (const q of plats) if (x < q.x + q.w && x + w > q.x && y + h > q.y && prevBottom <= q.y + 2 && y < q.y + q.h) return q;
+  return null;
+}
+function updateP2() {
+  if (!p2) return;
+  const human = keys.j || keys.l || keys.i || keys.u || keys.J || keys.L || keys.I || keys.U;
+  if (human) p2.ai = false, p2.idle = 0; else if (++p2.idle > 600) p2.ai = true;
+  let mv = 0, jump = false, punch = false;
+  if (p2.ai) {
+    const tx = p.x - p.face * 46, dx = tx - p2.x;
+    if (Math.abs(dx) > 24) mv = Math.sign(dx);
+    if (!p2.air && (p.y + p.h < p2.y + p2.h - 50 || (mv && solidAt(p2.x + mv * 8, p2.y, p2.w, p2.h - 6)) || (mv && !solidAt(p2.x + mv * 30, p2.y + p2.h + 4, 4, 40, true, p2.y + p2.h)))) jump = true;
+    const near = foes.find(f => !f.dead && !f.lion && Math.abs(f.x + f.w / 2 - (p2.x + p2.w / 2)) < 70 && Math.abs(f.y - p2.y) < 60);
+    if (near) { p2.face = near.x > p2.x ? 1 : -1; punch = true; }
+    if (Math.hypot(p.x - p2.x, p.y - p2.y) > 520) { p2.x = p.x - p.face * 40; p2.y = p.y - 20; p2.vx = p2.vy = 0; spawnFire(p2.x + 15, p2.y + 50, 14, true); }
+  } else {
+    mv = (keys.l || keys.L ? 1 : 0) - (keys.j || keys.J ? 1 : 0); jump = !!(keys.i || keys.I); punch = !!(keys.u || keys.U);
+  }
+  const c = CHARS[sel2()], spd = c.spd || 4.5;
+  p2.vx += (mv * spd - p2.vx) * (p2.air ? .12 : .25); if (mv) p2.face = mv;
+  if (jump && !p2.air) { p2.vy = -(c.jump || 14); p2.air = true; }
+  p2.vy = Math.min(p2.vy + G, 13);
+  // déplacement : d'abord de côté, puis de haut en bas
+  p2.x += p2.vx; let s = solidAt(p2.x, p2.y, p2.w, p2.h - 4); if (s) { p2.x = p2.vx > 0 ? s.x - p2.w : s.x + s.w; p2.vx = 0; }
+  const prevB = p2.y + p2.h; p2.y += p2.vy; p2.air = true;
+  s = solidAt(p2.x, p2.y, p2.w, p2.h, p2.vy >= 0, prevB);
+  if (s) { if (p2.vy >= 0) { p2.y = s.y - p2.h; p2.vy = 0; p2.air = false; if (s.dx) p2.x += s.dx; } else { p2.y = s.y + s.h; p2.vy = 0; } }
+  if (p2.y > 470) { p2.x = p.x - p.face * 40; p2.y = p.y - 40; p2.vy = 0; spawnFire(p2.x + 15, p2.y + 50, 14, true); }
+  if (p2.cd > 0) p2.cd--; if (p2.punch > 0) p2.punch--;
+  if (punch && p2.cd <= 0) { p2.punch = 12; p2.cd = 22; sfx('light'); }
+  if (p2.punch > 6) { const hand = { x:p2.face > 0 ? p2.x + p2.w : p2.x - 50, y:p2.y + 12, w:50, h:30 }; for (const f of foes) if (!f.dead && hit(hand, f)) damageFoe(f, 1); }
+}
+function drawP2() {
+  if (!p2) return; const c = CHARS[sel2()], mv = !p2.air && Math.abs(p2.vx) > .6;
+  shadow(p2.x + p2.w / 2, groundBelow(p2.x + p2.w / 2, p2.y + p2.h), 18, .25);
+  drawHeroP(c, p2.x - 3, p2.y - 4, p2.face, { air:p2.air, k:mv ? Math.floor(Date.now() / 120) % 4 : -1 }, p2.punch > 0);
+  label('J2', p2.x + p2.w / 2 - cam, p2.y - 14, 11, '#9ad8ff');
+  if (p2.punch > 6) { const X = p2.x + p2.w / 2 + p2.face * 40 - cam, Y = p2.y + 26; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = RG(X, Y, 2, 26, [[0, 'rgba(255,255,230,.8)'], [1, 'rgba(255,230,140,0)']]); ctx.fillRect(X - 26, Y - 26, 52, 52); ctx.restore(); }
+}
+// en vue de haut : le deuxième serviteur marche à côté du héros
+function tdP2Update() {
+  if (!twoP) { p2 = null; return; }
+  const H = td.h; if (!p2 || p2.td !== true) p2 = { td:true, x:H.x - 40, y:H.y + 10, vx:0, vy:0, face:1, dx:1, dy:0, punch:0, cd:0, ai:true, idle:0 };
+  const human = keys.j || keys.l || keys.i || keys.k || keys.u || keys.J || keys.L || keys.I || keys.K || keys.U;
+  if (human) p2.ai = false, p2.idle = 0; else if (++p2.idle > 600) p2.ai = true;
+  let ix = 0, iy = 0, punch = false;
+  if (p2.ai) {
+    const tx = H.x - H.dx * 40, ty = H.y - H.dy * 40 + 12, d = Math.hypot(tx - p2.x, ty - p2.y);
+    if (d > 20) { ix = (tx - p2.x) / d; iy = (ty - p2.y) / d; }
+    const near = foes.find(f => !f.dead && Math.hypot(f.fx - p2.x, f.fy - p2.y) < 60); if (near) { p2.dx = Math.sign(near.fx - p2.x) || 1; p2.dy = 0; punch = true; }
+    if (d > 420) { p2.x = H.x - 30; p2.y = H.y + 10; }
+  } else {
+    ix = (keys.l || keys.L ? 1 : 0) - (keys.j || keys.J ? 1 : 0); iy = (keys.k || keys.K ? 1 : 0) - (keys.i || keys.I ? 1 : 0); punch = !!(keys.u || keys.U);
+    const l = Math.hypot(ix, iy); if (l) { ix /= l; iy /= l; }
+  }
+  if (ix || iy) { p2.dx = ix; p2.dy = iy; if (Math.abs(ix) > .2) p2.face = ix > 0 ? 1 : -1; }
+  p2.vx += (ix * 2.6 - p2.vx) * .3; p2.vy += (iy * 2.6 - p2.vy) * .3; tdMove(p2, p2.vx, p2.vy, 10, 'hero');
+  if (p2.cd > 0) p2.cd--; if (p2.punch > 0) p2.punch--;
+  if (punch && p2.cd <= 0) { p2.punch = 14; p2.cd = 22; sfx('light'); }
+  if (p2.punch > 8) { const hx = p2.x + p2.dx * 30, hy = p2.y - 26 + p2.dy * 20; for (const f of foes) if (!f.dead && Math.hypot(hx - f.fx, hy - (f.fy - f.h / 2)) < 36 + f.w * .4) damageFoe(f, 1); }
+}
+function tdP2Draw(E, vis) {
+  if (!p2 || !p2.td || !vis(p2.x, p2.y, 60)) return;
+  E.push([p2.y, () => { const c = CHARS[sel2()], mv = Math.hypot(p2.vx, p2.vy) > .4; tdShadow(p2.x, p2.y, 13);
+    if (Math.abs(p2.dy) > Math.abs(p2.dx) * 1.2 && p2.punch <= 0) drawHeroFB(c, p2.x - 18, p2.y - 60, p2.dy < 0, levelT * .28, mv); else drawHeroP(c, p2.x - 18, p2.y - 60, p2.face, { air:false, k:mv ? 0 : -1, v:2 }, p2.punch > 0);
+    label('J2', p2.x - cam, p2.y - 66, 11, '#9ad8ff'); }]);
 }
 
 function loop() {
